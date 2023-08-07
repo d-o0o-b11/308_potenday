@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AdjectiveExpressionEntity } from './entities/game-kind.entity';
+import { AdjectiveExpressionEntity } from './entities/adjective-expression.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
