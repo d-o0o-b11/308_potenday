@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
+import { UserAdjectiveExpressionEntity } from './user-adjective-expression.entity';
 
 @Entity('adjective_expression')
 export class AdjectiveExpressionEntity {
@@ -14,4 +15,14 @@ export class AdjectiveExpressionEntity {
 
   @Column({ type: 'varchar' })
   expression: string;
+
+  @OneToMany(
+    () => UserAdjectiveExpressionEntity,
+    (expression) => expression.expressions,
+    {
+      cascade: true,
+      nullable: true,
+    },
+  )
+  expressions: UserAdjectiveExpressionEntity[];
 }

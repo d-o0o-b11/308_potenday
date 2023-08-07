@@ -6,9 +6,11 @@ import {
   Generated,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
 } from 'typeorm';
 import { UserUrlEntity } from './user-url.entity';
+import { UserAdjectiveExpressionEntity } from 'src/game-kind/entities/user-adjective-expression.entity';
 
 @Entity('user_info')
 export class UserInfoEntity {
@@ -39,4 +41,14 @@ export class UserInfoEntity {
   })
   @JoinColumn({ name: 'url_id' })
   url: UserUrlEntity;
+
+  @OneToMany(
+    () => UserAdjectiveExpressionEntity,
+    (expression) => expression.user,
+    {
+      cascade: true,
+      nullable: true,
+    },
+  )
+  expressions: UserAdjectiveExpressionEntity[];
 }
