@@ -77,4 +77,10 @@ export class UserUrlController {
       throw new InternalServerErrorException(e.message);
     }
   }
+
+  @Get('test')
+  async test() {
+    const url = '6fe6f1cf3be479fc684501ff28c62a3186d58432';
+    return await this.userUrlService.countUserAdjectiveExpression(url);
+  }
 }

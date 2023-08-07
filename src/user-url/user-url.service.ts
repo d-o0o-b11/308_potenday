@@ -103,6 +103,7 @@ export class UserUrlService {
     return { userCount, userInfo };
   }
 
+  //입장 마감
   async updateStatusFalse(url: string) {
     const findOneResult = await this.userUrlRepository.findOne({
       where: {
@@ -123,5 +124,37 @@ export class UserUrlService {
     }
 
     return true;
+  }
+
+  //url 이용해서 형용사 표현 출력
+  async findUserAdjectiveExpressioList(url: string) {
+    const findResult = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+      relations: {
+        user: {
+          expressions: {
+            expressions: true,
+          },
+        },
+      },
+    });
+
+    return findResult;
+  }
+
+  //형용사 표현 몇명이 완료했는지 인원 수 체크
+  async countUserAdjectiveExpression(url: string) {
+    const findResult = await this.findUserAdjectiveExpressioList(url);
+
+    let user_count = 0;
+    for (let i = 0; i < findResult.user.length; i++) {
+      if (findResult.user[i].expressions.length > 0) {
+        user_count++;
+      }
+    }
+
+    return user_count;
   }
 }

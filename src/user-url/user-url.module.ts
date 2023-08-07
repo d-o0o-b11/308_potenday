@@ -7,5 +7,6 @@ import { EntitiesModule } from 'src/entity.module';
   imports: [EntitiesModule],
   controllers: [UserUrlController],
   providers: [UserUrlService],
+  exports: [UserUrlService],
 })
 export class UserUrlModule {}
