@@ -1,8 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import databaseConfig from './config/database.config';
-import tokenConfig from './config/token.config';
-import swaggerConfig from './config/swagger.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Global()
@@ -14,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           process.env.NODE_ENV == 'dev' ? 'development' : 'production'
         }.env`,
       ],
-      load: [databaseConfig, tokenConfig, swaggerConfig],
+      load: [databaseConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
