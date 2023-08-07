@@ -1,34 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { GameKindService } from './game-kind.service';
-import { CreateGameKindDto } from './dto/create-game-kind.dto';
-import { UpdateGameKindDto } from './dto/update-game-kind.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('게임 API')
 @Controller('game-kind')
 export class GameKindController {
   constructor(private readonly gameKindService: GameKindService) {}
 
-  @Post()
-  create(@Body() createGameKindDto: CreateGameKindDto) {
-    return this.gameKindService.create(createGameKindDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.gameKindService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gameKindService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGameKindDto: UpdateGameKindDto) {
-    return this.gameKindService.update(+id, updateGameKindDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.gameKindService.remove(+id);
+  @Get('adjective-expression')
+  @ApiOperation({
+    summary: '[게임] 나를 표현할 수 있는 형용사를 선택해주세요',
+    description: '모든 형용사 출력',
+  })
+  async getAllExpressionList() {
+    return await this.gameKindService.getAllExpressionList();
   }
 }

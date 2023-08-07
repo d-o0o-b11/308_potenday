@@ -1,26 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGameKindDto } from './dto/create-game-kind.dto';
-import { UpdateGameKindDto } from './dto/update-game-kind.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AdjectiveExpressionEntity } from './entities/game-kind.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class GameKindService {
-  create(createGameKindDto: CreateGameKindDto) {
-    return 'This action adds a new gameKind';
-  }
+  constructor(
+    @InjectRepository(AdjectiveExpressionEntity)
+    private readonly adjectiveExpressionRepository: Repository<AdjectiveExpressionEntity>,
+  ) {}
 
-  findAll() {
-    return `This action returns all gameKind`;
-  }
+  async getAllExpressionList() {
+    const findResult = await this.adjectiveExpressionRepository.find();
 
-  findOne(id: number) {
-    return `This action returns a #${id} gameKind`;
-  }
-
-  update(id: number, updateGameKindDto: UpdateGameKindDto) {
-    return `This action updates a #${id} gameKind`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} gameKind`;
+    return findResult;
   }
 }
