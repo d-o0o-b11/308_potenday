@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 import { UserUrlEntity } from './user-url.entity';
 import { UserAdjectiveExpressionEntity } from 'src/game-kind/entities/user-adjective-expression.entity';
-import { BalanceGameEntity } from 'src/game-kind/entities/balance-game-list.entity';
 
 @Entity('user_info')
 export class UserInfoEntity {
@@ -55,10 +54,4 @@ export class UserInfoEntity {
     },
   )
   expressions: UserAdjectiveExpressionEntity[];
-
-  // @OneToMany(() => BalanceGameEntity, (balance) => balance.user, {
-  //   cascade: true,
-  //   nullable: true,
-  // })
-  // balance: BalanceGameEntity[];
 }

@@ -1,18 +1,9 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
-import { AdjectiveExpressionService } from './adjective-expression.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { BalanceGameService } from './balance-game.service';
 
-@ApiTags('[GAME] 밸런스 게임 API')
+@ApiTags('[GAME] 공통 질문 + 밸런스 게임 API')
 @Controller('balance-game')
-export class AdjectiveExpressionController {
-  constructor(
-    private readonly adjectiveExpressionService: AdjectiveExpressionService,
-  ) {}
+export class BalanceGameController {
+  constructor(private readonly balanceGameService: BalanceGameService) {}
 }

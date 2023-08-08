@@ -5,9 +5,11 @@ import {
   Entity,
   Generated,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
 } from 'typeorm';
 import { UserInfoEntity } from './user-info.entity';
+import { CommonQuestionEntity } from 'src/game-kind/entities/common-question.entity';
 
 @Entity('user_url')
 export class UserUrlEntity {
@@ -36,4 +38,9 @@ export class UserUrlEntity {
     nullable: true,
   })
   user: UserInfoEntity[];
+
+  @OneToOne(() => CommonQuestionEntity, (question) => question.url, {
+    onDelete: 'CASCADE',
+  })
+  question: CommonQuestionEntity;
 }
