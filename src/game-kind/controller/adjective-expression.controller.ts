@@ -6,9 +6,9 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { AdjectiveExpressionService } from './adjective-expression.service';
+import { AdjectiveExpressionService } from '../service/adjective-expression.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateGameKindDto } from './dto/create-game-kind.dto';
+import { CreateGameKindDto } from '../dto/create-game-kind.dto';
 
 @ApiTags('[GAME] 형용사 표현 API')
 @Controller('adjective-expression')

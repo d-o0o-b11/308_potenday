@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AdjectiveExpressionService } from './adjective-expression.service';
+import { AdjectiveExpressionService } from './service/adjective-expression.service';
 
 describe('AdjectiveExpressionService', () => {
   let service: AdjectiveExpressionService;

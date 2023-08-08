@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AdjectiveExpressionEntity } from './entities/adjective-expression.entity';
+import { AdjectiveExpressionEntity } from '../entities/adjective-expression.entity';
 import { Repository } from 'typeorm';
-import { UserAdjectiveExpressionEntity } from './entities/user-adjective-expression.entity';
-import { CreateGameKindDto } from './dto/create-game-kind.dto';
+import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expression.entity';
+import { CreateGameKindDto } from '../dto/create-game-kind.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
 
 @Injectable()

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AdjectiveExpressionService } from './adjective-expression.service';
-import { AdjectiveExpressionController } from './adjective-expression.controller';
+import { AdjectiveExpressionService } from './service/adjective-expression.service';
+import { AdjectiveExpressionController } from './controller/adjective-expression.controller';
 import { EntitiesModule } from 'src/entity.module';
 import { UserUrlModule } from 'src/user-url/user-url.module';
-import { BalanceGameService } from './balance-game.service';
-import { BalanceGameController } from './ balance-game.controller';
+import { BalanceGameService } from './service/balance-game.service';
+import { BalanceGameController } from './controller/ balance-game.controller';
 
 @Module({
   imports: [EntitiesModule, UserUrlModule],
