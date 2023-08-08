@@ -17,11 +17,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateUserUrlDto } from './dto/create-user-url.dto';
+import { SseService } from 'src/user-url/sse.service';
 
 @ApiTags('URL 생성, 입장 API')
 @Controller('user-url')
 export class UserUrlController {
-  constructor(private readonly userUrlService: UserUrlService) {}
+  constructor(
+    private readonly userUrlService: UserUrlService,
+    private readonly sseService: SseService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -62,15 +66,36 @@ export class UserUrlController {
     return this.userUrlService.countUserToWaitingRoom(url);
   }
 
+  // @Patch('status/:url')
+  // @ApiOperation({
+  //   summary: '[모두 모였어요]버튼 클릭 시 상태 변경',
+  //   description:
+  //     '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api , return true -> 변경 성공',
+  // })
+  // async updateUrlStatus(@Param('url') url: string) {
+  //   try {
+  //     return await this.userUrlService.updateStatusFalse(url);
+  //   } catch (e) {
+  //     if (e instanceof NotFoundException) {
+  //       throw new NotFoundException(e.message);
+  //     }
+  //     throw new InternalServerErrorException(e.message);
+  //   }
+  // }
   @Patch('status/:url')
   @ApiOperation({
     summary: '[모두 모였어요]버튼 클릭 시 상태 변경',
     description:
-      '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api , return true -> 변경 성공',
+      '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api, return true -> 변경 성공',
   })
   async updateUrlStatus(@Param('url') url: string) {
     try {
-      return await this.userUrlService.updateStatusFalse(url);
+      await this.userUrlService.updateStatusFalse(url);
+
+      // 상태 변경 후 SSE 이벤트 발생
+      this.sseService.sendUpdate(url);
+
+      return true;
     } catch (e) {
       if (e instanceof NotFoundException) {
         throw new NotFoundException(e.message);
