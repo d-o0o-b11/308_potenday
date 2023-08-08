@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { GameKindService } from './game-kind.service';
-import { GameKindController } from './game-kind.controller';
+import { AdjectiveExpressionService } from './adjective-expression.service';
+import { AdjectiveExpressionController } from './adjective-expression.controller';
 import { EntitiesModule } from 'src/entity.module';
 import { UserUrlModule } from 'src/user-url/user-url.module';
 
 @Module({
   imports: [EntitiesModule, UserUrlModule],
-  controllers: [GameKindController],
-  providers: [GameKindService],
+  controllers: [AdjectiveExpressionController],
+  providers: [AdjectiveExpressionService],
 })
 export class GameKindModule {}

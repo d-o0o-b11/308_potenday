@@ -7,7 +7,7 @@ import { CreateGameKindDto } from './dto/create-game-kind.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
 
 @Injectable()
-export class GameKindService {
+export class AdjectiveExpressionService {
   constructor(
     @InjectRepository(AdjectiveExpressionEntity)
     private readonly adjectiveExpressionRepository: Repository<AdjectiveExpressionEntity>,
