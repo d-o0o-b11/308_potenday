@@ -12,6 +12,20 @@ services:
     networks:
       - test-networks
 
+  nginx:
+    image: nginx:latest
+    container_name: proxy
+    ports:
+      - '80:80'
+    restart: 'unless-stopped'
+    depends_on:
+      - server
+    volumes:
+      - ./nginx/nginx.dev-new.conf:/etc/nginx/nginx.conf
+    networks:
+      - test-networks
+
 networks:
   test-networks:
     driver: bridge
+    name: test-networks

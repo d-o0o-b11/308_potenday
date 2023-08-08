@@ -157,4 +157,47 @@ export class UserUrlService {
 
     return user_count;
   }
+
+  //url 상태! (게임 시작한 상태인지 대기중인지 확인)
+  async getUrlStatus(url: string) {
+    const findOneResuelt = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+    });
+
+    return findOneResuelt?.status;
+  }
+
+  async updateOnBoardingUser(user_id: number) {
+    const updateResult = await this.userInfoRepository.update(user_id, {
+      onboarding: true,
+    });
+
+    if (!updateResult.affected)
+      throw new Error('onboarding 상태 업데이트 실패');
+
+    return true;
+  }
+
+  //모두가 onboarding 했는지 확인
+  async findOnBoardingUserCheck(url: string) {
+    const findResult = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+      relations: {
+        user: true,
+      },
+    });
+    const trueOnboardingCount = findResult.user.filter(
+      (user) => user.onboarding === true,
+    ).length;
+
+    if (trueOnboardingCount !== findResult.user.length) {
+      return false;
+    }
+
+    return true;
+  }
 }

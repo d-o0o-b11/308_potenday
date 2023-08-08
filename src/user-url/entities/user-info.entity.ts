@@ -32,6 +32,9 @@ export class UserInfoEntity {
   @Column({ type: 'varchar' })
   nickname: string;
 
+  @Column({ type: 'boolean', default: false })
+  onboarding: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

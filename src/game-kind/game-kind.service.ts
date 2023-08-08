@@ -20,7 +20,11 @@ export class GameKindService {
 
   //모든 형용사 출력
   async getAllExpressionList() {
-    const findResult = await this.adjectiveExpressionRepository.find();
+    const findResult = await this.adjectiveExpressionRepository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
 
     return findResult;
   }
@@ -52,7 +56,14 @@ export class GameKindService {
       url,
     );
 
-    return findResult;
+    const findCountUser = await this.userUrlService.countUserToWaitingRoom(url);
+
+    let next = true;
+    if (findResult !== findCountUser.userCount) {
+      next = false;
+    }
+
+    return { finish_user: findResult, next: next };
   }
 
   //사용자가 선택한 모든 형용사 표현 출력

@@ -65,7 +65,8 @@ export class UserUrlController {
   @Patch('status/:url')
   @ApiOperation({
     summary: '[모두 모였어요]버튼 클릭 시 상태 변경',
-    description: '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api',
+    description:
+      '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api , return true -> 변경 성공',
   })
   async updateUrlStatus(@Param('url') url: string) {
     try {
@@ -78,9 +79,39 @@ export class UserUrlController {
     }
   }
 
-  @Get('test')
-  async test() {
-    const url = '6fe6f1cf3be479fc684501ff28c62a3186d58432';
-    return await this.userUrlService.countUserAdjectiveExpression(url);
+  @Get(':url')
+  @ApiOperation({
+    summary: '[모두 모였어요]버튼 눌렀는지 확인',
+    description: 'true -> 대기중 , false -> 게임 진행',
+  })
+  async checkUrlStatus(@Param('url') url: string) {
+    return await this.userUrlService.getUrlStatus(url);
+  }
+
+  @Post('onboarding/:user_id')
+  @ApiOperation({
+    summary: '[게임 설명]시작하기 버튼 누르기',
+    description: 'reteurn true -> 성공',
+  })
+  async updateUserOnboarding(@Param('user_id') user_id: number) {
+    try {
+      return await this.userUrlService.updateOnBoardingUser(user_id);
+    } catch (e) {
+      throw new InternalServerErrorException(e.message);
+    }
+  }
+
+  @Get('onboarding/finish/:url')
+  @ApiOperation({
+    summary: '[게임 설명]시작하기 버튼 모두가 눌렀는지 확인',
+    description:
+      'reteurn true -> 모두 [시작하기] 누른 상태 , false -> 한 명이라도 안누른 상태',
+  })
+  async findOnBoardingUserCheck(@Param('url') url: string) {
+    try {
+      return await this.userUrlService.findOnBoardingUserCheck(url);
+    } catch (e) {
+      throw new InternalServerErrorException(e.message);
+    }
   }
 }

@@ -38,6 +38,8 @@ export class GameKindController {
   @Get('adjective-expression/:url')
   @ApiOperation({
     summary: '[게임] 총 몇명이 형용사 표현 완료했는지 ',
+    description:
+      'finish_user: 형용사 표현 완료한 인원 수, next: false -> 아직 하고 있는 사람 존재 / true -> 모두 완료',
   })
   async getExpressionListUserCount(@Param('url') url: string) {
     return await this.gameKindService.getExpressionListUserCount(url);
