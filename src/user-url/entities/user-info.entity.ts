@@ -12,6 +12,7 @@ import {
 import { UserUrlEntity } from './user-url.entity';
 import { UserAdjectiveExpressionEntity } from 'src/game-kind/entities/user-adjective-expression.entity';
 import { UserBalanceGameEntity } from 'src/game-kind/entities/user-balance-game.entity';
+import { MbtiChooseEntity } from 'src/game-kind/entities/mbti-choose.entity';
 
 @Entity('user_info')
 export class UserInfoEntity {
@@ -64,4 +65,16 @@ export class UserInfoEntity {
     nullable: true,
   })
   balance: UserBalanceGameEntity[];
+
+  @OneToMany(() => MbtiChooseEntity, (mbti) => mbti.user, {
+    cascade: true,
+    nullable: true,
+  })
+  mbti_choose: MbtiChooseEntity[];
+
+  @OneToMany(() => MbtiChooseEntity, (mbti) => mbti.toUser, {
+    cascade: true,
+    nullable: true,
+  })
+  mbti_choose_to_user: MbtiChooseEntity[];
 }

@@ -216,8 +216,8 @@ export class UserUrlService {
     return findOneResult;
   }
 
-  //url로 유저 정보 찾기
-  async findUserInfo(url: string) {
+  //url로 유저 정보 + 밸런스 게임 정보 찾기
+  async findUserInfoWithBalance(url: string) {
     const findResult = await this.userUrlRepository.find({
       where: {
         url: url,
@@ -230,5 +230,43 @@ export class UserUrlService {
     });
 
     return findResult;
+  }
+
+  async findUserInfo(url: string) {
+    const findOneResuelt = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+      relations: {
+        user: true,
+      },
+      order: {
+        user: {
+          created_at: 'ASC',
+        },
+      },
+    });
+    return findOneResuelt;
+  }
+
+  //본인 mbti 저장하기
+  async saveUserMbti(user_id: number, mbti: string) {
+    const saveResult = await this.userInfoRepository.save({
+      id: user_id,
+      mbti: mbti,
+    });
+
+    return saveResult;
+  }
+
+  //유저 info 정보 출력
+  async findOneUserInfo(user_id: number) {
+    const findOneResuelt = await this.userInfoRepository.findOne({
+      where: {
+        id: user_id,
+      },
+    });
+
+    return findOneResuelt;
   }
 }

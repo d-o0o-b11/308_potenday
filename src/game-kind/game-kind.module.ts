@@ -7,6 +7,8 @@ import { BalanceGameService } from './service/balance-game.service';
 import { BalanceGameController } from './controller/balance-game.controller';
 import { PublicQuestionGameService } from './service/pubilc-question.service';
 import { PublicQuestionGameController } from './controller/public-question-game.controller';
+import { MbtiPredictionController } from './controller/mbti-prediction.controller';
+import { MbtiPredictionService } from './service/mbti-prediction.service';
 
 @Module({
   imports: [EntitiesModule, UserUrlModule],
@@ -14,11 +16,13 @@ import { PublicQuestionGameController } from './controller/public-question-game.
     AdjectiveExpressionController,
     BalanceGameController,
     PublicQuestionGameController,
+    MbtiPredictionController,
   ],
   providers: [
     AdjectiveExpressionService,
     BalanceGameService,
     PublicQuestionGameService,
+    MbtiPredictionService,
   ],
 })
 export class GameKindModule {}

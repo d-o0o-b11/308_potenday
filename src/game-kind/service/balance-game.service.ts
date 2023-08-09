@@ -46,7 +46,9 @@ export class BalanceGameService {
 
   //각 밸런스 비율 출력
   async findBalanceGameUser(dto: FindBalanceGameDto) {
-    const findResult = await this.userUrlService.findUserInfo(dto.url);
+    const findResult = await this.userUrlService.findUserInfoWithBalance(
+      dto.url,
+    );
 
     const filteredData = findResult.map((entry) => ({
       ...entry,
