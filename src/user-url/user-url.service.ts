@@ -200,4 +200,19 @@ export class UserUrlService {
 
     return true;
   }
+
+  //url로 url id 찾아서 return
+  async findUrlId(url: string) {
+    const findOneResult = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+    });
+
+    if (!findOneResult) {
+      throw new NotFoundException('존재하지 않는 url 입니다.');
+    }
+
+    return findOneResult;
+  }
 }

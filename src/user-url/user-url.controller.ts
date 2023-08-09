@@ -94,6 +94,7 @@ export class UserUrlController {
 
       // 상태 변경 후 SSE 이벤트 발생
       this.sseService.sendUpdate(url);
+      console.log('실행실행');
 
       return true;
     } catch (e) {

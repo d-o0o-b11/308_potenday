@@ -4,11 +4,21 @@ import { AdjectiveExpressionController } from './controller/adjective-expression
 import { EntitiesModule } from 'src/entity.module';
 import { UserUrlModule } from 'src/user-url/user-url.module';
 import { BalanceGameService } from './service/balance-game.service';
-import { BalanceGameController } from './controller/ balance-game.controller';
+import { BalanceGameController } from './controller/balance-game.controller';
+import { PublicQuestionGameService } from './service/pubilc-question.service';
+import { PublicQuestionGameController } from './controller/public-question-game.controller';
 
 @Module({
   imports: [EntitiesModule, UserUrlModule],
-  controllers: [AdjectiveExpressionController, BalanceGameController],
-  providers: [AdjectiveExpressionService, BalanceGameService],
+  controllers: [
+    AdjectiveExpressionController,
+    BalanceGameController,
+    PublicQuestionGameController,
+  ],
+  providers: [
+    AdjectiveExpressionService,
+    BalanceGameService,
+    PublicQuestionGameService,
+  ],
 })
 export class GameKindModule {}
