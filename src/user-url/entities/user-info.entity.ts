@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { UserUrlEntity } from './user-url.entity';
 import { UserAdjectiveExpressionEntity } from 'src/game-kind/entities/user-adjective-expression.entity';
+import { UserBalanceGameEntity } from 'src/game-kind/entities/user-balance-game.entity';
 
 @Entity('user_info')
 export class UserInfoEntity {
@@ -31,6 +32,9 @@ export class UserInfoEntity {
 
   @Column({ type: 'varchar' })
   nickname: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  mbti: string;
 
   @Column({ type: 'boolean', default: false })
   onboarding: boolean;
@@ -54,4 +58,10 @@ export class UserInfoEntity {
     },
   )
   expressions: UserAdjectiveExpressionEntity[];
+
+  @OneToMany(() => UserBalanceGameEntity, (balance) => balance.user, {
+    cascade: true,
+    nullable: true,
+  })
+  balance: UserBalanceGameEntity[];
 }

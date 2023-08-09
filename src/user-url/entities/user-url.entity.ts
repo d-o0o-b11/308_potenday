@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { UserInfoEntity } from './user-info.entity';
 import { CommonQuestionEntity } from 'src/game-kind/entities/common-question.entity';
+import { UserBalanceGameEntity } from 'src/game-kind/entities/user-balance-game.entity';
 
 @Entity('user_url')
 export class UserUrlEntity {
@@ -43,4 +44,10 @@ export class UserUrlEntity {
     onDelete: 'CASCADE',
   })
   question: CommonQuestionEntity;
+
+  @OneToMany(() => UserBalanceGameEntity, (balance) => balance.url, {
+    cascade: true,
+    nullable: false,
+  })
+  balance: UserBalanceGameEntity;
 }

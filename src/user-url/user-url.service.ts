@@ -215,4 +215,20 @@ export class UserUrlService {
 
     return findOneResult;
   }
+
+  //url로 유저 정보 찾기
+  async findUserInfo(url: string) {
+    const findResult = await this.userUrlRepository.find({
+      where: {
+        url: url,
+      },
+      relations: {
+        user: {
+          balance: true,
+        },
+      },
+    });
+
+    return findResult;
+  }
 }

@@ -6,6 +6,7 @@ import { AdjectiveExpressionEntity } from './game-kind/entities/adjective-expres
 import { UserAdjectiveExpressionEntity } from './game-kind/entities/user-adjective-expression.entity';
 import { BalanceGameEntity } from './game-kind/entities/balance-game-list.entity';
 import { CommonQuestionEntity } from './game-kind/entities/common-question.entity';
+import { UserBalanceGameEntity } from './game-kind/entities/user-balance-game.entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CommonQuestionEntity } from './game-kind/entities/common-question.entit
       UserAdjectiveExpressionEntity,
       BalanceGameEntity,
       CommonQuestionEntity,
+      UserBalanceGameEntity,
     ]),
   ],
   exports: [TypeOrmModule],

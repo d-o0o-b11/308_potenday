@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
+import { UserBalanceGameEntity } from './user-balance-game.entity';
 
 @Entity('balance_game_list')
 export class BalanceGameEntity {
@@ -17,4 +18,10 @@ export class BalanceGameEntity {
 
   @Column({ type: 'varchar' })
   type_B: string;
+
+  @OneToMany(() => UserBalanceGameEntity, (balance) => balance.balance, {
+    cascade: true,
+    nullable: true,
+  })
+  balance: UserBalanceGameEntity[];
 }
