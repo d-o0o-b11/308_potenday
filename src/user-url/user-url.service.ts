@@ -74,6 +74,8 @@ export class UserUrlService {
       nickname: dto.nickname,
     });
 
+    this.eventEmitter.emit('statusUpdated', { url: dto.url, status: false });
+
     return {
       user_id: saveResult.id,
       img_id: saveResult.img_id,
@@ -118,6 +120,10 @@ export class UserUrlService {
       },
     });
 
+    if (!findOneResult.status) {
+      throw new Error('다른 유저가 누른 상태입니다.');
+    }
+
     if (!findOneResult) {
       throw new NotFoundException('존재하지 않는 url입니다.');
     }
@@ -130,7 +136,7 @@ export class UserUrlService {
       throw new Error('url 상태 변경 실패');
     }
 
-    this.eventEmitter.emit('statusUpdated', { url, status: false });
+    this.eventEmitter.emit('statusUpdated', { url, status: true });
 
     return true;
   }
