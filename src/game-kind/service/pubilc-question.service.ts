@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CommonQuestionEntity } from '../entities/common-question.entity';
 import { UpdateQuestionStatusDto } from '../dto/update-question-status.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PublicQuestionGameService {
@@ -12,6 +13,8 @@ export class PublicQuestionGameService {
     private readonly commonQuestionEntityRepository: Repository<CommonQuestionEntity>,
 
     private readonly userUrlService: UserUrlService,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   //공통 질문 다음으로 넘어가기
@@ -39,6 +42,8 @@ export class PublicQuestionGameService {
         updateColumns,
       );
     }
+
+    this.eventEmitter.emit('statusUpdated', { url: dto.url, status: true });
 
     return true;
   }
