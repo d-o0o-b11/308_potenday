@@ -5,6 +5,7 @@ import { UserUrlService } from 'src/user-url/user-url.service';
 import { FindMbtiRoundDto } from '../dto/find-mbti-round.dto';
 import { SaveMbtiRoundDto } from '../dto/save-mbti-round.dto';
 import { MbtiChooseEntity } from '../entities/mbti-choose.entity';
+import { AdjectiveExpressionService } from './adjective-expression.service';
 
 @Injectable()
 export class MbtiPredictionService {
@@ -13,6 +14,8 @@ export class MbtiPredictionService {
     private readonly mbtiChooseEntityRepository: Repository<MbtiChooseEntity>,
 
     private readonly userUrlService: UserUrlService,
+
+    private readonly adjectiveExpressionService: AdjectiveExpressionService,
   ) {}
 
   //해당 라운드때 어떤 유저의 mbti 맞추는 차례인지
@@ -74,5 +77,29 @@ export class MbtiPredictionService {
     }
 
     return { user_mbti: findUserInfo.mbti, user: other_user_choose };
+  }
+
+  //모든 게임 결과 출력
+  async finalAllUserData(url: string) {
+    const adjective =
+      await this.adjectiveExpressionService.findUserAdjectiveExpressioList(
+        url,
+        true,
+      );
+
+    const findUserInfo = await this.userUrlService.findUserToUrlOrder(url);
+
+    const result = [];
+
+    for (let i = 0; i < adjective.length; i++) {
+      result.push({
+        img_id: adjective[i].img_id,
+        nickname: adjective[i].nickname,
+        expressions: adjective[i].expressions,
+        mbti: findUserInfo.user[i].mbti,
+      });
+    }
+
+    return result;
   }
 }

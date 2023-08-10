@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   ValidationPipe,
@@ -50,5 +51,13 @@ export class MbtiPredictionController {
     dto: FindMbtiRoundDto,
   ) {
     return await this.mbtiPredictionService.getResultMbtiRound(dto);
+  }
+
+  @Get('final/:url')
+  @ApiOperation({
+    summary: '[마지막] 전체 게임 결과 출력',
+  })
+  async finalAllUserData(@Param('url') url: string) {
+    return await this.mbtiPredictionService.finalAllUserData(url);
   }
 }

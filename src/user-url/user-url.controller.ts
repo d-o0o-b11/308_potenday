@@ -17,14 +17,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateUserUrlDto } from './dto/create-user-url.dto';
-import { SseService } from 'src/user-url/sse.service';
+// import { SseService } from 'src/user-url/sse.service';
 
 @ApiTags('URL 생성, 입장 API')
 @Controller('user-url')
 export class UserUrlController {
   constructor(
-    private readonly userUrlService: UserUrlService,
-    private readonly sseService: SseService,
+    private readonly userUrlService: UserUrlService, // private readonly sseService: SseService,
   ) {}
 
   @Get()
@@ -91,10 +90,6 @@ export class UserUrlController {
   async updateUrlStatus(@Param('url') url: string) {
     try {
       await this.userUrlService.updateStatusFalse(url);
-
-      // 상태 변경 후 SSE 이벤트 발생
-      this.sseService.sendUpdate(url);
-      console.log('실행실행');
 
       return true;
     } catch (e) {

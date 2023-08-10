@@ -67,10 +67,16 @@ export class AdjectiveExpressionService {
   }
 
   //사용자가 선택한 모든 형용사 표현 출력
-  async findUserAdjectiveExpressioList(url: string) {
-    const findResult = await this.userUrlService.findUserAdjectiveExpressioList(
-      url,
-    );
+  async findUserAdjectiveExpressioList(url: string, order?: boolean) {
+    let findResult;
+    if (order) {
+      findResult =
+        await this.userUrlService.findUserAdjectiveExpressioListOrder(url);
+    } else {
+      findResult = await this.userUrlService.findUserAdjectiveExpressioList(
+        url,
+      );
+    }
 
     const expressionsArray = findResult.user.map((user) => user.expressions);
 
@@ -88,37 +94,7 @@ export class AdjectiveExpressionService {
     }
 
     return result;
-
-    /**
- * {
-    "id": 4,
-    "url_id": 1,
-    "img_id": 1,
-    "nickname": "지민",
-    "created_at": "2023-08-07T05:22:04.141Z",
-    "expressions": [
-      {
-        "id": 1,
-        "user_id": 4,
-        "expression_id": 12,
-        "expressions": {
-          "id": 12,
-          "expression": "다정한"
-        }
-      },
-      {
-        "id": 2,
-        "user_id": 4,
-        "expression_id": 9,
-        "expressions": {
-          "id": 9,
-          "expression": "외향적인"
-        }
-      }
- */
-
-    // const expressionsArray = findResult.user.map((user) => user.expressions);
-
-    // return expressionsArray;
   }
+
+  // findUserAdjectiveExpressioListOrder;
 }

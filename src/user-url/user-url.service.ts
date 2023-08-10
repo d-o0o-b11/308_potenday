@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import * as crypto from 'crypto';
 import { CreateUserUrlDto } from './dto/create-user-url.dto';
 import { UserInfoEntity } from './entities/user-info.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserUrlService {
@@ -14,6 +15,8 @@ export class UserUrlService {
 
     @InjectRepository(UserInfoEntity)
     private readonly userInfoRepository: Repository<UserInfoEntity>,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   //url 중복확인
@@ -59,6 +62,10 @@ export class UserUrlService {
 
     if (!findOneResult) {
       throw new NotFoundException('존재하지 않는 url입니다.');
+    }
+
+    if ((await this.countUserToWaitingRoom(dto.url)).userCount > 4) {
+      throw new Error('최대 4명까지 이용할 수 있습니다.');
     }
 
     const saveResult = await this.userInfoRepository.save({
@@ -123,6 +130,8 @@ export class UserUrlService {
       throw new Error('url 상태 변경 실패');
     }
 
+    this.eventEmitter.emit('statusUpdated', { url, status: false });
+
     return true;
   }
 
@@ -137,6 +146,29 @@ export class UserUrlService {
           expressions: {
             expressions: true,
           },
+        },
+      },
+    });
+
+    return findResult;
+  }
+
+  //url 이용해서 형용사 표현 출력 => 정렬
+  async findUserAdjectiveExpressioListOrder(url: string) {
+    const findResult = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+      relations: {
+        user: {
+          expressions: {
+            expressions: true,
+          },
+        },
+      },
+      order: {
+        user: {
+          created_at: 'ASC',
         },
       },
     });
@@ -268,5 +300,28 @@ export class UserUrlService {
     });
 
     return findOneResuelt;
+  }
+
+  //url에 연관된 애들 출력 정렬
+  async findUserToUrlOrder(url: string) {
+    const findResult = await this.userUrlRepository.findOne({
+      where: {
+        url: url,
+      },
+      relations: {
+        user: {
+          expressions: {
+            expressions: true,
+          },
+        },
+      },
+      order: {
+        user: {
+          created_at: 'ASC',
+        },
+      },
+    });
+
+    return findResult;
   }
 }
