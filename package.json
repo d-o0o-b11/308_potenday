@@ -32,10 +32,12 @@
     "class-validator": "^0.14.0",
     "crypto": "^1.0.1",
     "joi": "^17.9.2",
+    "nest-winston": "^1.9.3",
     "pg": "^8.11.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
