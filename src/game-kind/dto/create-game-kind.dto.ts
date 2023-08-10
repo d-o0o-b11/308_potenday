@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNumber } from 'class-validator';
+import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class CreateGameKindDto {
+  @IsString()
+  @ApiProperty({
+    description: 'url',
+    example: 'dfsf',
+  })
+  url: string;
+
   @IsNumber()
   @ApiProperty({
     description: '유저 id',

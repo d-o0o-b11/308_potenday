@@ -18,7 +18,7 @@ export class LoggerService implements NestLoggerService {
             winston.format.timestamp({
               format: 'YYYY-MM-DD hh:mm:ss A',
             }),
-            utilities.format.nestLike('RUWITY_', {
+            utilities.format.nestLike('308_POTEN_DAY', {
               prettyPrint: true,
             }),
           ),

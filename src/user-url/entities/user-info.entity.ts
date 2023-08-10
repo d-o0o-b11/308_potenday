@@ -7,12 +7,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
 } from 'typeorm';
 import { UserUrlEntity } from './user-url.entity';
 import { UserAdjectiveExpressionEntity } from 'src/game-kind/entities/user-adjective-expression.entity';
 import { UserBalanceGameEntity } from 'src/game-kind/entities/user-balance-game.entity';
 import { MbtiChooseEntity } from 'src/game-kind/entities/mbti-choose.entity';
+import { UserGameStatusEntity } from 'src/game-kind/entities/user-game-status.entity';
 
 @Entity('user_info')
 export class UserInfoEntity {
@@ -77,4 +79,10 @@ export class UserInfoEntity {
     nullable: true,
   })
   mbti_choose_to_user: MbtiChooseEntity[];
+
+  @OneToOne(() => UserGameStatusEntity, (status) => status.user, {
+    cascade: true,
+    nullable: true,
+  })
+  user_game_status: UserGameStatusEntity;
 }

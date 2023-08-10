@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expression.entity';
 import { CreateGameKindDto } from '../dto/create-game-kind.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
+import { UserGameStatusEntity } from '../entities/user-game-status.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AdjectiveExpressionService {
@@ -15,7 +17,12 @@ export class AdjectiveExpressionService {
     @InjectRepository(UserAdjectiveExpressionEntity)
     private readonly userAdjectiveExpressionRepository: Repository<UserAdjectiveExpressionEntity>,
 
+    @InjectRepository(UserGameStatusEntity)
+    private readonly userGameStatusRepository: Repository<UserGameStatusEntity>,
+
     private readonly userUrlService: UserUrlService,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   //모든 형용사 출력
@@ -31,7 +38,7 @@ export class AdjectiveExpressionService {
 
   //형용사 표현 저장 (개인)
   async saveUserExpressionList(dto: CreateGameKindDto) {
-    const { user_id, expression_id } = dto;
+    const { url, user_id, expression_id } = dto;
 
     const userAdjectiveExpressions: UserAdjectiveExpressionEntity[] = [];
 
@@ -47,6 +54,14 @@ export class AdjectiveExpressionService {
       userAdjectiveExpressions,
     );
 
+    //게임 완료
+    await this.userGameStatusRepository.save({
+      user_id: user_id,
+      adjective_status: true,
+    });
+
+    await this.getExpressionListUserCount(url);
+
     return saveResult;
   }
 
@@ -59,8 +74,12 @@ export class AdjectiveExpressionService {
     const findCountUser = await this.userUrlService.countUserToWaitingRoom(url);
 
     let next = true;
+    //다르면 false
     if (findResult !== findCountUser.userCount) {
       next = false;
+    } else {
+      //같으면 sse
+      this.eventEmitter.emit('statusUpdated', { url: url, status: true });
     }
 
     return { finish_user: findResult, next: next };
@@ -95,6 +114,4 @@ export class AdjectiveExpressionService {
 
     return result;
   }
-
-  // findUserAdjectiveExpressioListOrder;
 }
