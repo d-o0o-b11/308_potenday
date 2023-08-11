@@ -6,6 +6,7 @@ import { FindMbtiRoundDto } from '../dto/find-mbti-round.dto';
 import { SaveMbtiRoundDto } from '../dto/save-mbti-round.dto';
 import { MbtiChooseEntity } from '../entities/mbti-choose.entity';
 import { AdjectiveExpressionService } from './adjective-expression.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class MbtiPredictionService {
@@ -16,6 +17,8 @@ export class MbtiPredictionService {
     private readonly userUrlService: UserUrlService,
 
     private readonly adjectiveExpressionService: AdjectiveExpressionService,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   //해당 라운드때 어떤 유저의 mbti 맞추는 차례인지
@@ -45,7 +48,41 @@ export class MbtiPredictionService {
       });
     }
 
+    const findUrlUser = await this.userUrlService.findUserInfo(dto.url);
+    const test = await this.checkMbtiUserCount(dto.url, dto.round_id);
+
+    if (findUrlUser.user.length == test) {
+      this.eventEmitter.emit('statusUpdated', { url: dto.url, status: true });
+    }
+
     return true;
+  }
+
+  async checkMbtiUserCount(url: string, round_id: number) {
+    let cnt = 0;
+    const findResult = await this.userUrlService.findUserInfo(url);
+
+    const findUserInfo = await this.userUrlService.findOneUserInfo(
+      findResult.user[round_id - 1].id,
+    );
+
+    const findOtherResult = await this.mbtiChooseEntityRepository.find({
+      where: {
+        url_id: findResult.id,
+        to_user_id: findResult.user[round_id - 1].id,
+      },
+    });
+
+    if (findUserInfo.mbti) cnt++;
+
+    for (let i = 0; i < findOtherResult.length; i++) {
+      const user_info = await this.userUrlService.findOneUserInfo(
+        findOtherResult[i].user_id,
+      );
+
+      if (findOtherResult[i].mbti) cnt++;
+    }
+    return cnt;
   }
 
   //결과 출력
@@ -60,6 +97,9 @@ export class MbtiPredictionService {
       where: {
         url_id: findResult.id,
         to_user_id: findResult.user[dto.round_id - 1].id,
+      },
+      order: {
+        created_at: 'ASC',
       },
     });
 

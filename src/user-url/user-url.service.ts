@@ -254,7 +254,7 @@ export class UserUrlService {
     return findOneResult;
   }
 
-  //url로 유저 정보 + 밸런스 게임 정보 찾기
+  //url로 유저 정보 + 밸런스 게임 정보 찾기 <정렬
   async findUserInfoWithBalance(url: string) {
     const findResult = await this.userUrlRepository.find({
       where: {
@@ -276,6 +276,29 @@ export class UserUrlService {
 
     return findResult;
   }
+
+  // //url로 유저 정보 + mbti 게임 정보 찾기 <정렬
+  // async findUserInfoWith(url: string) {
+  //   const findResult = await this.userUrlRepository.find({
+  //     where: {
+  //       url: url,
+  //     },
+  //     relations: {
+  //       user: {
+  //         mbti_choose_to_user: true,
+  //       },
+  //     },
+  //     order: {
+  //       user: {
+  //         mbti_choose_to_user: {
+  //           created_at: 'ASC',
+  //         },
+  //       },
+  //     },
+  //   });
+
+  //   return findResult;
+  // }
 
   async findUserInfo(url: string) {
     const findOneResuelt = await this.userUrlRepository.findOne({

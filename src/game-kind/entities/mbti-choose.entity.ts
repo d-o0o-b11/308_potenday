@@ -1,7 +1,9 @@
+import { IsDate } from 'class-validator';
 import { UserInfoEntity } from 'src/user-url/entities/user-info.entity';
 import { UserUrlEntity } from 'src/user-url/entities/user-url.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -24,6 +26,10 @@ export class MbtiChooseEntity {
 
   @Column({ type: 'varchar', nullable: true })
   to_user_id: number;
+
+  @CreateDateColumn()
+  @IsDate()
+  created_at: Date;
 
   @ManyToOne(() => UserUrlEntity, (url) => url.id, {
     onDelete: 'CASCADE',
