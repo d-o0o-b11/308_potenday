@@ -360,4 +360,8 @@ export class UserUrlService {
 
     return findResult;
   }
+
+  async nextToGame(url: string) {
+    this.eventEmitter.emit('statusUpdated', { url: url, status: true });
+  }
 }

@@ -82,6 +82,14 @@ export class UserUrlController {
     }
   }
 
+  @Post('next/:url')
+  @ApiOperation({
+    summary: '다음 게임으로 넘어가기',
+  })
+  async nextToGame(@Param('url') url: string) {
+    return await this.userUrlService.nextToGame(url);
+  }
+
   // @Get(':url')
   // @ApiOperation({
   //   summary: '[모두 모였어요]버튼 눌렀는지 확인',
