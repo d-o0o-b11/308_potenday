@@ -8,7 +8,6 @@ import { BalanceGameEntity } from './game-kind/entities/balance-game-list.entity
 import { CommonQuestionEntity } from './game-kind/entities/common-question.entity';
 import { UserBalanceGameEntity } from './game-kind/entities/user-balance-game.entity';
 import { MbtiChooseEntity } from './game-kind/entities/mbti-choose.entity';
-import { UserGameStatusEntity } from './game-kind/entities/user-game-status.entity';
 
 @Module({
   imports: [
@@ -21,7 +20,6 @@ import { UserGameStatusEntity } from './game-kind/entities/user-game-status.enti
       CommonQuestionEntity,
       UserBalanceGameEntity,
       MbtiChooseEntity,
-      UserGameStatusEntity,
     ]),
   ],
   exports: [TypeOrmModule],

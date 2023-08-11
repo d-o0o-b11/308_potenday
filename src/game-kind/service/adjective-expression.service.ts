@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expression.entity';
 import { CreateGameKindDto } from '../dto/create-game-kind.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
-import { UserGameStatusEntity } from '../entities/user-game-status.entity';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
@@ -16,9 +15,6 @@ export class AdjectiveExpressionService {
 
     @InjectRepository(UserAdjectiveExpressionEntity)
     private readonly userAdjectiveExpressionRepository: Repository<UserAdjectiveExpressionEntity>,
-
-    @InjectRepository(UserGameStatusEntity)
-    private readonly userGameStatusRepository: Repository<UserGameStatusEntity>,
 
     private readonly userUrlService: UserUrlService,
 
@@ -55,10 +51,10 @@ export class AdjectiveExpressionService {
     );
 
     //게임 완료
-    await this.userGameStatusRepository.save({
-      user_id: user_id,
-      adjective_status: true,
-    });
+    // await this.userGameStatusRepository.save({
+    //   user_id: user_id,
+    //   adjective_status: true,
+    // });
 
     await this.getExpressionListUserCount(url);
 

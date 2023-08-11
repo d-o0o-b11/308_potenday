@@ -6,6 +6,7 @@ import { UserUrlService } from 'src/user-url/user-url.service';
 import { UserBalanceGameEntity } from '../entities/user-balance-game.entity';
 import { CreateBalanceGameDto } from '../dto/create-balance-game.dto';
 import { FindBalanceGameDto } from '../dto/find-balance-game.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class BalanceGameService {
@@ -17,6 +18,8 @@ export class BalanceGameService {
     private readonly balanceGameRepository: Repository<BalanceGameEntity>,
 
     private readonly userUrlService: UserUrlService,
+
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   //각 라운드 밸런스 게임 질문지 출력
@@ -41,7 +44,26 @@ export class BalanceGameService {
       balance_type: dto.type,
     });
 
+    await this.findUserCountBalance(dto.url, dto.balance_id);
+
     return saveResult;
+  }
+
+  async findUserCountBalance(url: string, balance_id: number) {
+    const findResult = await this.userUrlService.findUserInfoWithBalance(url);
+
+    const filteredData = findResult.map((entry) => ({
+      ...entry,
+      user: entry.user.filter((user) =>
+        user.balance.some((balance) => balance.balance_id === balance_id),
+      ),
+    }));
+
+    const countUser = await this.userUrlService.findUserInfo(url);
+
+    if (filteredData[0].user.length == countUser.user.length) {
+      this.eventEmitter.emit('statusUpdated', { url: url, status: true });
+    }
   }
 
   //각 밸런스 비율 출력
@@ -79,34 +101,6 @@ export class BalanceGameService {
     });
 
     const userPercentages = await this.calculateUserPercentages(processedData);
-
-    // const userCountByBalanceType = {};
-    // processedData.forEach((item) => {
-    //   const balanceType = item.balance_type;
-    //   if (userCountByBalanceType[balanceType] === undefined) {
-    //     userCountByBalanceType[balanceType] = 1;
-    //   } else {
-    //     userCountByBalanceType[balanceType]++;
-    //   }
-    // });
-
-    // // 전체 사용자 수 계산
-    // const totalUsers = processedData.length;
-
-    // /**소수점
-    //  * Object.keys(userCountByBalanceType).forEach(balanceType => {
-    //     const userCount = userCountByBalanceType[balanceType];
-    //     const percentage = (userCount / totalUsers) * 100;
-    //     console.log(`${balanceType}: ${percentage.toFixed(2)}%`);
-    //   });
-    //  */
-    // // 결과 출력
-    // Object.keys(userCountByBalanceType).forEach((balanceType) => {
-    //   const userCount = userCountByBalanceType[balanceType];
-    //   const percentage = (userCount / totalUsers) * 100;
-    //   const formattedPercentage = Math.round(percentage); // 소수점 없애기
-    //   console.log(`${balanceType}: ${formattedPercentage}%`);
-    // });
 
     return {
       user: processedData,
