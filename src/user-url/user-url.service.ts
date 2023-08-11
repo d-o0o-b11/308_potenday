@@ -265,6 +265,13 @@ export class UserUrlService {
           balance: true,
         },
       },
+      order: {
+        user: {
+          balance: {
+            created_at: 'ASC',
+          },
+        },
+      },
     });
 
     return findResult;

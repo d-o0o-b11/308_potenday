@@ -2,12 +2,14 @@ import { UserInfoEntity } from 'src/user-url/entities/user-info.entity';
 import { UserUrlEntity } from 'src/user-url/entities/user-url.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BalanceGameEntity } from './balance-game-list.entity';
+import { IsDate } from 'class-validator';
 
 @Entity('user_balance_game')
 export class UserBalanceGameEntity {
@@ -25,6 +27,10 @@ export class UserBalanceGameEntity {
 
   @Column({ type: 'int4' })
   balance_id: number;
+
+  @CreateDateColumn()
+  @IsDate()
+  created_at: Date;
 
   @ManyToOne(() => UserUrlEntity, (url) => url.id, {
     onDelete: 'CASCADE',
