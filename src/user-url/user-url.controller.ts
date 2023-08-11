@@ -82,6 +82,14 @@ export class UserUrlController {
     }
   }
 
+  @Get('check-url/:url')
+  @ApiOperation({
+    summary: 'true 면 입장가능, false면 입장 불가능',
+  })
+  async checkUrlToStart(@Param('url') url: string) {
+    return await this.userUrlService.getUrlStatus(url);
+  }
+
   @Post('next/:url')
   @ApiOperation({
     summary: '다음 게임으로 넘어가기',
