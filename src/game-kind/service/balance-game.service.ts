@@ -161,6 +161,41 @@ export class BalanceGameService {
 
   //   return result;
   // }
+  /////////////////////////////////////////
+  // async calculateUserPercentages(data, balance_id) {
+  //   const userCountByBalanceType = {};
+  //   data.forEach((item) => {
+  //     const balanceType = item.balance_type;
+  //     if (userCountByBalanceType[balanceType] === undefined) {
+  //       userCountByBalanceType[balanceType] = 1;
+  //     } else {
+  //       userCountByBalanceType[balanceType]++;
+  //     }
+  //   });
+
+  //   const totalUsers = data.length;
+  //   const result = [];
+
+  //   for (const balanceType of Object.keys(userCountByBalanceType)) {
+  //     const userCount = userCountByBalanceType[balanceType] || 0;
+  //     const percentage = (userCount / totalUsers) * 100;
+  //     const formattedPercentage = Math.round(percentage);
+  //     result.push(`${balanceType}: ${formattedPercentage}%`);
+
+  //     if (formattedPercentage === 100) {
+  //       const balance_type = await this.getBalanceGame(balance_id);
+  //       if (balance_type) {
+  //         if (balance_type.type_A == balanceType) {
+  //           result.push(`${balance_type.type_B}: 0%`);
+  //         } else {
+  //           result.push(`${balance_type.type_A}: 0%`);
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   return result;
+  // }
   async calculateUserPercentages(data, balance_id) {
     const userCountByBalanceType = {};
     data.forEach((item) => {
@@ -173,26 +208,42 @@ export class BalanceGameService {
     });
 
     const totalUsers = data.length;
-    const result = [];
+    const percentages = [];
 
     for (const balanceType of Object.keys(userCountByBalanceType)) {
       const userCount = userCountByBalanceType[balanceType] || 0;
       const percentage = (userCount / totalUsers) * 100;
       const formattedPercentage = Math.round(percentage);
-      result.push(`${balanceType}: ${formattedPercentage}%`);
+      const formattedResult = `${balanceType}: ${formattedPercentage}%`;
+      percentages.push(formattedResult);
 
       if (formattedPercentage === 100) {
         const balance_type = await this.getBalanceGame(balance_id);
         if (balance_type) {
           if (balance_type.type_A == balanceType) {
-            result.push(`${balance_type.type_B}: 0%`);
+            percentages.push(`${balance_type.type_B}: 0%`);
           } else {
-            result.push(`${balance_type.type_A}: 0%`);
+            percentages.push(`${balance_type.type_A}: 0%`);
           }
         }
       }
     }
 
-    return result;
+    const balance_type = await this.getBalanceGame(balance_id);
+    if (balance_type) {
+      const typeA = balance_type.type_A;
+      const typeB = balance_type.type_B;
+      const sortedPercentages = percentages.sort((a, b) => {
+        if (a.includes(typeA) && b.includes(typeB)) {
+          return -1;
+        } else if (a.includes(typeB) && b.includes(typeA)) {
+          return 1;
+        }
+        return 0;
+      });
+      return sortedPercentages;
+    }
+
+    return percentages;
   }
 }
