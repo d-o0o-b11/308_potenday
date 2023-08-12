@@ -40,7 +40,7 @@ export class UserUrlService {
     let isDuplicate;
 
     do {
-      url = crypto.randomBytes(8).toString('hex');
+      url = crypto.randomBytes(4).toString('hex');
       isDuplicate = await this.findDuplication(url);
     } while (isDuplicate); // 중복이면 다시 랜덤 url발급하고 찾기
 
