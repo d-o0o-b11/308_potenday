@@ -79,6 +79,8 @@ export class BalanceGameService {
       ),
     }));
 
+    // console.log(filteredData);
+
     const processedData: {
       url_id: number;
       img_id: number;
@@ -94,7 +96,9 @@ export class BalanceGameService {
           img_id: user.img_id,
           nickname: user.nickname,
           balance_type:
-            user.balance.length > 0 ? user.balance[0].balance_type : '',
+            user.balance.length > 0
+              ? user.balance[dto.balance_id - 1].balance_type
+              : '',
         };
         processedData.push(processedItem);
       });
