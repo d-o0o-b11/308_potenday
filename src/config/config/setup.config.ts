@@ -54,14 +54,12 @@ export class SetUpConfig {
   }
 
   protected setCORS() {
-    // this.app.enableCors({
-    //   origin: ['http://localhost:3000', 'http://localhost:5173'],
-    //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    //   credentials: true,
-    //   allowedHeaders: 'Content-Type, Accept, Authorization',
-    // });
     this.app.enableCors({
-      origin: '*',
+      origin: [
+        'https://melting-point.vercel.app/',
+        'https://melting-point.vercel.app/*',
+        'https://melting-point.vercel.app',
+      ],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
       allowedHeaders: 'Content-Type, Accept, Authorization',

@@ -1,4 +1,4 @@
-import { DatabaseType } from "typeorm";
+import { DatabaseType } from 'typeorm';
 
 export interface IsDatabaseConfig {
   type: DatabaseType;
