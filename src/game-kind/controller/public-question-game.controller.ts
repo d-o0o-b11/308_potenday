@@ -22,16 +22,4 @@ export class PublicQuestionGameController {
   ) {
     return await this.publicQuestionGameService.nextPublicQuestion(dto);
   }
-
-  // @Get('public-question')
-  // @ApiOperation({
-  //   summary: '[공통질문] 다음으로 넘어가기 눌렀는지 상태 확인',
-  //   description: 'return true -> 넘어감, false -> 못 넘어감',
-  // })
-  // async checkQuestionStatus(
-  //   @Query(new ValidationPipe({ whitelist: true, transform: true }))
-  //   dto: UpdateQuestionStatusDto,
-  // ) {
-  //   return await this.publicQuestionGameService.findQuestionStatus(dto);
-  // }
 }

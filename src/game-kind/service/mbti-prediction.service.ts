@@ -76,9 +76,7 @@ export class MbtiPredictionService {
     if (findUserInfo.mbti) cnt++;
 
     for (let i = 0; i < findOtherResult.length; i++) {
-      const user_info = await this.userUrlService.findOneUserInfo(
-        findOtherResult[i].user_id,
-      );
+      await this.userUrlService.findOneUserInfo(findOtherResult[i].user_id);
 
       if (findOtherResult[i].mbti) cnt++;
     }

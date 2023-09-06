@@ -6,6 +6,7 @@ import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expres
 import { CreateGameKindDto } from '../dto/create-game-kind.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GameKindMapper } from '../mapper/game-kind.mapper';
 
 @Injectable()
 export class AdjectiveExpressionService {
@@ -39,9 +40,8 @@ export class AdjectiveExpressionService {
     const userAdjectiveExpressions: UserAdjectiveExpressionEntity[] = [];
 
     for (const id of expression_id) {
-      const userAdjectiveExpression = new UserAdjectiveExpressionEntity();
-      userAdjectiveExpression.user_id = user_id;
-      userAdjectiveExpression.expression_id = id;
+      const userAdjectiveExpression =
+        GameKindMapper.toUserAdjectiveExpressionEntity(user_id, id);
 
       userAdjectiveExpressions.push(userAdjectiveExpression);
     }
@@ -50,19 +50,13 @@ export class AdjectiveExpressionService {
       userAdjectiveExpressions,
     );
 
-    //게임 완료
-    // await this.userGameStatusRepository.save({
-    //   user_id: user_id,
-    //   adjective_status: true,
-    // });
-
     await this.getExpressionListUserCount(url);
 
     return saveResult;
   }
 
   //몇명이 형용사 표현 저장했는지
-  async getExpressionListUserCount(url: string) {
+  private async getExpressionListUserCount(url: string) {
     const findResult = await this.userUrlService.countUserAdjectiveExpression(
       url,
     );

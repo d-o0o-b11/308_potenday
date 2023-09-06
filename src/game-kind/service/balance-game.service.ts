@@ -79,8 +79,6 @@ export class BalanceGameService {
       ),
     }));
 
-    // console.log(filteredData);
-
     const processedData: {
       url_id: number;
       img_id: number;
@@ -109,93 +107,12 @@ export class BalanceGameService {
       dto.balance_id,
     );
 
-    // console.log(userPercentages);
-    //[ '브레인 팀에서 숨쉬듯 자괴감 느끼기: 100%', '내가 팀 내 유일한 희망되기: 0%' ]
-
     return {
       user: processedData,
       percent: userPercentages,
     };
   }
 
-  //밸런스 게임 퍼센트 구하기
-  // async calculateUserPercentages(
-  //   data: {
-  //     url_id: number;
-  //     img_id: number;
-  //     nickname: string;
-  //     balance_type: string;
-  //   }[],
-  //   balance_id: number,
-  // ) {
-  //   const userCountByBalanceType = {};
-  //   data.forEach((item) => {
-  //     const balanceType = item.balance_type;
-  //     if (userCountByBalanceType[balanceType] === undefined) {
-  //       userCountByBalanceType[balanceType] = 1;
-  //     } else {
-  //       userCountByBalanceType[balanceType]++;
-  //     }
-  //   });
-
-  //   const totalUsers = data.length;
-  //   const result = [];
-
-  //   Object.keys(userCountByBalanceType).forEach(async (balanceType) => {
-  //     const userCount = userCountByBalanceType[balanceType] || 0;
-  //     const percentage = (userCount / totalUsers) * 100;
-  //     const formattedPercentage = Math.round(percentage);
-  //     result.push(`${balanceType}: ${formattedPercentage}%`);
-
-  //     if (formattedPercentage === 100) {
-  //       console.log(await this.getBalanceGame(balance_id));
-  //       const balance_type = await this.getBalanceGame(balance_id);
-  //       if (balance_type.type_A == balanceType) {
-  //         result.push(`${balance_type.type_B}: 0%`);
-  //         console.log(result);
-  //       } else {
-  //         result.push(`${balance_type.type_A}: 0%`);
-  //       }
-  //     }
-  //   });
-
-  //   return result;
-  // }
-  /////////////////////////////////////////
-  // async calculateUserPercentages(data, balance_id) {
-  //   const userCountByBalanceType = {};
-  //   data.forEach((item) => {
-  //     const balanceType = item.balance_type;
-  //     if (userCountByBalanceType[balanceType] === undefined) {
-  //       userCountByBalanceType[balanceType] = 1;
-  //     } else {
-  //       userCountByBalanceType[balanceType]++;
-  //     }
-  //   });
-
-  //   const totalUsers = data.length;
-  //   const result = [];
-
-  //   for (const balanceType of Object.keys(userCountByBalanceType)) {
-  //     const userCount = userCountByBalanceType[balanceType] || 0;
-  //     const percentage = (userCount / totalUsers) * 100;
-  //     const formattedPercentage = Math.round(percentage);
-  //     result.push(`${balanceType}: ${formattedPercentage}%`);
-
-  //     if (formattedPercentage === 100) {
-  //       const balance_type = await this.getBalanceGame(balance_id);
-  //       if (balance_type) {
-  //         if (balance_type.type_A == balanceType) {
-  //           result.push(`${balance_type.type_B}: 0%`);
-  //         } else {
-  //           result.push(`${balance_type.type_A}: 0%`);
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   return result;
-  // }
   async calculateUserPercentages(data, balance_id) {
     const userCountByBalanceType = {};
     data.forEach((item) => {
