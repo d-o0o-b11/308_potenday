@@ -7,6 +7,8 @@ import { UserBalanceGameEntity } from '../entities/user-balance-game.entity';
 import { CreateBalanceGameDto } from '../dto/create-balance-game.dto';
 import { FindBalanceGameDto } from '../dto/find-balance-game.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GameKindMapper } from '../mapper/game-kind.mapper';
+import { SaveUserBalance } from '../dto/save-balance-game.dto';
 
 @Injectable()
 export class BalanceGameService {
@@ -37,19 +39,23 @@ export class BalanceGameService {
   async saveBalanceGame(dto: CreateBalanceGameDto) {
     const findResult = await this.userUrlService.findUrlId(dto.url);
 
-    const saveResult = await this.userBalanceGameRepository.save({
+    const saveBalanceGame = GameKindMapper.toBalanceGameEntity({
       url_id: findResult.id,
       user_id: dto.user_id,
       balance_id: dto.balance_id,
       balance_type: dto.type,
-    });
+    } as unknown as SaveUserBalance);
+
+    const saveResult = await this.userBalanceGameRepository.save(
+      saveBalanceGame,
+    );
 
     await this.findUserCountBalance(dto.url, dto.balance_id);
 
     return saveResult;
   }
 
-  async findUserCountBalance(url: string, balance_id: number) {
+  private async findUserCountBalance(url: string, balance_id: number) {
     const findResult = await this.userUrlService.findUserInfoWithBalance(url);
 
     const filteredData = findResult.map((entry) => ({
@@ -113,7 +119,7 @@ export class BalanceGameService {
     };
   }
 
-  async calculateUserPercentages(data, balance_id) {
+  private async calculateUserPercentages(data, balance_id) {
     const userCountByBalanceType = {};
     data.forEach((item) => {
       const balanceType = item.balance_type;
