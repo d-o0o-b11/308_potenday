@@ -7,6 +7,8 @@ import { SaveMbtiRoundDto } from '../dto/save-mbti-round.dto';
 import { MbtiChooseEntity } from '../entities/mbti-choose.entity';
 import { AdjectiveExpressionService } from './adjective-expression.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GameKindMapper } from '../mapper/game-kind.mapper';
+import { SaveMbtiDto } from '../dto/save-mbti.dto';
 
 @Injectable()
 export class MbtiPredictionService {
@@ -40,25 +42,27 @@ export class MbtiPredictionService {
       await this.userUrlService.saveUserMbti(dto.user_id, dto.mbti);
     } else {
       //다른 사람 추측
-      await this.mbtiChooseEntityRepository.save({
+      const saveUserMbti = GameKindMapper.toUserMbtiEntity({
         url_id: findResult.id,
         user_id: dto.user_id,
         mbti: dto.mbti,
         to_user_id: dto.to_user_id,
-      });
+      } as SaveMbtiDto);
+
+      await this.mbtiChooseEntityRepository.save(saveUserMbti);
     }
 
     const findUrlUser = await this.userUrlService.findUserInfo(dto.url);
-    const test = await this.checkMbtiUserCount(dto.url, dto.round_id);
+    const count_check = await this.checkMbtiUserCount(dto.url, dto.round_id);
 
-    if (findUrlUser.user.length == test) {
+    if (findUrlUser.user.length == count_check) {
       this.eventEmitter.emit('statusUpdated', { url: dto.url, status: true });
     }
 
     return true;
   }
 
-  async checkMbtiUserCount(url: string, round_id: number) {
+  private async checkMbtiUserCount(url: string, round_id: number) {
     let cnt = 0;
     const findResult = await this.userUrlService.findUserInfo(url);
 

@@ -2,6 +2,8 @@ import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expression.entity';
 import { SaveUserBalance } from '../dto/save-balance-game.dto';
 import { UserBalanceGameEntity } from '../entities/user-balance-game.entity';
+import { SaveMbtiDto } from '../dto/save-mbti.dto';
+import { MbtiChooseEntity } from '../entities/mbti-choose.entity';
 
 export class GameKindMapper {
   static toUserAdjectiveExpressionEntity(
@@ -28,5 +30,16 @@ export class GameKindMapper {
     } as unknown as UserBalanceGameEntity);
 
     return plainToInstance(UserBalanceGameEntity, userBalanceGame);
+  }
+
+  static toUserMbtiEntity(dto: SaveMbtiDto) {
+    const userMbti = instanceToPlain({
+      url_id: dto.url_id,
+      user_id: dto.user_id,
+      mbti: dto.mbti,
+      to_user_id: dto.to_user_id,
+    } as MbtiChooseEntity);
+
+    return plainToInstance(MbtiChooseEntity, userMbti);
   }
 }
