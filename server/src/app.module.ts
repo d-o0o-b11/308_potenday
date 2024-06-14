@@ -7,9 +7,11 @@ import { GameKindModule } from './game-kind/game-kind.module';
 import { LoggerModule } from './winston/winston.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { SseModule } from './sse/sse.module';
+import { TransactionModule } from 'nestjs-transaction';
 
 @Module({
   imports: [
+    TransactionModule.forRoot(),
     UserUrlModule,
     SettingModule,
     GameKindModule,

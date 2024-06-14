@@ -7,6 +7,7 @@ import { CreateGameKindDto } from '../dto/create-game-kind.dto';
 import { UserUrlService } from 'src/user-url/user-url.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { GameKindMapper } from '../mapper/game-kind.mapper';
+import { Transactional } from 'nestjs-transaction';
 
 @Injectable()
 export class AdjectiveExpressionService {
@@ -34,6 +35,7 @@ export class AdjectiveExpressionService {
   }
 
   //형용사 표현 저장 (개인)
+  @Transactional()
   async saveUserExpressionList(dto: CreateGameKindDto) {
     const { url, user_id, expression_id } = dto;
 
@@ -50,12 +52,15 @@ export class AdjectiveExpressionService {
       userAdjectiveExpressions,
     );
 
+    throw new Error('test');
+
     await this.getExpressionListUserCount(url);
 
     return saveResult;
   }
 
   //몇명이 형용사 표현 저장했는지
+  @Transactional()
   private async getExpressionListUserCount(url: string) {
     const findResult = await this.userUrlService.countUserAdjectiveExpression(
       url,
@@ -71,7 +76,7 @@ export class AdjectiveExpressionService {
       //같으면 sse
       this.eventEmitter.emit('statusUpdated', { url: url, status: true });
     }
-
+    console.log('들어옴');
     return { finish_user: findResult, next: next };
   }
 

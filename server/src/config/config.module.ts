@@ -7,11 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [
-        `src/envs/${
-          process.env.NODE_ENV == 'dev' ? 'development' : 'production'
-        }.env`,
-      ],
+      envFilePath: [`envs/${process.env.NODE_ENV}.env`],
       load: [databaseConfig],
       isGlobal: true,
     }),

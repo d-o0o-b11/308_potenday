@@ -14,7 +14,7 @@ export class SetUpConfig {
   }
 
   async setListen(port: number) {
-    await this.app.listen(port);
+    await this.app.listen(process.env.SERVER_PORT || 3000, '0.0.0.0');
   }
 
   protected swaggerConfig() {
@@ -55,11 +55,7 @@ export class SetUpConfig {
 
   protected setCORS() {
     this.app.enableCors({
-      origin: [
-        'https://melting-point.vercel.app/',
-        'https://melting-point.vercel.app/*',
-        'https://melting-point.vercel.app',
-      ],
+      origin: ['https://melting-point.vercel.app/*'],
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       credentials: true,
       allowedHeaders: 'Content-Type, Accept, Authorization',

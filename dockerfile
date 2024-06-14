@@ -25,7 +25,7 @@ FROM node:18.12.1-alpine AS runner
 WORKDIR /usr/src/308_poten_day/app
 
 COPY --from=deps /usr/src/308_poten_day/app/dist ./dist
-COPY --from=deps /usr/src/308_poten_day/app/src/envs ./src/envs
+COPY --from=deps /usr/src/308_poten_day/app/src/envs ./envs
 COPY --from=deps /usr/src/308_poten_day/app/node_modules ./node_modules
 # COPY src/envs/production.env ./src/envs/production.env
 

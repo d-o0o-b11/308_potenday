@@ -22,6 +22,8 @@ export default registerAs('postgres', () => {
     database: process.env.DB_DATABASE,
   };
 
+  console.log(config);
+
   const { error, value } = schema.validate(config, {
     abortEarly: false,
     // true :  첫번째 오류에서 유효성 검사 중지

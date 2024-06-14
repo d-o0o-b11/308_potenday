@@ -47,31 +47,4 @@ export class PublicQuestionGameService {
 
     return true;
   }
-
-  //공통 질문 현재 페이지 찾기
-  async findQuestionStatus(dto: UpdateQuestionStatusDto) {
-    const findOneResuelt = await this.userUrlService.findUrlId(dto.url);
-
-    const updates: { [key: number]: string } = {
-      1: 'question_1',
-      2: 'question_2',
-      3: 'question_3',
-      4: 'squestion_4',
-    };
-
-    const updateColumns = updates[dto.question_id];
-
-    const findQuestionStatus =
-      await this.commonQuestionEntityRepository.findOne({
-        where: {
-          url_id: findOneResuelt.id,
-        },
-      });
-
-    if (findQuestionStatus[updateColumns]) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

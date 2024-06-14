@@ -13,7 +13,7 @@ export class LoggerService implements NestLoggerService {
 
       transports: [
         new winston.transports.Console({
-          level: process.env.NODE_ENV === 'dev' ? 'info' : 'silly',
+          level: process.env.NODE_ENV === 'development' ? 'info' : 'silly',
           format: winston.format.combine(
             winston.format.timestamp({
               format: 'YYYY-MM-DD hh:mm:ss A',
