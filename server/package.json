@@ -13,16 +13,20 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "NODE_ENV=production node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
+    "test": "NODE_ENV=test jest --config ./jest.unit.js",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "NODE_ENV=test jest test --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "NODE_ENV=test jest --config ./jest.e2e.js",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "seed:run": "source scripts/seed.run.sh ",
+    "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/cqrs": "^10.2.7",
     "@nestjs/event-emitter": "^2.0.1",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.1.3",
@@ -31,6 +35,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "crypto": "^1.0.1",
+    "env-cmd": "^10.1.0",
     "joi": "^17.9.2",
     "nest-winston": "^1.9.3",
     "nestjs-transaction": "^0.1.2",
@@ -38,6 +43,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.17",
+    "typeorm-extension": "^3.5.1",
     "winston": "^3.10.0"
   },
   "devDependencies": {
@@ -62,28 +68,5 @@
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
-  },
-  "jest": {
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "roots": [
-      "src"
-    ],
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "src/(.*)": "<rootDir>/src/$1"
-    }
   }
 }
