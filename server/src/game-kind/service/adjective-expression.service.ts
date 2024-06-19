@@ -4,7 +4,7 @@ import { AdjectiveExpressionEntity } from '../entities/adjective-expression.enti
 import { Repository } from 'typeorm';
 import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expression.entity';
 import { CreateGameKindDto } from '../dto/create-game-kind.dto';
-import { UserUrlService } from 'src/user-url/user-url.service';
+import { UserUrlService } from '../../user-url/user-url.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { GameKindMapper } from '../mapper/game-kind.mapper';
 import { Transactional } from 'nestjs-transaction';

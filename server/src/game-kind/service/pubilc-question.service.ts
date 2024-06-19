@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommonQuestionEntity } from '../entities/common-question.entity';
 import { UpdateQuestionStatusDto } from '../dto/update-question-status.dto';
-import { UserUrlService } from 'src/user-url/user-url.service';
+import { UserUrlService } from '../../user-url/user-url.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()

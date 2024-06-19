@@ -10,9 +10,9 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { UserUrlEntity } from './user-url.entity';
-import { UserAdjectiveExpressionEntity } from 'src/game-kind/entities/user-adjective-expression.entity';
-import { UserBalanceGameEntity } from 'src/game-kind/entities/user-balance-game.entity';
-import { MbtiChooseEntity } from 'src/game-kind/entities/mbti-choose.entity';
+import { UserAdjectiveExpressionEntity } from '../../game-kind/entities/user-adjective-expression.entity';
+import { UserBalanceGameEntity } from '../../game-kind/entities/user-balance-game.entity';
+import { MbtiChooseEntity } from '../../game-kind/entities/mbti-choose.entity';
 
 @Entity('user_info')
 export class UserInfoEntity {

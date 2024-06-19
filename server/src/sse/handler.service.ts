@@ -5,6 +5,6 @@ import { OnEvent } from '@nestjs/event-emitter';
 export class StockCreatedListener {
   @OnEvent('statusUpdated')
   handleStockCreatedEvent(event) {
-    console.log(event);
+    console.log('이벤트', event);
   }
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UserUrlService } from './user-url.service';
 import { UserUrlController } from './user-url.controller';
-import { EntitiesModule } from 'src/entity.module';
+import { EntitiesModule } from '../entity.module';
 
 @Module({
   imports: [EntitiesModule],

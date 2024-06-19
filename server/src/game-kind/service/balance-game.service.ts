@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BalanceGameEntity } from '../entities/balance-game-list.entity';
-import { UserUrlService } from 'src/user-url/user-url.service';
+import { UserUrlService } from '../../user-url/user-url.service';
 import { UserBalanceGameEntity } from '../entities/user-balance-game.entity';
 import { CreateBalanceGameDto } from '../dto/create-balance-game.dto';
 import { FindBalanceGameDto } from '../dto/find-balance-game.dto';

@@ -19,7 +19,7 @@ export class UserUrlService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  //url 중복확인
+  //url 중복확인 (끝)
   async findDuplication(url: string) {
     const findOneResuelt = await this.userUrlRepository.findOne({
       where: {
@@ -34,7 +34,7 @@ export class UserUrlService {
     return false;
   }
 
-  //랜덤 url 출력하기
+  //랜덤 url 출력하기 (끝)
   async setUrl() {
     let url;
     let isDuplicate;
@@ -52,7 +52,7 @@ export class UserUrlService {
     return url;
   }
 
-  //유저 닉네임 해당 링크에 저장하기
+  //유저 닉네임 해당 링크에 저장하기 (끝)
   async saveUserProfileToUrl(dto: CreateUserUrlDto) {
     const findOneResult = await this.userUrlRepository.findOne({
       where: {
@@ -84,7 +84,7 @@ export class UserUrlService {
     };
   }
 
-  //대기방 인원 수
+  //대기방 인원 수 (끝)
   async countUserToWaitingRoom(url: string) {
     const userUrl = await this.userUrlRepository
       .createQueryBuilder('user_url')
@@ -112,7 +112,7 @@ export class UserUrlService {
     return { userCount, userInfo };
   }
 
-  //입장 마감
+  //입장 마감 (끝)
   async updateStatusFalse(url: string) {
     const findOneResult = await this.userUrlRepository.findOne({
       where: {
@@ -160,6 +160,7 @@ export class UserUrlService {
   }
 
   //url 이용해서 형용사 표현 출력 => 정렬
+  //위에랑 동일하니깐  정렬된걸 같이 쓰면될듯하다.
   async findUserAdjectiveExpressioListOrder(url: string) {
     const findResult = await this.userUrlRepository.findOne({
       where: {
@@ -196,7 +197,7 @@ export class UserUrlService {
     return user_count;
   }
 
-  //url 상태! (게임 시작한 상태인지 대기중인지 확인)
+  //url 상태! (게임 시작한 상태인지 대기중인지 확인) (끝)
   async getUrlStatus(url: string) {
     const findOneResuelt = await this.userUrlRepository.findOne({
       where: {
@@ -304,7 +305,7 @@ export class UserUrlService {
     return saveResult;
   }
 
-  //유저 info 정보 출력
+  //유저 info 정보 출력 (구현완료)
   async findOneUserInfo(user_id: number) {
     const findOneResuelt = await this.userInfoRepository.findOne({
       where: {
@@ -316,6 +317,7 @@ export class UserUrlService {
   }
 
   //url에 연관된 애들 출력 정렬
+  //
   async findUserToUrlOrder(url: string) {
     const findResult = await this.userUrlRepository.findOne({
       where: {

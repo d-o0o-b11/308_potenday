@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserUrlService } from 'src/user-url/user-url.service';
+import { UserUrlService } from '../../user-url/user-url.service';
 import { FindMbtiRoundDto } from '../dto/find-mbti-round.dto';
 import { SaveMbtiRoundDto } from '../dto/save-mbti-round.dto';
 import { MbtiChooseEntity } from '../entities/mbti-choose.entity';

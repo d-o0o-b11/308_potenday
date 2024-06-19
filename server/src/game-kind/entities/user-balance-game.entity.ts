@@ -1,5 +1,5 @@
-import { UserInfoEntity } from 'src/user-url/entities/user-info.entity';
-import { UserUrlEntity } from 'src/user-url/entities/user-url.entity';
+import { UserInfoEntity } from '../../user-url/entities/user-info.entity';
+import { UserUrlEntity } from '../../user-url/entities/user-url.entity';
 import {
   Column,
   CreateDateColumn,

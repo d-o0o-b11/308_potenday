@@ -1,4 +1,4 @@
-import { UserUrlEntity } from 'src/user-url/entities/user-url.entity';
+import { UserUrlEntity } from '../../user-url/entities/user-url.entity';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity('common_question')

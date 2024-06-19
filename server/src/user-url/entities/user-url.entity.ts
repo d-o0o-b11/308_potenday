@@ -9,9 +9,9 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { UserInfoEntity } from './user-info.entity';
-import { CommonQuestionEntity } from 'src/game-kind/entities/common-question.entity';
-import { UserBalanceGameEntity } from 'src/game-kind/entities/user-balance-game.entity';
-import { MbtiChooseEntity } from 'src/game-kind/entities/mbti-choose.entity';
+import { CommonQuestionEntity } from '../../game-kind/entities/common-question.entity';
+import { UserBalanceGameEntity } from '../../game-kind/entities/user-balance-game.entity';
+import { MbtiChooseEntity } from '../../game-kind/entities/mbti-choose.entity';
 
 @Entity('user_url')
 export class UserUrlEntity {

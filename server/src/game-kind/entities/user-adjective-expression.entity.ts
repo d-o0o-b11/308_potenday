@@ -1,4 +1,4 @@
-import { UserInfoEntity } from 'src/user-url/entities/user-info.entity';
+import { UserInfoEntity } from '../../user-url/entities/user-info.entity';
 import {
   Column,
   Entity,
@@ -18,6 +18,10 @@ export class UserAdjectiveExpressionEntity {
 
   @Column({ type: 'int4' })
   expression_id: number;
+
+  constructor(data: Partial<UserAdjectiveExpressionEntity>) {
+    Object.assign(this, data);
+  }
 
   @ManyToOne(() => UserInfoEntity, (user) => user.expressions, {
     onDelete: 'CASCADE',
