@@ -1,6 +1,6 @@
 import { DatabaseType } from 'typeorm';
 
-export interface IsDatabaseConfig {
+export interface IDataBase {
   type: DatabaseType;
   host: string;
   port: number;
