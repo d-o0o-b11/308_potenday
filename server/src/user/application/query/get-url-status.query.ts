@@ -1,0 +1,5 @@
+import { IQuery } from '@nestjs/cqrs';
+
+export class GetUrlStatusQuery implements IQuery {
+  constructor(public readonly url: string) {}
+}

@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserUrlModule } from './user-url/user-url.module';
 import { SettingModule } from './config/config.module';
 import { GameKindModule } from './game-kind/game-kind.module';
@@ -8,9 +6,14 @@ import { LoggerModule } from './winston/winston.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { SseModule } from './sse/sse.module';
 import { TransactionModule } from 'nestjs-transaction';
+import { UserModule } from '@user';
+import { APP_FILTER } from '@nestjs/core';
+import { BasicExceptionFilter } from '@common';
+import { DataBaseModule } from '@database';
 
 @Module({
   imports: [
+    DataBaseModule,
     TransactionModule.forRoot(),
     UserUrlModule,
     SettingModule,
@@ -33,8 +36,14 @@ import { TransactionModule } from 'nestjs-transaction';
       ignoreErrors: false,
     }),
     SseModule,
+    UserModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: BasicExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
