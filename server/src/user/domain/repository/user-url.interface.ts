@@ -1,6 +1,5 @@
 import {
   CreateUserUrlDto,
-  FindAdjectiveExpressionListDto,
   FindOneUserUrlDto,
   FindOneUserUrlWithUserDto,
   UpdateUserUrlDto,
@@ -13,7 +12,4 @@ export interface IUserUrlRepository {
   update: (dto: UpdateUserUrlDto) => Promise<void>;
   findOne: (dto: FindOneUserUrlDto) => Promise<UserUrl>;
   findOneWithUser: (dto: FindOneUserUrlWithUserDto) => Promise<UserUrl>;
-  findUserAdjectiveExpressionList: (
-    dto: FindAdjectiveExpressionListDto,
-  ) => Promise<UserUrl>;
 }

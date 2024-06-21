@@ -10,7 +10,6 @@ import {
 } from '../../../domain';
 import {
   CreateUserUrlDto,
-  FindAdjectiveExpressionListDto,
   FindOneUserUrlDto,
   FindOneUserUrlWithUserDto,
   UpdateUserUrlDto,
@@ -97,70 +96,4 @@ export class UserUrlRepository implements IUserUrlRepository {
       users,
     );
   }
-
-  async findUserAdjectiveExpressionList(dto: FindAdjectiveExpressionListDto) {
-    const result = await this.userUrlRepository.findOne({
-      where: {
-        url: dto.url,
-      },
-      relations: {
-        user: {
-          expressions: {
-            expressions: true,
-          },
-        },
-      },
-      order: {
-        user: {
-          createdAt: 'ASC',
-        },
-      },
-    });
-
-    //조회 값 존재하지 않을 시 처리 <--수정 필요
-
-    const users = result.user.map((user) => {
-      const expressions = user.expressions.map(
-        (expression) => expression.expressions.expression,
-      );
-      return this.userFactory.reconstituteAdjectiveExpression(
-        user.id,
-        user.imgId,
-        user.nickName,
-        user.urlId,
-        user.mbti,
-        user.onboarding,
-        expressions as any, //<--수정 필요
-      );
-    });
-
-    return this.userUrlFactory.reconstituteWithUser(
-      result.id,
-      result.url,
-      result.status,
-      users,
-    );
-  }
-
-  // async findUserAdjectiveExpressionList(dto: FindAdjectiveExpressionListDto) {
-  //   const result = await this.userUrlRepository.findOne({
-  //     where: {
-  //       url: dto.url,
-  //     },
-  //     relations: {
-  //       user: {
-  //         expressions: {
-  //           expressions: true,
-  //         },
-  //       },
-  //     },
-  //     order: {
-  //       user: {
-  //         createdAt: 'ASC',
-  //       },
-  //     },
-  //   });
-
-  //   return result;
-  // }
 }

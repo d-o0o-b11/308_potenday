@@ -35,12 +35,3 @@ export class FindOneUserUrlWithUserDto {
   @IsString()
   readonly url: string;
 }
-
-export class FindAdjectiveExpressionListDto {
-  /**
-   * URL
-   * @example 'qervvdd'
-   */
-  @IsString()
-  readonly url: string;
-}

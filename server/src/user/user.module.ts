@@ -16,6 +16,7 @@ import {
   NextStepHandler,
   UpdateStatusFalseHandler,
   UserEventHandler,
+  GetUsersInRoomQueryHandler,
   UserUrlService,
 } from './application';
 import {
@@ -34,6 +35,7 @@ import {
     CountUsersInRoomQueryHandler,
     UpdateStatusFalseHandler,
     GetUrlStatusHandler,
+    GetUsersInRoomQueryHandler,
     NextStepHandler,
     UserFactory,
     UserUrlFactory,
