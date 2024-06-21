@@ -46,22 +46,6 @@ export class CreateUserCommandDto {
   readonly nickName: string;
 }
 
-export class InsertMbtiDto {
-  /**
-   * 유저 ID
-   * @example 25
-   */
-  @IsNumber()
-  readonly userId: number;
-
-  /**
-   * MBTI
-   * @example 'ISTJ'
-   */
-  @IsString()
-  readonly mbti: string;
-}
-
 export class UpdateOnboardingDto {
   /**
    * 유저 ID

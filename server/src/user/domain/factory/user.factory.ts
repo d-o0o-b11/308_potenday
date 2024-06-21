@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
 import { User } from '../user';
 import { UserCreateEvent } from '../user-create.event';
-import { UserAdjectiveExpressionEntity } from '@game-kind/entities/user-adjective-expression.entity';
+import { UserAdjectiveExpression } from '@game';
 
 @Injectable()
 export class UserFactory {
@@ -26,10 +26,9 @@ export class UserFactory {
     imgId: number,
     nickName: string,
     urlId: number,
-    mbti: string,
     onboarding: boolean,
   ): User {
-    return new User(id, imgId, nickName, urlId, mbti, onboarding);
+    return new User(id, imgId, nickName, urlId, onboarding);
   }
 
   reconstituteArray(
@@ -46,30 +45,16 @@ export class UserFactory {
     imgId: number,
     nickName: string,
     urlId: number,
-    mbti?: string,
     onboarding?: boolean,
-    //수정 필요 entity X, UserAdjectiveExpression.ts
-    /**
-     * export class Expression {
-  constructor(
-    private readonly id: number,
-    private readonly content: string,
-  ) {}
-
-  getId(): Readonly<number> {
-    return this.id;
-  }
-
-  getContent(): Readonly<string> {
-    return this.content;
-  }
-
-
-}
-
-     */
-    expressions?: UserAdjectiveExpressionEntity[],
+    adjectiveExpressions?: UserAdjectiveExpression[],
   ): User {
-    return new User(id, imgId, nickName, urlId, mbti, onboarding, expressions);
+    return new User(
+      id,
+      imgId,
+      nickName,
+      urlId,
+      onboarding,
+      adjectiveExpressions,
+    );
   }
 }

@@ -6,7 +6,6 @@ import { UserEntity } from '../entity';
 import {
   CreateUserDto,
   FindOneUserDto,
-  InsertMbtiDto,
   UpdateOnboardingDto,
 } from '../../../interface';
 import { UserMapper } from '../mapper';
@@ -32,13 +31,6 @@ export class UserRepository implements IUserRepository {
         onboarding: result.onboarding,
         urlId: result.urlId,
       };
-    });
-  }
-
-  async insertMbti(dto: InsertMbtiDto) {
-    await this.manager.transaction(async (manager) => {
-      const userEntity = UserMapper.toMbtiEntity(dto);
-      return await manager.insert(UserEntity, userEntity);
     });
   }
 
@@ -69,7 +61,6 @@ export class UserRepository implements IUserRepository {
       user.imgId,
       user.nickName,
       user.urlId,
-      user.mbti,
       user.onboarding,
     );
   }

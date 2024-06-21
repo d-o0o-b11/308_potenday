@@ -1,4 +1,4 @@
-import { CreateUserDto, InsertMbtiDto } from '../../../interface';
+import { CreateUserDto } from '../../../interface';
 import { UserEntity } from '../entity';
 
 export class UserMapper {
@@ -8,12 +8,5 @@ export class UserMapper {
     entity.imgId = dto.imgId;
     entity.nickName = dto.nickName;
     return entity;
-  }
-
-  static toMbtiEntity(dto: InsertMbtiDto): Partial<UserEntity> {
-    return {
-      id: dto.userId,
-      mbti: dto.mbti,
-    };
   }
 }

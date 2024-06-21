@@ -5,7 +5,7 @@
  * 이를 통해 데이터와 로직을 명확히 분리하고, 유지보수성과 테스트 용이성을 높일 수 있다.
  */
 
-import { UserAdjectiveExpressionEntity } from '@game-kind/entities/user-adjective-expression.entity';
+import { UserAdjectiveExpression } from '@game';
 
 export class User {
   constructor(
@@ -13,10 +13,9 @@ export class User {
     private readonly imgId: number,
     private readonly nickName: string,
     private readonly urlId: number,
-    private readonly mbti?: string,
     private readonly onboarding?: boolean,
     //수정 필요 entity X
-    private readonly expressions?: UserAdjectiveExpressionEntity[],
+    private readonly adjectiveExpressions?: UserAdjectiveExpression[],
   ) {}
 
   getId(): Readonly<number> {
@@ -31,10 +30,6 @@ export class User {
     return this.nickName;
   }
 
-  getMbti(): Readonly<string | undefined> {
-    return this.mbti;
-  }
-
   getOnboarding(): Readonly<boolean | undefined> {
     return this.onboarding;
   }
@@ -43,8 +38,8 @@ export class User {
     return this.urlId;
   }
 
-  getExpressions(): Readonly<UserAdjectiveExpressionEntity[] | undefined> {
-    return this.expressions;
+  getAdjectiveExpressions(): Readonly<UserAdjectiveExpression[] | undefined> {
+    return this.adjectiveExpressions;
   }
 
   //   getCreatedAt(): Readonly<Date> {
