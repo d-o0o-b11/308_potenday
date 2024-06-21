@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserAdjectiveExpressionEntity } from './user-adjective-expression.entity';
+import { IsEnum } from 'class-validator';
+import { Adjective } from '../../../domain';
 
 @Entity('adjective_expression')
 export class AdjectiveExpressionEntity {
@@ -13,16 +15,27 @@ export class AdjectiveExpressionEntity {
   })
   id: number;
 
-  @Column({ type: 'varchar' })
-  expression: string;
+  // @memo 생각해보기,,컬럼을 fit하게 맞출지 서버에서만 fit하게 맞출지에 대해서
+  // @Column({
+  //   type: 'enum',
+  //   enum: [
+  //     '꼼꼼한', '솔직한', '자신감있는', '사려깊은', '신중한', '쾌할한',
+  //     '침착한', '내성적인', '외향적인', '긍정적인', '열정적인', '다정한',
+  //     '부지런한', '정직한', '즉흥적인', '엉뚱한'
+  //   ],
+  //   nullable: false
+  // })
+  @Column({ type: 'varchar', name: 'adjective', nullable: false })
+  @IsEnum(Adjective)
+  adjective: Adjective;
 
   @OneToMany(
     () => UserAdjectiveExpressionEntity,
-    (expression) => expression.expressions,
+    (userAdjectiveExpression) => userAdjectiveExpression.adjectiveExpression,
     {
       cascade: true,
       nullable: true,
     },
   )
-  expressionList: UserAdjectiveExpressionEntity[];
+  userAdjectiveExpressions: UserAdjectiveExpressionEntity[];
 }

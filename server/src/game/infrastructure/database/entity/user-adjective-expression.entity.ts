@@ -17,13 +17,8 @@ export class UserAdjectiveExpressionEntity extends BaseEntity {
   @Column({ type: 'int4', name: 'user_id', nullable: false })
   userId: number;
 
-  @Column({ type: 'int4', name: 'expression_id', nullable: false })
-  expressionId: number;
-
-  constructor(data: Partial<UserAdjectiveExpressionEntity>) {
-    super();
-    Object.assign(this, data);
-  }
+  @Column({ type: 'int4', name: 'adjective_expression_id', nullable: false })
+  adjectiveExpressionId: number;
 
   @ManyToOne(() => UserEntity, (user) => user.expressions, {
     onDelete: 'CASCADE',
@@ -33,11 +28,11 @@ export class UserAdjectiveExpressionEntity extends BaseEntity {
 
   @ManyToOne(
     () => AdjectiveExpressionEntity,
-    (expression) => expression.expressionList,
+    (expression) => expression.userAdjectiveExpressions,
     {
       onDelete: 'CASCADE',
     },
   )
-  @JoinColumn({ name: 'expression_id' }) // 중간 테이블 지정
-  expressions: AdjectiveExpressionEntity;
+  @JoinColumn({ name: 'adjective_expression_id' }) // 중간 테이블 지정
+  adjectiveExpression: AdjectiveExpressionEntity;
 }

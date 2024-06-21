@@ -7,11 +7,9 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { CommonQuestionEntity } from '../../../../game-kind/entities/common-question.entity';
-import { UserBalanceGameEntity } from '../../../../game-kind/entities/user-balance-game.entity';
-import { MbtiChooseEntity } from '../../../../game-kind/entities/mbti-choose.entity';
 import { UserEntity } from './user.entity';
 import { BaseEntity } from '@common';
+import { CommonQuestionEntity } from '@game';
 
 @Entity('user_url')
 export class UserUrlEntity extends BaseEntity {
@@ -41,16 +39,4 @@ export class UserUrlEntity extends BaseEntity {
     onDelete: 'CASCADE',
   })
   question: CommonQuestionEntity;
-
-  @OneToMany(() => UserBalanceGameEntity, (balance) => balance.url, {
-    cascade: true,
-    nullable: false,
-  })
-  balance: UserBalanceGameEntity;
-
-  @OneToMany(() => MbtiChooseEntity, (mbti) => mbti.url, {
-    cascade: true,
-    nullable: false,
-  })
-  mbti: MbtiChooseEntity[];
 }

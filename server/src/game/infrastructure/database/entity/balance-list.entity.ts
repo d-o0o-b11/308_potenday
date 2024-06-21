@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
-import { UserBalanceGameEntity } from './user-balance-game.entity';
+import { UserBalanceEntity } from './user-balance.entity';
 
-@Entity('balance_game_list')
-export class BalanceGameEntity {
+@Entity('balance_list')
+export class BalanceListEntity {
   @Generated()
   @PrimaryColumn('int4')
   @ApiProperty({
@@ -19,9 +19,13 @@ export class BalanceGameEntity {
   @Column({ type: 'varchar', name: 'type_B', nullable: false })
   typeB: string;
 
-  @OneToMany(() => UserBalanceGameEntity, (balance) => balance.balance, {
-    cascade: true,
-    nullable: true,
-  })
-  balanceList: UserBalanceGameEntity[];
+  @OneToMany(
+    () => UserBalanceEntity,
+    (userBalanceGame) => userBalanceGame.balanceGame,
+    {
+      cascade: true,
+      nullable: true,
+    },
+  )
+  userBalanceGames: UserBalanceEntity[];
 }

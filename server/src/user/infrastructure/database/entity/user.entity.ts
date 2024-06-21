@@ -7,11 +7,13 @@ import {
   OneToMany,
   PrimaryColumn,
 } from 'typeorm';
-import { UserBalanceGameEntity } from '../../../../game-kind/entities/user-balance-game.entity';
-import { MbtiChooseEntity } from '../../../../game-kind/entities/mbti-choose.entity';
 import { BaseEntity } from '@common';
 import { UserUrlEntity } from './user-url.entity';
-import { UserAdjectiveExpressionEntity } from '../../../../game-kind/entities/user-adjective-expression.entity';
+import {
+  UserMbtiEntity,
+  UserAdjectiveExpressionEntity,
+  UserBalanceEntity,
+} from '@game';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {
@@ -24,9 +26,6 @@ export class UserEntity extends BaseEntity {
 
   @Column({ type: 'varchar', name: 'nickname', nullable: false })
   nickName: string;
-
-  @Column({ type: 'varchar', name: 'mbti', nullable: true })
-  mbti: string;
 
   @Column({
     type: 'boolean',
@@ -56,21 +55,21 @@ export class UserEntity extends BaseEntity {
   )
   expressions: UserAdjectiveExpressionEntity[];
 
-  @OneToMany(() => UserBalanceGameEntity, (balance) => balance.user, {
+  @OneToMany(() => UserBalanceEntity, (userBalance) => userBalance.user, {
     cascade: true,
     nullable: true,
   })
-  balance: UserBalanceGameEntity[];
+  userBalanceGames: UserBalanceEntity[];
 
-  @OneToMany(() => MbtiChooseEntity, (mbti) => mbti.user, {
+  @OneToMany(() => UserMbtiEntity, (mbti) => mbti.user, {
     cascade: true,
     nullable: true,
   })
-  mbtiChoose: MbtiChooseEntity[];
+  mbtiChoose: UserMbtiEntity[];
 
-  @OneToMany(() => MbtiChooseEntity, (mbti) => mbti.toUser, {
+  @OneToMany(() => UserMbtiEntity, (mbti) => mbti.toUser, {
     cascade: true,
     nullable: true,
   })
-  mbtiChooseToUser: MbtiChooseEntity[];
+  mbtiChooseToUser: UserMbtiEntity[];
 }
