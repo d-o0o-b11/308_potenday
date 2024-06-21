@@ -11,7 +11,7 @@ import {
 import { BalanceGameEntity } from './balance-game-list.entity';
 import { IsDate } from 'class-validator';
 
-@Entity('user_balance_game')
+@Entity('user_balance_game1')
 export class UserBalanceGameEntity {
   @PrimaryGeneratedColumn()
   id: number;

@@ -3,7 +3,7 @@ import { UserAdjectiveExpressionEntity } from '../entities/user-adjective-expres
 import { SaveUserBalance } from '../dto/save-balance-game.dto';
 import { UserBalanceGameEntity } from '../entities/user-balance-game.entity';
 import { SaveMbtiDto } from '../dto/save-mbti.dto';
-import { MbtiChooseEntity } from '../entities/mbti-choose.entity';
+import { MbtiChooseEntity } from '@game-kind/entities/mbti-choose.entity';
 
 export class GameKindMapper {
   static toUserAdjectiveExpressionEntity(

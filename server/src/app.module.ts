@@ -10,6 +10,7 @@ import { UserModule } from '@user';
 import { APP_FILTER } from '@nestjs/core';
 import { BasicExceptionFilter } from '@common';
 import { DataBaseModule } from '@database';
+import { GameModule } from '@game';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { DataBaseModule } from '@database';
     }),
     SseModule,
     UserModule,
+    GameModule,
   ],
   controllers: [],
   providers: [

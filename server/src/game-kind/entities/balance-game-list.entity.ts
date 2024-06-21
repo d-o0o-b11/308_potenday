@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserBalanceGameEntity } from './user-balance-game.entity';
 
-@Entity('balance_game_list')
+@Entity('balance_game_list1')
 export class BalanceGameEntity {
   @Generated()
   @PrimaryColumn('int4')

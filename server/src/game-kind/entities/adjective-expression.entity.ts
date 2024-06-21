@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserAdjectiveExpressionEntity } from './user-adjective-expression.entity';
 
-@Entity('adjective_expression')
+@Entity('adjective_expression1')
 export class AdjectiveExpressionEntity {
   @Generated()
   @PrimaryColumn('int4')

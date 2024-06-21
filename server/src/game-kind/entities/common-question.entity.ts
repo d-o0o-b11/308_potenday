@@ -1,7 +1,7 @@
 import { UserUrlEntity } from '../../user-url/entities/user-url.entity';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
-@Entity('common_question')
+@Entity('common_question1')
 export class CommonQuestionEntity {
   @PrimaryColumn('int4')
   url_id: number;

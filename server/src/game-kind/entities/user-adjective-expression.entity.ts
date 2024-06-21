@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { AdjectiveExpressionEntity } from './adjective-expression.entity';
 
-@Entity('user_adjective_expression')
+@Entity('user_adjective_expression1')
 export class UserAdjectiveExpressionEntity {
   @PrimaryGeneratedColumn()
   id: number;

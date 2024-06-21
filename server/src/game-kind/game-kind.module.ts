@@ -13,9 +13,9 @@ import { MbtiPredictionService } from './service/mbti-prediction.service';
 @Module({
   imports: [EntitiesModule, UserUrlModule],
   controllers: [
-    AdjectiveExpressionController,
-    BalanceGameController,
-    PublicQuestionGameController,
+    // AdjectiveExpressionController,
+    // BalanceGameController,
+    // PublicQuestionGameController,
     MbtiPredictionController,
   ],
   providers: [

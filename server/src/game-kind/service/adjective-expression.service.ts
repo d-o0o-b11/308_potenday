@@ -23,7 +23,7 @@ export class AdjectiveExpressionService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  //모든 형용사 출력
+  //모든 형용사 출력 (끝)
   async getAllExpressionList() {
     const findResult = await this.adjectiveExpressionRepository.find({
       order: {
@@ -52,8 +52,6 @@ export class AdjectiveExpressionService {
       userAdjectiveExpressions,
     );
 
-    throw new Error('test');
-
     await this.getExpressionListUserCount(url);
 
     return saveResult;
@@ -62,10 +60,18 @@ export class AdjectiveExpressionService {
   //몇명이 형용사 표현 저장했는지
   @Transactional()
   private async getExpressionListUserCount(url: string) {
+    /**
+     * 수정로직
+     * 1. 해당 url에 총인원수  countUserToWaitingRoom , 유저 정보도 나옴
+     * 2. 1번에서 나온 유저정보.id를 이용해서 형용사 표현 디비 조회한다
+     */
+
+    //형용사 표현 제출한 인원수
     const findResult = await this.userUrlService.countUserAdjectiveExpression(
       url,
     );
 
+    //해당 방의 총인원수
     const findCountUser = await this.userUrlService.countUserToWaitingRoom(url);
 
     let next = true;
@@ -77,6 +83,7 @@ export class AdjectiveExpressionService {
       this.eventEmitter.emit('statusUpdated', { url: url, status: true });
     }
     console.log('들어옴');
+    //반환 데이터는 필요없다
     return { finish_user: findResult, next: next };
   }
 

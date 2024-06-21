@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('mbti_choose')
+@Entity('mbti_choose1')
 export class MbtiChooseEntity {
   @PrimaryGeneratedColumn()
   id: number;
