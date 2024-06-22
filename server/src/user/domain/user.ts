@@ -41,24 +41,4 @@ export class User {
   getAdjectiveExpressions(): Readonly<UserAdjectiveExpression[] | undefined> {
     return this.adjectiveExpressions;
   }
-
-  //   getCreatedAt(): Readonly<Date> {
-  //     return this.createdAt;
-  //   }
-
-  //   getUrl(): Readonly<UserUrl> {
-  //     return this.url;
-  //   }
-
-  //   getBalance(): Readonly<UserBalanceGame[]> {
-  //     return this.balance;
-  //   }
-
-  //   getMbtiChoose(): Readonly<MbtiChoose[]> {
-  //     return this.mbtiChoose;
-  //   }
-
-  //   getMbtiChooseToUser(): Readonly<MbtiChoose[]> {
-  //     return this.mbtiChooseToUser;
-  //   }
 }

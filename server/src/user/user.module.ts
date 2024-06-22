@@ -1,13 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UserFactory, UserUrlFactory } from './domain';
-import {
-  UserRepository,
-  UserUrlRepository,
-} from './infrastructure/database/repository';
 import { UserController, UserUrlController } from './interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity, UserUrlEntity } from './infrastructure/database/entity';
 import {
   CountUsersInRoomQueryHandler,
   CreateUserHandler,
@@ -23,6 +18,10 @@ import {
   USER_REPOSITORY_TOKEN,
   USER_URL_REPOSITORY_TOKEN,
   USER_URL_SERVICE_TOKEN,
+  UserEntity,
+  UserRepository,
+  UserUrlEntity,
+  UserUrlRepository,
 } from './infrastructure';
 
 @Module({

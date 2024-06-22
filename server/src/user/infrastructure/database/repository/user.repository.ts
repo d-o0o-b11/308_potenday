@@ -56,12 +56,12 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return this.userFactory.reconstitute(
-      user.id,
-      user.imgId,
-      user.nickName,
-      user.urlId,
-      user.onboarding,
-    );
+    return this.userFactory.reconstitute({
+      id: user.id,
+      imgId: user.imgId,
+      nickName: user.nickName,
+      urlId: user.urlId,
+      onboarding: user.onboarding,
+    });
   }
 }

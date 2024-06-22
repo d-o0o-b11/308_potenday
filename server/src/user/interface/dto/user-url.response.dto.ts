@@ -1,3 +1,4 @@
+import { IsBoolean, IsString } from 'class-validator';
 import { User } from '../../domain';
 
 export class UserUrlResponseDto {
@@ -20,4 +21,22 @@ export class CountUsersInRoomResponseDto {
    * @example []
    */
   userInfo: User[];
+}
+
+export class GetUrlResponseDto {
+  /**
+   * URL
+   * @example 'dfsdf'
+   */
+  @IsString()
+  url: string;
+}
+
+export class GetUrlStatusResponseDto {
+  /**
+   * URL 입장 여부
+   * @example true
+   */
+  @IsBoolean()
+  status: boolean;
 }

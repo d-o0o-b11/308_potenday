@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { GetUrlStatusQuery } from './get-url-status.query';
 import { IUserUrlRepository } from '../../domain';
 import { USER_URL_REPOSITORY_TOKEN } from '../../infrastructure';
+import { GetUrlStatusResponseDto } from '../../interface';
 
 @Injectable()
 @QueryHandler(GetUrlStatusQuery)
@@ -12,7 +13,7 @@ export class GetUrlStatusHandler implements IQueryHandler<GetUrlStatusQuery> {
     private userUrlRepository: IUserUrlRepository,
   ) {}
 
-  async execute(query: GetUrlStatusQuery): Promise<{ status: boolean }> {
+  async execute(query: GetUrlStatusQuery): Promise<GetUrlStatusResponseDto> {
     const { url } = query;
     const findResult = await this.userUrlRepository.findOne({ url });
 

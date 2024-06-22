@@ -20,6 +20,6 @@ export class UpdateStatusFalseHandler
 
     await this.userUrlService.updateStatusFalse(url);
 
-    this.userUrlFactory.update(url, true);
+    this.userUrlFactory.update({ url: url, status: true });
   }
 }

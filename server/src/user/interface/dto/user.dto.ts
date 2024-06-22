@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
   /**
@@ -62,4 +62,29 @@ export class FindOneUserDto {
    */
   @IsNumber()
   readonly userId: number;
+}
+
+export class ReconstituteUserFactoryDto extends CreateUserDto {
+  /**
+   * URL ID
+   * @example 1
+   */
+  @IsNumber()
+  id: number;
+
+  /**
+   * 유저 온보딩 여부
+   * @example true
+   */
+  @IsBoolean()
+  onboarding: boolean;
+}
+
+export class ReconstituteArrayUserFactoryDto extends CreateUserDto {
+  /**
+   * URL ID
+   * @example 1
+   */
+  @IsNumber()
+  id: number;
 }

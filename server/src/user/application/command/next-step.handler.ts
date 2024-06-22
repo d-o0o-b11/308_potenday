@@ -6,9 +6,9 @@ import { NextStepCommand } from './next-step.command';
 export class NextStepHandler implements ICommandHandler<NextStepCommand> {
   constructor(private userUrlFactory: UserUrlFactory) {}
 
-  async execute(command: NextStepCommand) {
+  async execute(command: NextStepCommand): Promise<void> {
     const { url } = command;
 
-    this.userUrlFactory.update(url, true);
+    this.userUrlFactory.update({ url: url, status: true });
   }
 }

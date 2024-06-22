@@ -3,25 +3,25 @@ import { UserUrl } from '../user-url';
 import { User } from '../user';
 import { EventBus } from '@nestjs/cqrs';
 import { StatusUpdatedEvent } from '../url-status-update.event';
+import {
+  ReconstituteFactoryDto,
+  ReconstituteWithUserFactoryDto,
+  UpdateUserUrlFactoryDto,
+} from '../../interface';
 
 @Injectable()
 export class UserUrlFactory {
   constructor(private eventBus: EventBus) {}
 
-  update(url: string, status: boolean) {
-    this.eventBus.publish(new StatusUpdatedEvent(url, status));
+  update(dto: UpdateUserUrlFactoryDto) {
+    this.eventBus.publish(new StatusUpdatedEvent(dto.url, dto.status));
   }
 
-  reconstitute(id: number, url: string, status: boolean): UserUrl {
-    return new UserUrl(id, url, status);
+  reconstitute(dto: ReconstituteFactoryDto): UserUrl {
+    return new UserUrl(dto.id, dto.url, dto.status);
   }
 
-  reconstituteWithUser(
-    id: number,
-    url: string,
-    status: boolean,
-    users: User[],
-  ): UserUrl {
-    return new UserUrl(id, url, status, users);
+  reconstituteWithUser(dto: ReconstituteWithUserFactoryDto): UserUrl {
+    return new UserUrl(dto.id, dto.url, dto.status, dto.users);
   }
 }

@@ -16,13 +16,12 @@ export class UserUrlService implements IUserUrlService {
     private urlRepository: IUserUrlRepository,
   ) {}
 
-  //방 url 발급
   async setUrl() {
     let url: string;
 
     while (true) {
-      url = this.generateRandomUrl();
-      if (!(await this.isUrlDuplicate(url))) {
+      url = this._generateRandomUrl();
+      if (!(await this._isUrlDuplicate(url))) {
         break;
       }
     }
@@ -31,8 +30,6 @@ export class UserUrlService implements IUserUrlService {
     return url;
   }
 
-  //해당 url 인원수 확인
-  //4명 초과시 에러
   async checkUserLimitForUrl(dto: FindOneUserUrlDto) {
     const findOneResult = await this.urlRepository.findOne({ url: dto.url });
 
@@ -47,7 +44,6 @@ export class UserUrlService implements IUserUrlService {
     return findOneResult.getId();
   }
 
-  //대기방 인원 수 확인
   async countUsersInRoom(url: string) {
     const userUrl = await this.urlRepository.findOneWithUser({
       url,
@@ -62,7 +58,6 @@ export class UserUrlService implements IUserUrlService {
     return { userCount, userInfo: userUrl.getUserList().slice() };
   }
 
-  //최대인원 4명 초과 시 입장 마감 status:false
   async updateStatusFalse(url: string) {
     const findOneResult = await this.urlRepository.findOne({
       url,
@@ -81,11 +76,17 @@ export class UserUrlService implements IUserUrlService {
     });
   }
 
-  private generateRandomUrl(): string {
+  /**
+   * 랜덤 URL 생성
+   */
+  private _generateRandomUrl(): string {
     return crypto.randomBytes(4).toString('hex');
   }
 
-  private async isUrlDuplicate(url: string): Promise<boolean> {
+  /**
+   * URL 중복 검사
+   */
+  private async _isUrlDuplicate(url: string): Promise<boolean> {
     const findOneResult = await this.urlRepository.findOne({ url });
     return !!findOneResult;
   }

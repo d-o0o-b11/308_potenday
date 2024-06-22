@@ -15,7 +15,7 @@ import {
   NextStepCommand,
   UpdateStatusFalseCommand,
 } from '../application';
-import { CountUsersInRoomResponseDto } from './dto';
+import { CountUsersInRoomResponseDto, GetUrlStatusResponseDto } from './dto';
 
 @ApiTags('URL API')
 @Controller('url')
@@ -76,7 +76,7 @@ export class UserUrlController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: '입장 가능 여부를 반환합니다.',
-    type: Boolean,
+    type: GetUrlStatusResponseDto,
   })
   @ApiQuery({
     name: 'url',

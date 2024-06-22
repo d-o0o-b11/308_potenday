@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { IUserRepository, UserFactory } from '../../domain';
 import { Inject } from '@nestjs/common';
 import { CreateUserCommand } from './create-user.command';
-import { IUserUrlService } from '../../interface';
+import { IUserUrlService, UserResponseDto } from '../../interface';
 import {
   USER_REPOSITORY_TOKEN,
   USER_URL_SERVICE_TOKEN,
@@ -18,14 +18,14 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     @Inject(USER_URL_SERVICE_TOKEN) private urlService: IUserUrlService,
   ) {}
 
-  async execute(command: CreateUserCommand) {
+  async execute(command: CreateUserCommand): Promise<UserResponseDto> {
     const { url, imgId, nickName } = command;
 
     const urlId = await this.urlService.checkUserLimitForUrl({ url });
 
     const result = await this.userRepository.save({ urlId, imgId, nickName });
 
-    this.userFactory.create(urlId, imgId, nickName);
+    this.userFactory.create({ urlId, imgId, nickName });
 
     return result;
   }

@@ -58,11 +58,11 @@ export class UserUrlRepository implements IUserUrlRepository {
 
     if (!userUrl) return null;
 
-    return this.userUrlFactory.reconstitute(
-      userUrl.id,
-      userUrl.url,
-      userUrl.status,
-    );
+    return this.userUrlFactory.reconstitute({
+      id: userUrl.id,
+      url: userUrl.url,
+      status: userUrl.status,
+    });
   }
 
   async findOneWithUser(dto: FindOneUserUrlWithUserDto) {
@@ -81,19 +81,19 @@ export class UserUrlRepository implements IUserUrlRepository {
     });
 
     const users = result.user.map((user) =>
-      this.userFactory.reconstituteArray(
-        user.id,
-        user.imgId,
-        user.nickName,
-        user.urlId,
-      ),
+      this.userFactory.reconstituteArray({
+        id: user.id,
+        imgId: user.imgId,
+        nickName: user.nickName,
+        urlId: user.urlId,
+      }),
     );
 
-    return this.userUrlFactory.reconstituteWithUser(
-      result.id,
-      result.url,
-      result.status,
-      users,
-    );
+    return this.userUrlFactory.reconstituteWithUser({
+      id: result.id,
+      url: result.url,
+      status: result.status,
+      users: users,
+    });
   }
 }
