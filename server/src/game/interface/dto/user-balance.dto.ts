@@ -1,4 +1,4 @@
-import { BalanceType } from '@game/domain';
+import { BalanceType } from '../../domain';
 import { IsEnum, IsNumber, IsNumberString, IsString } from 'class-validator';
 
 export class SaveUserBalanceDto {
