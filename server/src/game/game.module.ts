@@ -24,6 +24,7 @@ import {
   AdjectiveExpressionFactory,
   BalanceListFactory,
   GameNextFactory,
+  UserAdjectiveExpressionFactory,
   UserBalanceFactory,
   UserMbtiFactory,
 } from './domain';
@@ -81,6 +82,7 @@ import { CreateCommonQuestionCommandHandler } from './application';
     GetUserMbtiQueryHandler,
     GetUsersMbtiInUrlQueryHandler,
     AdjectiveExpressionFactory,
+    UserAdjectiveExpressionFactory,
     GameNextFactory,
     BalanceListFactory,
     UserBalanceFactory,

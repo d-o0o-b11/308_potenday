@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Inject,
   ParseIntPipe,
   Post,
@@ -9,17 +10,21 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUsersInRoomQuery } from '@user';
-import { FindMbtiRoundDto, SaveMbtiDto } from './dto';
+import {
+  FindMbtiRoundDto,
+  FindUserMbtiAnswerResponseDto,
+  SaveMbtiDto,
+} from './dto';
 import {
   CreateUserMbtiCommand,
   GetUserMbtiQuery,
   GetUsersMbtiInUrlQuery,
 } from '../application';
 
-@ApiTags('[GAME] MBTI API2')
-@Controller('mbti2')
+@ApiTags('[GAME] MBTI API')
+@Controller('mbti')
 export class UserMbtiController {
   constructor(
     private queryBus: QueryBus,
@@ -64,6 +69,10 @@ export class UserMbtiController {
     summary: 'mbti 추측 결과 확인하기',
     description:
       '해당 라운드의 정답: user_mbti, 그 외의 유저들이 추측한 결과: user',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: FindUserMbtiAnswerResponseDto,
   })
   async findResultUserMbti(@Query('toUserId', ParseIntPipe) toUserId: number) {
     return await this.queryBus.execute(new GetUserMbtiQuery(toUserId));

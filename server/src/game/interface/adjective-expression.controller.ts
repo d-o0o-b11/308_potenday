@@ -7,13 +7,17 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Post,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateUserAdjectiveExpressionDto } from './dto';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  CreateUserAdjectiveExpressionDto,
+  GroupByUserAdjectiveExpressionDto,
+} from './dto';
 
 @ApiTags('[GAME] 형용사 표현 API')
 @Controller('adjective-expression2')
@@ -57,6 +61,10 @@ export class AdjectiveExpressionController {
   @ApiQuery({
     name: 'urlId',
     example: '37',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: [GroupByUserAdjectiveExpressionDto],
   })
   async getExpressionListUserList(@Query('urlId') urlId: number) {
     return await this.queryBus.execute(

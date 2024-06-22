@@ -7,14 +7,19 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   ParseIntPipe,
   Post,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateBalanceDto, FindUserBalanceDto } from './dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  CalculatePercentagesResponseDto,
+  CreateBalanceDto,
+  FindUserBalanceDto,
+} from './dto';
 
 @ApiTags('[GAME] 밸런스 게임 API')
 @Controller('balance')
@@ -55,6 +60,10 @@ export class BalanceController {
   @Get()
   @ApiOperation({
     summary: '각 밸런스 게임 결과 보기',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: [CalculatePercentagesResponseDto],
   })
   async findBalanceGameUser(
     @Query(new ValidationPipe({ whitelist: true, transform: true }))

@@ -6,6 +6,7 @@ import { UserAdjectiveExpressionMapper } from '../mapper';
 import {
   IUserAdjectiveExpressionRepository,
   UserAdjectiveExpression,
+  UserAdjectiveExpressionFactory,
 } from '../../../domain';
 import {
   FindUserAdjectiveExpressionDto,
@@ -21,6 +22,7 @@ export class UserAdjectiveExpressionRepository
     @InjectRepository(UserAdjectiveExpressionEntity)
     private userAdjectiveExpressionRepository: Repository<UserAdjectiveExpressionEntity>,
     private manager: EntityManager,
+    private userAdjectiveExpressionFactory: UserAdjectiveExpressionFactory,
   ) {}
 
   async save(dto: SaveUserAdjectiveExpressionDto) {
@@ -70,10 +72,16 @@ export class UserAdjectiveExpressionRepository
       },
     });
 
-    const mapperFind =
-      UserAdjectiveExpressionMapper.toDomainEntities(findResult);
+    const userAdjectiveExpressions = findResult.map((adjective) =>
+      this.userAdjectiveExpressionFactory.reconstituteArray(
+        adjective.user.id,
+        adjective.user.nickName,
+        adjective.user.imgId,
+        adjective.adjectiveExpression.adjective,
+      ),
+    );
 
-    return this._groupByUserId(mapperFind);
+    return this._groupByUserId(userAdjectiveExpressions);
   }
 
   /**

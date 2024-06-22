@@ -1,4 +1,3 @@
-import { UserAdjectiveExpression } from '../../../domain';
 import { UserAdjectiveExpressionEntity } from '../entity';
 
 export class UserAdjectiveExpressionMapper {
@@ -12,23 +11,5 @@ export class UserAdjectiveExpressionMapper {
       entity.adjectiveExpressionId = expressionId;
       return entity;
     });
-  }
-
-  static toDomainEntities(
-    entities: UserAdjectiveExpressionEntity[],
-  ): UserAdjectiveExpression[] {
-    return entities.map((entity) => this.toDomainEntity(entity));
-  }
-
-  static toDomainEntity(
-    entity: UserAdjectiveExpressionEntity,
-  ): UserAdjectiveExpression {
-    return new UserAdjectiveExpression(
-      entity.id,
-      entity.userId,
-      entity.adjectiveExpression.adjective,
-      entity.user.nickName,
-      entity.user.imgId,
-    );
   }
 }
