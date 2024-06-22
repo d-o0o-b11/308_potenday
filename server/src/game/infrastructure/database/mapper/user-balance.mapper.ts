@@ -1,10 +1,11 @@
+import { BalanceType } from '../../../domain';
 import { UserBalanceEntity } from '../entity';
 
 export class UserBalanceMapper {
   static toEntity(
     userId: number,
     balanceId: number,
-    balanceType: string,
+    balanceType: BalanceType,
   ): UserBalanceEntity {
     const entity = new UserBalanceEntity();
     entity.userId = userId;

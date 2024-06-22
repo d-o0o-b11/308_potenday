@@ -1,20 +1,23 @@
-import { UserBalance } from '../user-balance';
+import {
+  CalculatePercentagesResponseDto,
+  FindUserBalanceDto,
+  FindUserCountResponseDto,
+  SaveUserBalanceDto,
+} from '../../interface';
 
 export interface IUserBalanceRepository {
-  save: (
-    userId: number,
-    balanceId: number,
-    balanceType: string,
-  ) => Promise<void>;
-  find: (urlId: number) => Promise<UserBalance[]>;
-  findUserBalance: (
-    urlId: number,
-    balanceId: number,
-  ) => Promise<
-    {
-      balanceType: any;
-      users: any;
-      percent: string;
-    }[]
-  >;
+  /**
+   * 밸런스 게임 종류 저장
+   */
+  save: (dto: SaveUserBalanceDto) => Promise<void>;
+
+  /**
+   * 밸런스 게임 답변한 인원 수
+   */
+  findUserCount: (dto: FindUserBalanceDto) => Promise<FindUserCountResponseDto>;
+
+  /**
+   * 밸런스 선택한 유저 정보, 퍼센트 결과 조회
+   */
+  find(dto: FindUserBalanceDto): Promise<CalculatePercentagesResponseDto[]>;
 }

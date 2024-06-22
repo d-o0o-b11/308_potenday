@@ -1,4 +1,3 @@
-import { AdjectiveExpression } from '@game/domain';
 import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserAdjectiveExpressionDto {
@@ -31,9 +30,27 @@ export class CreateUserAdjectiveExpressionDto {
   expressionIds: number[];
 }
 
-export class GroupByUserAdjectiveExpressionDto {
+export class SaveUserAdjectiveExpressionDto {
+  /**
+   * USER ID
+   * @example 12
+   */
+  @IsNumber()
   userId: number;
-  nickName: string;
-  imgId: number;
-  adjectiveExpressions: AdjectiveExpression[];
+
+  /**
+   * 형용사 ID
+   * @example [1,3,11]
+   */
+  @IsArray()
+  expressionIds: number[];
+}
+
+export class FindUserAdjectiveExpressionDto {
+  /**
+   * URL ID
+   * @example 1
+   */
+  @IsNumber()
+  urlId: number;
 }

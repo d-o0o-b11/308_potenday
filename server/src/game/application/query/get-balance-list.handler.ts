@@ -15,6 +15,8 @@ export class GetBalanceListQueryHandler
   ) {}
 
   async execute(query: GetBalanceListQuery): Promise<BalanceList> {
-    return await this.balanceListRepository.find(query.balanceId);
+    return await this.balanceListRepository.find({
+      balanceId: query.balanceId,
+    });
   }
 }

@@ -17,8 +17,6 @@ import {
   GetUserMbtiQuery,
   GetUsersMbtiInUrlQuery,
 } from '../application';
-import { USER_MBTI_REPOSITORY_TOKEN } from '@game/infrastructure';
-import { IUserMbtiRepository } from '../domain';
 
 @ApiTags('[GAME] MBTI API2')
 @Controller('mbti2')
@@ -26,8 +24,6 @@ export class UserMbtiController {
   constructor(
     private queryBus: QueryBus,
     private commandBud: CommandBus,
-    @Inject(USER_MBTI_REPOSITORY_TOKEN)
-    private ede: IUserMbtiRepository,
   ) {}
 
   @Get()

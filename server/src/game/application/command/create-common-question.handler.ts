@@ -14,9 +14,9 @@ export class CreateCommonQuestionCommandHandler
     private commonQuestionRepository: ICommonQuestionRepository,
   ) {}
 
-  async execute(command: CreateCommonQuestionCommand) {
+  async execute(command: CreateCommonQuestionCommand): Promise<void> {
     const { urlId } = command;
 
-    await this.commonQuestionRepository.save(urlId);
+    await this.commonQuestionRepository.save({ urlId });
   }
 }

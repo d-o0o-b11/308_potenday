@@ -18,6 +18,8 @@ export class GetUsersAdjectiveExpressionQueryHandler
   async execute(
     query: GetUsersAdjectiveExpressionQuery,
   ): Promise<GroupByUserAdjectiveExpressionDto[]> {
-    return await this.userAdjectiveExpressionRepository.find(query.urlId);
+    return await this.userAdjectiveExpressionRepository.find({
+      urlId: query.urlId,
+    });
   }
 }

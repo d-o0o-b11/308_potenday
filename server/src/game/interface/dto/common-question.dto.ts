@@ -15,3 +15,12 @@ export class PatchCommonQuestionDto {
   @IsNumber()
   questionId: number;
 }
+
+export class SaveCommonQuestionDto {
+  /**
+   * URL ID
+   * @example 37
+   */
+  @IsNumber()
+  urlId: number;
+}

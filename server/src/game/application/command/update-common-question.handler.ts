@@ -14,10 +14,10 @@ export class UpdateCommonQuestionCommandHandler
     private commonQuestionRepository: ICommonQuestionRepository,
   ) {}
 
-  async execute(command: UpdateCommonQuestionCommand) {
+  async execute(command: UpdateCommonQuestionCommand): Promise<void> {
     const { urlId, questionId } = command;
 
-    await this.commonQuestionRepository.update(urlId, questionId);
+    await this.commonQuestionRepository.update({ urlId, questionId });
 
     this.gameNextFactory.create(urlId);
   }

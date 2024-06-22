@@ -83,3 +83,21 @@ export class UserMbtiRawDto {
   imgId: number;
   toUserId: number;
 }
+
+export class FindUserMbtiDto {
+  /**
+   * 대상 사용자 ID
+   * @example 11
+   */
+  @IsNumber()
+  toUserId: number;
+}
+
+export class FindUserMbtiByUrlIdDto {
+  /**
+   * URL ID
+   * @example 1
+   */
+  @IsNumber()
+  urlId: number;
+}

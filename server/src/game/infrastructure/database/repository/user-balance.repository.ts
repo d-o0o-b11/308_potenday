@@ -8,6 +8,13 @@ import {
   UserBalanceFactory,
 } from '../../../domain';
 import { UserBalanceMapper } from '../mapper';
+import {
+  CalculatePercentagesResponseDto,
+  FindUserBalanceDto,
+  FindUserBalanceResponseDto,
+  GroupedByBalanceTypeDto,
+  SaveUserBalanceDto,
+} from '../../../interface';
 
 @Injectable()
 export class UserBalanceRepository implements IUserBalanceRepository {
@@ -18,19 +25,24 @@ export class UserBalanceRepository implements IUserBalanceRepository {
     private manager: EntityManager,
   ) {}
 
-  async save(userId: number, balanceId: number, balanceType: string) {
+  async save(dto: SaveUserBalanceDto) {
     return await this.manager.transaction(async (manager) => {
-      const entity = UserBalanceMapper.toEntity(userId, balanceId, balanceType);
+      const entity = UserBalanceMapper.toEntity(
+        dto.userId,
+        dto.balanceId,
+        dto.balanceType,
+      );
       manager.save(UserBalanceEntity, entity);
     });
   }
 
-  async find(urlId: number) {
+  async findUserCount(dto: FindUserBalanceDto) {
     const findResult = await this.userBalanceRepository.find({
       where: {
         user: {
-          urlId: urlId,
+          urlId: dto.urlId,
         },
+        balanceId: dto.balanceId,
       },
       relations: {
         user: true,
@@ -38,36 +50,36 @@ export class UserBalanceRepository implements IUserBalanceRepository {
       select: {
         user: {
           id: true,
-          nickName: true,
-          imgId: true,
+          // nickName: true,
+          // imgId: true,
         },
-        id: true,
-        balanceType: true,
-        balanceId: true,
+        // id: true,
+        // balanceType: true,
+        // balanceId: true,
       },
     });
 
-    const userBalnces = findResult.map((balance) =>
-      this.userBalanceFactory.reconstituteArray(
-        balance.id,
-        balance.user.id,
-        balance.user.nickName,
-        balance.user.imgId,
-        balance.balanceId,
-        balance.balanceType,
-      ),
-    );
+    // const userBalnces = findResult.map((balance) =>
+    //   this.userBalanceFactory.reconstituteArray(
+    //     balance.id,
+    //     balance.user.id,
+    //     balance.user.nickName,
+    //     balance.user.imgId,
+    //     balance.balanceId,
+    //     balance.balanceType,
+    //   ),
+    // );
 
-    return userBalnces;
+    return { count: findResult.length };
   }
 
-  async findUserBalance(urlId: number, balanceId: number) {
+  async find(dto: FindUserBalanceDto) {
     const findResult = await this.userBalanceRepository.find({
       where: {
         user: {
-          urlId: urlId,
+          urlId: dto.urlId,
         },
-        balanceId: balanceId,
+        balanceId: dto.balanceId,
       },
       relations: {
         user: true,
@@ -105,19 +117,15 @@ export class UserBalanceRepository implements IUserBalanceRepository {
 
     const groupedByBalanceType = this._groupByBalanceType(userBalances);
 
-    return this._calculatePercentages(
+    return this._calculatePercentages({
       groupedByBalanceType,
-      userBalances.length,
-    );
+      totalUsers: userBalances.length,
+    });
   }
 
-  private _groupByBalanceType(userBalances: UserBalance[]): {
-    [key: string]: {
-      balanceType: string;
-      users: { id: number; nickName: string; imgId: number }[];
-      count: number;
-    };
-  } {
+  private _groupByBalanceType(
+    userBalances: UserBalance[],
+  ): GroupedByBalanceTypeDto {
     return userBalances.reduce((acc, balance) => {
       const balanceTypeText =
         balance.getBalanceType() === 'A'
@@ -144,27 +152,12 @@ export class UserBalanceRepository implements IUserBalanceRepository {
   }
 
   private _calculatePercentages(
-    groupedByBalanceType: {
-      [key: string]: {
-        balanceType: string;
-        users: {
-          id: number;
-          nickName: string;
-          imgId: number;
-        }[];
-        count: number;
-      };
-    },
-    totalUsers: number,
-  ): {
-    balanceType: string;
-    users: { id: number; nickName: string; imgId: number }[];
-    percent: string;
-  }[] {
-    return Object.values(groupedByBalanceType).map((group: any) => ({
+    dto: FindUserBalanceResponseDto,
+  ): CalculatePercentagesResponseDto[] {
+    return Object.values(dto.groupedByBalanceType).map((group: any) => ({
       balanceType: group.balanceType,
       users: group.users,
-      percent: `${((group.count / totalUsers) * 100).toFixed(2)}%`,
+      percent: `${((group.count / dto.totalUsers) * 100).toFixed(2)}%`,
     }));
   }
 }

@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { USER_BALANCE_REPOSITORY_TOKEN } from '../../infrastructure';
 import { IUserBalanceRepository } from '../../domain';
 import { GetBalanceResultQuery } from './get-balance-result.query';
+import { CalculatePercentagesResponseDto } from '../../interface';
 
 @Injectable()
 @QueryHandler(GetBalanceResultQuery)
@@ -14,10 +15,12 @@ export class GetBalanceResultQueryHandler
     private userBalanceRepository: IUserBalanceRepository,
   ) {}
 
-  async execute(query: GetBalanceResultQuery) {
-    return await this.userBalanceRepository.findUserBalance(
-      query.urlId,
-      query.balanceId,
-    );
+  async execute(
+    query: GetBalanceResultQuery,
+  ): Promise<CalculatePercentagesResponseDto[]> {
+    return await this.userBalanceRepository.find({
+      urlId: query.urlId,
+      balanceId: query.balanceId,
+    });
   }
 }

@@ -20,14 +20,17 @@ export class CreateUserBalanceCommandHandler
     //url 제거하기
     const { url, urlId, userId, balanceId, balanceType } = command;
 
-    await this.userBalanceRepository.save(userId, balanceId, balanceType);
+    await this.userBalanceRepository.save({ userId, balanceId, balanceType });
 
-    const submitCount = (await this.userBalanceRepository.find(urlId)).length;
+    const submit = await this.userBalanceRepository.findUserCount({
+      urlId,
+      balanceId,
+    });
     const { userCount } = await this.queryBus.execute(
       new CountUsersInRoomQuery(url),
     );
 
-    if (submitCount === userCount) {
+    if (submit.count === userCount) {
       this.gameNextFactory.create(urlId);
     }
   }

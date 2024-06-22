@@ -24,9 +24,9 @@ export class CreateUserAdjectiveExpressionHandler
   }> {
     const { url, urlId, userId, expressionIds } = command;
 
-    await this.userRepository.save(userId, expressionIds);
+    await this.userRepository.save({ userId, expressionIds });
 
-    const submitCount = (await this.userRepository.find(urlId)).length;
+    const submitCount = (await this.userRepository.find({ urlId })).length;
     const { userCount } = await this.queryBus.execute(
       new CountUsersInRoomQuery(url),
     );

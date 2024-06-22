@@ -33,6 +33,7 @@ import {
   CreateUserMbtiCommandHandler,
   GameEventHandler,
   GetAdjectiveExpressionQueryHandler,
+  GetBalanceListQueryHandler,
   GetBalanceResultQueryHandler,
   GetUserMbtiQueryHandler,
   GetUsersAdjectiveExpressionQueryHandler,
@@ -47,7 +48,6 @@ import {
 } from './interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateCommonQuestionCommandHandler } from './application';
-import { GetBalanceListQueryHandler } from './application/query/get-balance-list.handler';
 
 @Module({
   imports: [

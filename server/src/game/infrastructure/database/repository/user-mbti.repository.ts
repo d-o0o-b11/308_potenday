@@ -3,8 +3,17 @@ import { UserMbtiEntity } from '../entity';
 import { EntityManager, Repository } from 'typeorm';
 import { UserMbtiMapper } from '../mapper';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SaveUserMbtiDto, UserMbtiRawDto } from '../../../interface';
-import { IUserMbtiRepository, UserMbtiFactory } from '../../../domain';
+import {
+  FindUserMbtiByUrlIdDto,
+  FindUserMbtiDto,
+  SaveUserMbtiDto,
+  UserMbtiRawDto,
+} from '../../../interface';
+import {
+  IUserMbtiRepository,
+  UserMbti,
+  UserMbtiFactory,
+} from '../../../domain';
 
 @Injectable()
 export class UserMbtiRepository implements IUserMbtiRepository {
@@ -15,7 +24,6 @@ export class UserMbtiRepository implements IUserMbtiRepository {
     private readonly userMbtiFactory: UserMbtiFactory,
   ) {}
 
-  //유저 추측하기
   async save(dto: SaveUserMbtiDto) {
     return await this.manager.transaction(async (manager) => {
       const entity = UserMbtiMapper.toEntity(
@@ -28,10 +36,10 @@ export class UserMbtiRepository implements IUserMbtiRepository {
     });
   }
 
-  async find(toUserId: number) {
+  async find(dto: FindUserMbtiDto) {
     const findResult = await this.userMbtiRepository.find({
       where: {
-        toUserId: toUserId,
+        toUserId: dto.toUserId,
       },
       relations: {
         user: true,
@@ -60,14 +68,14 @@ export class UserMbtiRepository implements IUserMbtiRepository {
     return userMbtis;
   }
 
-  async findUserMbtiAnswer(toUserId: number) {
-    const userMbtis = await this.find(toUserId);
+  async findUserMbtiAnswer(dto: FindUserMbtiDto) {
+    const userMbtis = await this.find({ toUserId: dto.toUserId });
 
-    let answerUser = null;
-    const guessingUsers = [];
+    let answerUser: UserMbti | null = null;
+    const guessingUsers: UserMbti[] = [];
 
     userMbtis.forEach((userMbti) => {
-      if (userMbti.getUserId() === toUserId) {
+      if (userMbti.getUserId() === dto.toUserId) {
         answerUser = userMbti;
       } else {
         guessingUsers.push(userMbti);
@@ -80,11 +88,11 @@ export class UserMbtiRepository implements IUserMbtiRepository {
     };
   }
 
-  async findUserMbtiByUrlId(urlId: number) {
+  async findUserMbtiByUrlId(dto: FindUserMbtiByUrlIdDto) {
     const userMbtis: UserMbtiRawDto[] = await this.userMbtiRepository
       .createQueryBuilder('userMbti')
       .innerJoinAndSelect('userMbti.user', 'user')
-      .where('user.urlId = :urlId', { urlId })
+      .where('user.urlId = :urlId', { urlId: dto.urlId })
       .andWhere('userMbti.userId = userMbti.toUserId')
       .select([
         'user.id AS "userId"',

@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserAdjectiveExpressionEntity } from '../entity';
 import { EntityManager, Repository } from 'typeorm';
-import { UserAdjectiveExpressionMapper } from '../mapper/user-adjective-expression.mapper';
+import { UserAdjectiveExpressionMapper } from '../mapper';
 import {
   IUserAdjectiveExpressionRepository,
   UserAdjectiveExpression,
 } from '../../../domain';
-import { GroupByUserAdjectiveExpressionDto } from '../../../interface';
+import {
+  FindUserAdjectiveExpressionDto,
+  GroupByUserAdjectiveExpressionDto,
+  SaveUserAdjectiveExpressionDto,
+} from '../../../interface';
 
 @Injectable()
 export class UserAdjectiveExpressionRepository
@@ -19,11 +23,11 @@ export class UserAdjectiveExpressionRepository
     private manager: EntityManager,
   ) {}
 
-  async save(userId: number, adjectiveExpressionIds: number[]) {
+  async save(dto: SaveUserAdjectiveExpressionDto) {
     return await this.manager.transaction(async (manager) => {
       const entitiesToSave = UserAdjectiveExpressionMapper.toEntities(
-        userId,
-        adjectiveExpressionIds,
+        dto.userId,
+        dto.expressionIds,
       );
       await manager.save(UserAdjectiveExpressionEntity, entitiesToSave);
     });
@@ -38,11 +42,11 @@ export class UserAdjectiveExpressionRepository
    * 이거는 find 그대로 쓰면 돼고 위에getExpressionListUserCount 이거는 한 층 더
    * 가공해서 써야한다
    */
-  async find(urlId: number) {
+  async find(dto: FindUserAdjectiveExpressionDto) {
     const findResult = await this.userAdjectiveExpressionRepository.find({
       where: {
         user: {
-          urlId: urlId,
+          urlId: dto.urlId,
         },
       },
       relations: {

@@ -8,6 +8,8 @@ import {
 import { BalanceListEntity } from './balance-list.entity';
 import { UserEntity } from '@user';
 import { BaseEntity } from '@common';
+import { IsEnum } from 'class-validator';
+import { BalanceType } from '../../../domain';
 
 @Entity('user_balance')
 export class UserBalanceEntity extends BaseEntity {
@@ -21,7 +23,8 @@ export class UserBalanceEntity extends BaseEntity {
   balanceId: number;
 
   @Column({ type: 'varchar', name: 'balance_type', nullable: false })
-  balanceType: string;
+  @IsEnum(BalanceType)
+  balanceType: BalanceType;
 
   @ManyToOne(() => UserEntity, (user) => user.userBalanceGames, {
     onDelete: 'CASCADE',

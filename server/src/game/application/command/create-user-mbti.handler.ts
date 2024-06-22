@@ -16,13 +16,14 @@ export class CreateUserMbtiCommandHandler
     private readonly gameNextFactory: GameNextFactory,
   ) {}
 
-  async execute(command: CreateUserMbtiCommand) {
+  async execute(command: CreateUserMbtiCommand): Promise<void> {
     //url 제거하기
     const { url, urlId, userId, mbti, toUserId } = command;
 
     await this.userMbtiRepository.save({ userId, mbti, toUserId });
 
-    const submitCount = (await this.userMbtiRepository.find(toUserId)).length;
+    const submitCount = (await this.userMbtiRepository.find({ toUserId }))
+      .length;
     const { userCount } = await this.queryBus.execute(
       new CountUsersInRoomQuery(url),
     );

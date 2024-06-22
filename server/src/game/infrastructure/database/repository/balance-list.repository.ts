@@ -3,6 +3,7 @@ import { BalanceListEntity } from '../entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BalanceListFactory, IBalanceListRepository } from '../../../domain';
+import { FindBalanceListDto } from '../../../interface';
 
 @Injectable()
 export class BalanceListRepository implements IBalanceListRepository {
@@ -12,10 +13,10 @@ export class BalanceListRepository implements IBalanceListRepository {
     private readonly balanceListFactory: BalanceListFactory,
   ) {}
 
-  async find(balanceId: number) {
+  async find(dto: FindBalanceListDto) {
     const findResult = await this.balanceListRepository.findOne({
       where: {
-        id: balanceId,
+        id: dto.balanceId,
       },
     });
 

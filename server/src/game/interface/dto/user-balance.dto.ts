@@ -1,20 +1,7 @@
-import { IsNumber, IsNumberString, IsString } from 'class-validator';
+import { BalanceType } from '@game/domain';
+import { IsEnum, IsNumber, IsNumberString, IsString } from 'class-validator';
 
-export class CreateBalanceDto {
-  /**
-   * URL
-   * @example '13fdf'
-   */
-  @IsString()
-  url: string;
-
-  /**
-   * URL ID
-   * @example 27
-   */
-  @IsNumber()
-  urlId: number;
-
+export class SaveUserBalanceDto {
   /**
    * USER ID
    * @example 12
@@ -33,8 +20,25 @@ export class CreateBalanceDto {
    * 밸런스 타입(A|B)
    * @example A
    */
+  // @IsString()
+  @IsEnum(BalanceType)
+  balanceType: BalanceType;
+}
+
+export class CreateBalanceDto extends SaveUserBalanceDto {
+  /**
+   * URL
+   * @example '13fdf'
+   */
   @IsString()
-  balanceType: string;
+  url: string;
+
+  /**
+   * URL ID
+   * @example 27
+   */
+  @IsNumber()
+  urlId: number;
 }
 
 /**
@@ -56,5 +60,14 @@ export class FindUserBalanceDto {
    * @example 1
    */
   @IsNumberString()
+  balanceId: number;
+}
+
+export class FindBalanceListDto {
+  /**
+   * 밸런스 ID
+   * @example 1
+   */
+  @IsNumber()
   balanceId: number;
 }
