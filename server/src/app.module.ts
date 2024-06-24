@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserUrlModule } from './user-url/user-url.module';
 import { SettingModule } from './config/config.module';
-import { GameKindModule } from './game-kind/game-kind.module';
 import { LoggerModule } from './winston/winston.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { SseModule } from './sse/sse.module';
@@ -16,9 +14,7 @@ import { GameModule } from '@game';
   imports: [
     DataBaseModule,
     TransactionModule.forRoot(),
-    UserUrlModule,
     SettingModule,
-    GameKindModule,
     LoggerModule,
     EventEmitterModule.forRoot({
       // set this to `true` to use wildcards

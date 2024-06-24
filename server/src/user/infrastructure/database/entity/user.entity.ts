@@ -10,9 +10,9 @@ import {
 import { BaseEntity } from '@common';
 import { UserUrlEntity } from './user-url.entity';
 import {
-  UserMbtiEntity,
   UserAdjectiveExpressionEntity,
   UserBalanceEntity,
+  UserMbtiEntity,
 } from '@game';
 
 @Entity('user')
