@@ -6,3 +6,4 @@ yarn env-cmd -f ./envs/$1.env \
     -d=./src/database/config/typeorm.config.ts \
     seed:run
 
+

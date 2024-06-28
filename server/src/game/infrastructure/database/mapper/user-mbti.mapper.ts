@@ -1,4 +1,4 @@
-import { UserMbtiEntity } from '../entity';
+import { UserMbtiEntity } from '../entity/user-mbti.entity';
 
 export class UserMbtiMapper {
   static toEntity(

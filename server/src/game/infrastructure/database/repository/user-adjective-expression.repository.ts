@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserAdjectiveExpressionEntity } from '../entity';
 import { EntityManager, Repository } from 'typeorm';
 import { UserAdjectiveExpressionMapper } from '../mapper';
 import {
@@ -13,6 +12,7 @@ import {
   GroupByUserAdjectiveExpressionDto,
   SaveUserAdjectiveExpressionDto,
 } from '../../../interface';
+import { UserAdjectiveExpressionEntity } from '../entity/user-adjective-expression.entity';
 
 @Injectable()
 export class UserAdjectiveExpressionRepository

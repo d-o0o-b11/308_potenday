@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CommonQuestionEntity } from '../entity';
 import { EntityManager } from 'typeorm';
 import { CommonQuestionMapper } from '../mapper';
 import { ICommonQuestionRepository } from '../../../domain';
@@ -7,6 +6,7 @@ import {
   PatchCommonQuestionDto,
   SaveCommonQuestionDto,
 } from '../../../interface';
+import { CommonQuestionEntity } from '../entity/common-question.entity';
 
 @Injectable()
 export class CommonQuestionRepository implements ICommonQuestionRepository {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AdjectiveExpressionEntity } from '../entity';
 import { Repository } from 'typeorm';
 import {
   AdjectiveExpressionFactory,
   IAdjectiveExpressionRepository,
 } from '../../../domain';
+import { AdjectiveExpressionEntity } from '../entity/adjective-expression.entity';
 
 @Injectable()
 export class AdjectiveExpressionRepository

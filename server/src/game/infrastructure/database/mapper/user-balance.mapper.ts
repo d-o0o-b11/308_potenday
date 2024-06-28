@@ -1,5 +1,5 @@
 import { BalanceType } from '../../../domain';
-import { UserBalanceEntity } from '../entity';
+import { UserBalanceEntity } from '../entity/user-balance.entity';
 
 export class UserBalanceMapper {
   static toEntity(

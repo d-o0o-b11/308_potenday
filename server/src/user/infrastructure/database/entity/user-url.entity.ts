@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { BaseEntity } from '@common';
-import { CommonQuestionEntity } from '@game';
+import { CommonQuestionEntity } from '@game/infrastructure/database/entity/common-question.entity';
 
 @Entity('user_url')
 export class UserUrlEntity extends BaseEntity {

@@ -2,20 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
-  AdjectiveExpressionEntity,
   AdjectiveExpressionRepository,
   BALANCE_LIST_REPOSITORY_TOKEN,
-  BalanceListEntity,
   BalanceListRepository,
   COMMON_QUESTION_REPOSITORY_TOKEN,
-  CommonQuestionEntity,
   CommonQuestionRepository,
-  UserMbtiEntity,
   USER_ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
   USER_BALANCE_REPOSITORY_TOKEN,
-  UserAdjectiveExpressionEntity,
   UserAdjectiveExpressionRepository,
-  UserBalanceEntity,
   UserBalanceRepository,
   UserMbtiRepository,
   USER_MBTI_REPOSITORY_TOKEN,
@@ -49,6 +43,12 @@ import {
 } from './interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateCommonQuestionCommandHandler } from './application';
+import { UserAdjectiveExpressionEntity } from './infrastructure/database/entity/user-adjective-expression.entity';
+import { UserMbtiEntity } from './infrastructure/database/entity/user-mbti.entity';
+import { AdjectiveExpressionEntity } from './infrastructure/database/entity/adjective-expression.entity';
+import { BalanceListEntity } from './infrastructure/database/entity/balance-list.entity';
+import { CommonQuestionEntity } from './infrastructure/database/entity/common-question.entity';
+import { UserBalanceEntity } from './infrastructure/database/entity/user-balance.entity';
 
 @Module({
   imports: [

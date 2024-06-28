@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserBalanceEntity } from '../entity';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -15,6 +14,7 @@ import {
   GroupedByBalanceTypeDto,
   SaveUserBalanceDto,
 } from '../../../interface';
+import { UserBalanceEntity } from '../entity/user-balance.entity';
 
 @Injectable()
 export class UserBalanceRepository implements IUserBalanceRepository {

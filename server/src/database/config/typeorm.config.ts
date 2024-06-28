@@ -1,7 +1,8 @@
+import { SeederOptions } from 'typeorm-extension';
 import config from './database.config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-export const AppDataSource: DataSourceOptions = {
+export const AppDataSource: DataSourceOptions & SeederOptions = {
   type: 'postgres',
   host: config.db.host,
   port: Number(config.db.port),
@@ -13,6 +14,7 @@ export const AppDataSource: DataSourceOptions = {
   logging: config.env === 'test' ? false : false,
   migrations: [__dirname + '/../migrations/*{.ts,.js}'], // migration 수행할 파일
   migrationsTableName: 'migrations', // migration 내용이 기록될 테이블명(default = migration)
+  seeds: [__dirname + '/../seeder/*{.ts,.js}'],
 };
 
 export default new DataSource(AppDataSource);

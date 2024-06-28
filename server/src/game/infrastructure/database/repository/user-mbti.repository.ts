@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UserMbtiEntity } from '../entity';
 import { EntityManager, Repository } from 'typeorm';
 import { UserMbtiMapper } from '../mapper';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +13,7 @@ import {
   UserMbti,
   UserMbtiFactory,
 } from '../../../domain';
+import { UserMbtiEntity } from '../entity/user-mbti.entity';
 
 @Injectable()
 export class UserMbtiRepository implements IUserMbtiRepository {

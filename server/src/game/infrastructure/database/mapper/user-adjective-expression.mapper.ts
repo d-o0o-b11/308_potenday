@@ -1,4 +1,4 @@
-import { UserAdjectiveExpressionEntity } from '../entity';
+import { UserAdjectiveExpressionEntity } from '../entity/user-adjective-expression.entity';
 
 export class UserAdjectiveExpressionMapper {
   static toEntities(
