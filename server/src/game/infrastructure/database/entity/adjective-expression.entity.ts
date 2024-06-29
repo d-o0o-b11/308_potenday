@@ -33,8 +33,7 @@ export class AdjectiveExpressionEntity {
     () => UserAdjectiveExpressionEntity,
     (userAdjectiveExpression) => userAdjectiveExpression.adjectiveExpression,
     {
-      cascade: true,
-      nullable: true,
+      onDelete: 'CASCADE',
     },
   )
   userAdjectiveExpressions: UserAdjectiveExpressionEntity[];

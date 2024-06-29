@@ -157,7 +157,7 @@ export class UserBalanceRepository implements IUserBalanceRepository {
     return Object.values(dto.groupedByBalanceType).map((group: any) => ({
       balanceType: group.balanceType,
       users: group.users,
-      percent: `${((group.count / dto.totalUsers) * 100).toFixed(2)}%`,
+      percent: `${Math.floor((group.count / dto.totalUsers) * 100)}%`,
     }));
   }
 }

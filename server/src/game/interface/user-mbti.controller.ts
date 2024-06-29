@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpStatus,
-  Inject,
   ParseIntPipe,
   Post,
   Query,
@@ -82,7 +81,7 @@ export class UserMbtiController {
   @ApiOperation({
     summary: '[마지막] 전체 게임 결과 출력',
   })
-  async finalAllUserData(@Query('urIdl', ParseIntPipe) urlId: number) {
+  async finalAllUserData(@Query('urlId', ParseIntPipe) urlId: number) {
     return await this.queryBus.execute(new GetUsersMbtiInUrlQuery(urlId));
   }
 }

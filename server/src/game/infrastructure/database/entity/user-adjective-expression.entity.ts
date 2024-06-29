@@ -30,7 +30,8 @@ export class UserAdjectiveExpressionEntity extends BaseEntity {
     () => AdjectiveExpressionEntity,
     (expression) => expression.userAdjectiveExpressions,
     {
-      onDelete: 'CASCADE',
+      cascade: true,
+      nullable: true,
     },
   )
   @JoinColumn({ name: 'adjective_expression_id' }) // 중간 테이블 지정

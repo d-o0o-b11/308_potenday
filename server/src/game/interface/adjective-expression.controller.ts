@@ -20,17 +20,16 @@ import {
 } from './dto';
 
 @ApiTags('[GAME] 형용사 표현 API')
-@Controller('adjective-expression2')
+@Controller('adjective-expression')
 export class AdjectiveExpressionController {
   constructor(
     private commandBus: CommandBus,
     private queryBus: QueryBus,
   ) {}
 
-  @Get()
+  @Get('list')
   @ApiOperation({
-    summary: '[게임] 나를 표현할 수 있는 형용사를 선택해주세요',
-    description: '모든 형용사 표현을 조회합니다.',
+    summary: '[게임] 모든 형용사 표현을 조회합니다.',
   })
   async getAllExpressionList() {
     return await this.queryBus.execute(new GetAdjectiveExpressionQuery());
@@ -54,7 +53,7 @@ export class AdjectiveExpressionController {
     );
   }
 
-  @Get('list')
+  @Get()
   @ApiOperation({
     summary: '[게임] url에 있는 유저의 형용사 표현 출력 ',
   })
