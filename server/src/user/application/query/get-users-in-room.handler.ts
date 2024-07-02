@@ -15,9 +15,9 @@ export class GetUsersInRoomQueryHandler
   ) {}
 
   async execute(query: GetUsersInRoomQuery): Promise<User> {
-    const { url, roundId } = query;
+    const { urlId, roundId } = query;
     return (
-      await this.userUrlRepository.findOneWithUser({ url })
+      await this.userUrlRepository.findOneWithUser({ urlId })
     ).getUserList()[roundId - 1];
   }
 }

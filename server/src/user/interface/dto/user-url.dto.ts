@@ -28,6 +28,15 @@ export class UpdateUserUrlDto {
 
 export class FindOneUserUrlDto {
   /**
+   * URL ID
+   * @example 33
+   */
+  @IsNumber()
+  readonly urlId: number;
+}
+
+export class FindOneUserWithUrlDto {
+  /**
    * URL
    * @example 'qervvdd'
    */
@@ -38,19 +47,19 @@ export class FindOneUserUrlDto {
 export class FindOneUserUrlWithUserDto {
   /**
    * URL
-   * @example 'qervvdd'
+   * @example 11
    */
-  @IsString()
-  readonly url: string;
+  @IsNumber()
+  readonly urlId: number;
 }
 
 export class UpdateUserUrlFactoryDto {
   /**
-   * URL
-   * @example 'qervvdd'
+   * URL ID
+   * @example 11
    */
-  @IsString()
-  readonly url: string;
+  @IsNumber()
+  readonly urlId: number;
 
   /**
    * URL 입장여부

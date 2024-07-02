@@ -18,14 +18,14 @@ export class CreateUserMbtiCommandHandler
 
   async execute(command: CreateUserMbtiCommand): Promise<void> {
     //url 제거하기
-    const { url, urlId, userId, mbti, toUserId } = command;
+    const { urlId, userId, mbti, toUserId } = command;
 
     await this.userMbtiRepository.save({ userId, mbti, toUserId });
 
     const submitCount = (await this.userMbtiRepository.find({ toUserId }))
       .length;
     const { userCount } = await this.queryBus.execute(
-      new CountUsersInRoomQuery(url),
+      new CountUsersInRoomQuery(urlId),
     );
 
     if (submitCount === userCount) {

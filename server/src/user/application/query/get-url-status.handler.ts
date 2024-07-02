@@ -14,8 +14,8 @@ export class GetUrlStatusHandler implements IQueryHandler<GetUrlStatusQuery> {
   ) {}
 
   async execute(query: GetUrlStatusQuery): Promise<GetUrlStatusResponseDto> {
-    const { url } = query;
-    const findResult = await this.userUrlRepository.findOne({ url });
+    const { urlId } = query;
+    const findResult = await this.userUrlRepository.findOne({ urlId });
 
     return { status: findResult.getStatus() };
   }

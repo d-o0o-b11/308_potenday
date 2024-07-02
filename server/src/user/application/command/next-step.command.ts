@@ -1,3 +1,3 @@
 export class NextStepCommand {
-  constructor(public readonly url: string) {}
+  constructor(public readonly urlId: number) {}
 }

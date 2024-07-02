@@ -1,3 +1,3 @@
 export class UpdateStatusFalseCommand {
-  constructor(public readonly url: string) {}
+  constructor(public readonly urlId: number) {}
 }

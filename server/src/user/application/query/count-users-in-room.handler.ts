@@ -17,7 +17,7 @@ export class CountUsersInRoomQueryHandler
   async execute(
     query: CountUsersInRoomQuery,
   ): Promise<CountUsersInRoomResponseDto> {
-    const { url } = query;
-    return await this.urlService.countUsersInRoom(url);
+    const { urlId } = query;
+    return await this.urlService.countUsersInRoom(urlId);
   }
 }

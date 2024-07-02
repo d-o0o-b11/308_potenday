@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetUrlQuery } from './get-url.query';
-import { GetUrlResponseDto, IUserUrlService } from '../../interface';
+import { IUserUrlService, SetUrlResponseDto } from '../../interface';
 import { Inject, Injectable } from '@nestjs/common';
 import { USER_URL_SERVICE_TOKEN } from '../../infrastructure';
 
@@ -12,9 +12,12 @@ export class GetUrlQueryHandler implements IQueryHandler<GetUrlQuery> {
     private urlService: IUserUrlService,
   ) {}
 
-  async execute(): Promise<GetUrlResponseDto> {
-    const url = await this.urlService.setUrl();
+  async execute(): Promise<SetUrlResponseDto> {
+    const result = await this.urlService.setUrl();
 
-    return { url: url };
+    return {
+      id: result.id,
+      url: result.url,
+    };
   }
 }

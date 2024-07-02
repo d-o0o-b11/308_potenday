@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -46,12 +47,12 @@ export class UserUrlController {
     type: CountUsersInRoomResponseDto,
   })
   @ApiQuery({
-    name: 'url',
-    example: '6a3fc8ac',
+    name: 'urlId',
+    example: 11,
   })
   @Get('waiting-room')
-  async countUserToWaitingRoom(@Query('url') url: string) {
-    return await this.queryBus.execute(new CountUsersInRoomQuery(url));
+  async countUserToWaitingRoom(@Query('urlId', ParseIntPipe) urlId: number) {
+    return await this.queryBus.execute(new CountUsersInRoomQuery(urlId));
   }
 
   @Patch('status')
@@ -61,11 +62,11 @@ export class UserUrlController {
       '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api, return true -> 변경 성공',
   })
   @ApiQuery({
-    name: 'url',
-    example: '6a3fc8ac',
+    name: 'urlId',
+    example: 11,
   })
-  async updateUrlStatus(@Query('url') url: string) {
-    return this.commandBus.execute(new UpdateStatusFalseCommand(url));
+  async updateUrlStatus(@Query('urlId', ParseIntPipe) urlId: number) {
+    return this.commandBus.execute(new UpdateStatusFalseCommand(urlId));
   }
 
   @Get('status')
@@ -79,11 +80,11 @@ export class UserUrlController {
     type: GetUrlStatusResponseDto,
   })
   @ApiQuery({
-    name: 'url',
-    example: '6a3fc8ac',
+    name: 'urlId',
+    example: 11,
   })
-  async checkUrlToStart(@Query('url') url: string) {
-    return await this.queryBus.execute(new GetUrlStatusQuery(url));
+  async checkUrlToStart(@Query('urlId', ParseIntPipe) urlId: number) {
+    return await this.queryBus.execute(new GetUrlStatusQuery(urlId));
   }
 
   @Post('next')
@@ -91,10 +92,10 @@ export class UserUrlController {
     summary: '다음 게임으로 넘어가기',
   })
   @ApiQuery({
-    name: 'url',
-    example: '6a3fc8ac',
+    name: 'urlId',
+    example: 11,
   })
-  async nextToGame(@Query('url') url: string) {
-    return await this.commandBus.execute(new NextStepCommand(url));
+  async nextToGame(@Query('urlId', ParseIntPipe) urlId: number) {
+    return await this.commandBus.execute(new NextStepCommand(urlId));
   }
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserUrl } from '../user-url';
-import { User } from '../user';
 import { EventBus } from '@nestjs/cqrs';
 import { StatusUpdatedEvent } from '../url-status-update.event';
 import {
@@ -14,7 +13,7 @@ export class UserUrlFactory {
   constructor(private eventBus: EventBus) {}
 
   update(dto: UpdateUserUrlFactoryDto) {
-    this.eventBus.publish(new StatusUpdatedEvent(dto.url, dto.status));
+    this.eventBus.publish(new StatusUpdatedEvent(dto.urlId, dto.status));
   }
 
   reconstitute(dto: ReconstituteFactoryDto): UserUrl {

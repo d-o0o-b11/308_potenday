@@ -22,13 +22,13 @@ export class CreateUserAdjectiveExpressionHandler
   async execute(command: CreateUserAdjectiveExpressionCommand): Promise<{
     next: boolean;
   }> {
-    const { url, urlId, userId, expressionIds } = command;
+    const { urlId, userId, expressionIds } = command;
 
     await this.userRepository.save({ userId, expressionIds });
 
     const submitCount = (await this.userRepository.find({ urlId })).length;
     const { userCount } = await this.queryBus.execute(
-      new CountUsersInRoomQuery(url),
+      new CountUsersInRoomQuery(urlId),
     );
 
     this.gameNextFactory.create(urlId);

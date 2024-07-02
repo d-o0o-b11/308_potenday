@@ -26,27 +26,33 @@ export class UserUrlService implements IUserUrlService {
       }
     }
 
-    await this.urlRepository.save({ url });
-    return url;
+    const save = await this.urlRepository.save({ url });
+
+    return {
+      id: save.getId(),
+      url: save.getUrl(),
+    };
   }
 
   async checkUserLimitForUrl(dto: FindOneUserUrlDto) {
-    const findOneResult = await this.urlRepository.findOne({ url: dto.url });
+    const findOneResult = await this.urlRepository.findOne({
+      urlId: dto.urlId,
+    });
 
     if (!findOneResult) {
       throw new UrlNotFoundException();
     }
 
-    if ((await this.countUsersInRoom(dto.url)).userCount >= 4) {
+    if ((await this.countUsersInRoom(dto.urlId)).userCount >= 4) {
       throw new UrlMaximumUserAlreadyClickButtonException();
     }
 
     return findOneResult.getId();
   }
 
-  async countUsersInRoom(url: string) {
+  async countUsersInRoom(urlId: number) {
     const userUrl = await this.urlRepository.findOneWithUser({
-      url,
+      urlId,
     });
 
     if (!userUrl.getUserList()) {
@@ -58,9 +64,9 @@ export class UserUrlService implements IUserUrlService {
     return { userCount, userInfo: userUrl.getUserList().slice() };
   }
 
-  async updateStatusFalse(url: string) {
+  async updateStatusFalse(urlId: number) {
     const findOneResult = await this.urlRepository.findOne({
-      url,
+      urlId,
     });
 
     if (!findOneResult) {
@@ -87,7 +93,7 @@ export class UserUrlService implements IUserUrlService {
    * URL 중복 검사
    */
   private async _isUrlDuplicate(url: string): Promise<boolean> {
-    const findOneResult = await this.urlRepository.findOne({ url });
+    const findOneResult = await this.urlRepository.findOneWithUrl({ url });
     return !!findOneResult;
   }
 }

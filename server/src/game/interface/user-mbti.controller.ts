@@ -39,7 +39,7 @@ export class UserMbtiController {
     dto: FindMbtiRoundDto,
   ) {
     return await this.queryBus.execute(
-      new GetUsersInRoomQuery(dto.url, dto.roundId),
+      new GetUsersInRoomQuery(dto.urlId, dto.roundId),
     );
   }
 
@@ -53,13 +53,7 @@ export class UserMbtiController {
     dto: SaveMbtiDto,
   ) {
     await this.commandBud.execute(
-      new CreateUserMbtiCommand(
-        dto.url,
-        dto.urlId,
-        dto.userId,
-        dto.mbti,
-        dto.toUserId,
-      ),
+      new CreateUserMbtiCommand(dto.urlId, dto.userId, dto.mbti, dto.toUserId),
     );
   }
 

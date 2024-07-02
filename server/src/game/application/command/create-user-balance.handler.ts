@@ -18,7 +18,7 @@ export class CreateUserBalanceCommandHandler
 
   async execute(command: CreateUserBalanceCommand): Promise<void> {
     //url 제거하기
-    const { url, urlId, userId, balanceId, balanceType } = command;
+    const { urlId, userId, balanceId, balanceType } = command;
 
     await this.userBalanceRepository.save({ userId, balanceId, balanceType });
 
@@ -27,7 +27,7 @@ export class CreateUserBalanceCommandHandler
       balanceId,
     });
     const { userCount } = await this.queryBus.execute(
-      new CountUsersInRoomQuery(url),
+      new CountUsersInRoomQuery(urlId),
     );
 
     if (submit.count === userCount) {

@@ -25,11 +25,11 @@ export class CreateUserDto {
 
 export class CreateUserCommandDto {
   /**
-   * URL
-   * @example dffga
+   * URL ID
+   * @example 11
    */
-  @IsString()
-  readonly url: string;
+  @IsNumber()
+  readonly urlId: number;
 
   /**
    * 이미지 ID

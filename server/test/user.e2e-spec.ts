@@ -50,7 +50,7 @@ describe('UserController (e2e)', () => {
 
       const response = await request(app.getHttpServer())
         .post('/user/check-in')
-        .send(createUserDto)
+        .send({ ...createUserDto, urlId: urlId })
         .expect(HttpStatus.CREATED);
 
       userId = response.body.id;
@@ -65,7 +65,7 @@ describe('UserController (e2e)', () => {
     });
 
     it('존재하지 않는 urlId일 경우 에러가 반환됩니다.', async () => {
-      const createUserDto = { ...defaultUser, url: 'NONE_URL' };
+      const createUserDto = { ...defaultUser, urlId: 999999 };
 
       await request(app.getHttpServer())
         .post('/user/check-in')
@@ -82,7 +82,7 @@ describe('UserController (e2e)', () => {
 
       await request(app.getHttpServer())
         .post('/user/check-in')
-        .send(createUserDto)
+        .send({ ...createUserDto, urlId: maxUrlId })
         .expect({
           code: 'URL_MAXIMUM_USER',
           status: 409,

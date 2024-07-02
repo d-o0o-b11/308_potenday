@@ -2,7 +2,7 @@ import { IEvent } from '@nestjs/cqrs';
 
 export class StatusUpdatedEvent implements IEvent {
   constructor(
-    public readonly url: string,
+    public readonly urlId: number,
     public readonly status: boolean,
   ) {}
   get name(): string {

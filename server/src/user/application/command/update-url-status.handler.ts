@@ -16,10 +16,10 @@ export class UpdateStatusFalseHandler
   ) {}
 
   async execute(command: UpdateStatusFalseCommand): Promise<void> {
-    const { url } = command;
+    const { urlId } = command;
 
-    await this.userUrlService.updateStatusFalse(url);
+    await this.userUrlService.updateStatusFalse(urlId);
 
-    this.userUrlFactory.update({ url: url, status: true });
+    this.userUrlFactory.update({ urlId: urlId, status: true });
   }
 }

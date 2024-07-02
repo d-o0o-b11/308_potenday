@@ -2,13 +2,6 @@ import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserAdjectiveExpressionDto {
   /**
-   * URL
-   * @example "12efds"
-   */
-  @IsString()
-  url: string;
-
-  /**
    * URL ID
    * @example 1
    */

@@ -2,11 +2,11 @@ import { IsNumber, IsNumberString, IsString } from 'class-validator';
 
 export class FindMbtiRoundDto {
   /**
-   * URL
-   * @example dfgew
+   * URL ID
+   * @example 11
    */
-  @IsString()
-  url: string;
+  @IsNumber()
+  urlId: number;
 
   /**
    * MBTI 추측 라운드 ID
@@ -23,13 +23,6 @@ export class SaveMbtiDto {
    */
   @IsNumber()
   urlId: number;
-
-  /**
-   * URL
-   * @example dfgew
-   */
-  @IsString()
-  url: string;
 
   /**
    * USER ID

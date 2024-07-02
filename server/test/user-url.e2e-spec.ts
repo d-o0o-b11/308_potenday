@@ -32,30 +32,23 @@ describe('UserUrlController (e2e)', () => {
   });
 
   describe('GET /url', () => {
-    let url: string;
+    let urlId: number;
     it('무작위 url을 반환합니다.', async () => {
       const response = await request(app.getHttpServer()).get('/url');
 
-      url = response.body.url;
+      urlId = response.body.id;
 
-      expect(response.body).toStrictEqual({
-        url: expect.any(String),
+      const findOne = await manager.findOne(UserUrlEntity, {
+        where: {
+          id: urlId,
+        },
       });
+
+      expect(findOne).not.toBeNull();
     });
 
     afterAll(async () => {
-      const findUrlId: number = (
-        await manager.findOne(UserUrlEntity, {
-          where: {
-            url: url,
-          },
-          select: {
-            id: true,
-          },
-        })
-      ).id;
-
-      await manager.delete(UserUrlEntity, findUrlId);
+      await manager.delete(UserUrlEntity, urlId);
     });
   });
 
@@ -77,7 +70,7 @@ describe('UserUrlController (e2e)', () => {
     it('대기방 인원 수 + 해당 방의 유저 정보를 반환합니다.', async () => {
       const response = await request(app.getHttpServer())
         .get('/url/waiting-room')
-        .query({ url: waitingUrl.url });
+        .query({ urlId: waitingUrlId });
 
       expect(response.body).toStrictEqual({
         userCount: 1,
@@ -95,7 +88,7 @@ describe('UserUrlController (e2e)', () => {
     it('대기방에 유저가 0명인 경우 count 0을 반환합니다.', async () => {
       const response = await request(app.getHttpServer())
         .get('/url/waiting-room')
-        .query({ url: waitingNoneUrl.url });
+        .query({ urlId: waitingNoneUrlId });
 
       expect(response.body).toStrictEqual({
         userCount: 0,
@@ -120,7 +113,7 @@ describe('UserUrlController (e2e)', () => {
     it('[모두 모였어요] 버튼 클릭 시 url 상태를 false로 변경합니다.', async () => {
       await request(app.getHttpServer())
         .patch('/url/status')
-        .query({ url: updateUrl.url })
+        .query({ urlId: updateUrlId })
         .expect(HttpStatus.OK);
 
       const findUrl = await manager.findOne(UserUrlEntity, {
@@ -148,7 +141,7 @@ describe('UserUrlController (e2e)', () => {
     it('url 상태가 true일 경우 입장 가능합니다.', async () => {
       const response = await request(app.getHttpServer())
         .get('/url/status')
-        .query({ url: updateTrueUrl.url });
+        .query({ urlId: trueUrlId });
 
       expect(response.body).toStrictEqual({ status: true });
     });
@@ -156,7 +149,7 @@ describe('UserUrlController (e2e)', () => {
     it('url 상태가 false일 경우 입장 가능합니다.', async () => {
       const response = await request(app.getHttpServer())
         .get('/url/status')
-        .query({ url: updateFalseUrl.url });
+        .query({ urlId: falseUrlId });
 
       expect(response.body).toStrictEqual({ status: false });
     });

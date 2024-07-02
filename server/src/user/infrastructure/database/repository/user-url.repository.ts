@@ -12,6 +12,7 @@ import {
   CreateUserUrlDto,
   FindOneUserUrlDto,
   FindOneUserUrlWithUserDto,
+  FindOneUserWithUrlDto,
   UpdateUserUrlDto,
 } from '../../../interface';
 
@@ -31,9 +32,11 @@ export class UserUrlRepository implements IUserUrlRepository {
       const userUrlEntity = UserUrlMapper.toEntity(dto.url);
       const result = await manager.save(userUrlEntity);
 
-      return {
+      return this.userUrlFactory.reconstitute({
         id: result.id,
-      };
+        url: result.url,
+        status: result.status,
+      });
     });
   }
 
@@ -52,7 +55,7 @@ export class UserUrlRepository implements IUserUrlRepository {
   async findOne(dto: FindOneUserUrlDto) {
     const userUrl = await this.userUrlRepository.findOne({
       where: {
-        url: dto.url,
+        id: dto.urlId,
       },
     });
 
@@ -65,10 +68,22 @@ export class UserUrlRepository implements IUserUrlRepository {
     });
   }
 
+  async findOneWithUrl(dto: FindOneUserWithUrlDto) {
+    const userUrl = await this.userUrlRepository.findOne({
+      where: {
+        url: dto.url,
+      },
+    });
+
+    if (!userUrl) return null;
+
+    return true;
+  }
+
   async findOneWithUser(dto: FindOneUserUrlWithUserDto) {
     const result = await this.userUrlRepository.findOne({
       where: {
-        url: dto.url,
+        id: dto.urlId,
       },
       relations: {
         user: true,

@@ -1,10 +1,14 @@
-import { CountUsersInRoomResponseDto, FindOneUserUrlDto } from '../dto';
+import {
+  CountUsersInRoomResponseDto,
+  FindOneUserUrlDto,
+  SetUrlResponseDto,
+} from '../dto';
 
 export interface IUserUrlService {
   /**
    * URL 발급
    */
-  setUrl: () => Promise<string>;
+  setUrl: () => Promise<SetUrlResponseDto>;
 
   /**
    * 해당 URL 인원 수 확인
@@ -16,11 +20,11 @@ export interface IUserUrlService {
   /**
    * 해당 URL 인원 수 확인
    */
-  countUsersInRoom: (url: string) => Promise<CountUsersInRoomResponseDto>;
+  countUsersInRoom: (urlId: number) => Promise<CountUsersInRoomResponseDto>;
 
   /**
    * 해당 URL 인원 수가 총 4명이 될 경우 입장 마감처리
    * status:false
    */
-  updateStatusFalse: (url: string) => Promise<void>;
+  updateStatusFalse: (urlId: number) => Promise<void>;
 }

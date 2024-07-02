@@ -27,13 +27,6 @@ export class SaveUserBalanceDto {
 
 export class CreateBalanceDto extends SaveUserBalanceDto {
   /**
-   * URL
-   * @example '13fdf'
-   */
-  @IsString()
-  url: string;
-
-  /**
    * URL ID
    * @example 27
    */

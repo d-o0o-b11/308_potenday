@@ -30,7 +30,7 @@ export class UserEventHandler
 
   private handleStatusUpdatedEvent(event: StatusUpdatedEvent) {
     this.eventEmitter.emit('statusUpdated', {
-      url: event.url,
+      urlId: event.urlId,
       status: event.status,
     });
   }

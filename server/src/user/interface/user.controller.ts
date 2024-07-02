@@ -41,8 +41,10 @@ export class UserController {
     @Body(new ValidationPipe({ whitelist: true, transform: true }))
     dto: CreateUserCommandDto,
   ) {
-    const { url, imgId, nickName } = dto;
+    const { urlId, imgId, nickName } = dto;
 
-    return this.commandBus.execute(new CreateUserCommand(url, imgId, nickName));
+    return this.commandBus.execute(
+      new CreateUserCommand(urlId, imgId, nickName),
+    );
   }
 }

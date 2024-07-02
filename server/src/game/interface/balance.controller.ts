@@ -48,7 +48,6 @@ export class BalanceController {
   ) {
     await this.commandBus.execute(
       new CreateUserBalanceCommand(
-        dto.url,
         dto.urlId,
         dto.userId,
         dto.balanceId,

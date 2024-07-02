@@ -45,7 +45,6 @@ export class AdjectiveExpressionController {
   ) {
     return await this.commandBus.execute(
       new CreateUserAdjectiveExpressionCommand(
-        dto.url,
         dto.urlId,
         dto.userId,
         dto.expressionIds,

@@ -7,8 +7,8 @@ export class NextStepHandler implements ICommandHandler<NextStepCommand> {
   constructor(private userUrlFactory: UserUrlFactory) {}
 
   async execute(command: NextStepCommand): Promise<void> {
-    const { url } = command;
+    const { urlId } = command;
 
-    this.userUrlFactory.update({ url: url, status: true });
+    this.userUrlFactory.update({ urlId: urlId, status: true });
   }
 }

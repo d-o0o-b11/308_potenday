@@ -19,10 +19,10 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   ) {}
 
   async execute(command: CreateUserCommand): Promise<UserResponseDto> {
-    const { url, imgId, nickName } = command;
+    const { urlId, imgId, nickName } = command;
 
-    const urlId = await this.urlService.checkUserLimitForUrl({ url });
-
+    await this.urlService.checkUserLimitForUrl({ urlId });
+    //4명 미만일 시 유저 추가
     const result = await this.userRepository.save({ urlId, imgId, nickName });
 
     this.userFactory.create({ urlId, imgId, nickName });
