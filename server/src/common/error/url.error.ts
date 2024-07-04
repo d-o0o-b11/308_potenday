@@ -35,3 +35,13 @@ export class UrlMaximumUserAlreadyClickButtonException extends BasicException {
     );
   }
 }
+
+export class UrlStatusFalseException extends BasicException {
+  constructor() {
+    super(
+      ErrorMessage.URL_STATUS_FALSE,
+      HttpStatus.CONFLICT,
+      ErrorCode.URL_STATUS_FALSE,
+    );
+  }
+}
