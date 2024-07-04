@@ -23,6 +23,14 @@ export class CreateUserDto {
   readonly nickName: string;
 }
 
+export class CreateFactoryUserDto extends CreateUserDto {
+  /**
+   * USER ID
+   * @example 11
+   */
+  @IsNumber()
+  readonly userId: number;
+}
 export class CreateUserCommandDto {
   /**
    * URL ID
@@ -44,40 +52,6 @@ export class CreateUserCommandDto {
    */
   @IsString()
   readonly nickName: string;
-}
-
-export class UpdateOnboardingDto {
-  /**
-   * 유저 ID
-   * @example 25
-   */
-  @IsNumber()
-  readonly userId: number;
-}
-
-export class FindOneUserDto {
-  /**
-   * 유저 ID
-   * @example 25
-   */
-  @IsNumber()
-  readonly userId: number;
-}
-
-export class ReconstituteUserFactoryDto extends CreateUserDto {
-  /**
-   * URL ID
-   * @example 1
-   */
-  @IsNumber()
-  id: number;
-
-  /**
-   * 유저 온보딩 여부
-   * @example true
-   */
-  @IsBoolean()
-  onboarding: boolean;
 }
 
 export class ReconstituteArrayUserFactoryDto extends CreateUserDto {

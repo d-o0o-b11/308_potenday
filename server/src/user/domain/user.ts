@@ -13,8 +13,6 @@ export class User {
     private readonly imgId: number,
     private readonly nickName: string,
     private readonly urlId: number,
-    private readonly onboarding?: boolean,
-    //수정 필요 entity X
     private readonly adjectiveExpressions?: UserAdjectiveExpression[],
   ) {}
 
@@ -28,10 +26,6 @@ export class User {
 
   getNickName(): Readonly<string> {
     return this.nickName;
-  }
-
-  getOnboarding(): Readonly<boolean | undefined> {
-    return this.onboarding;
   }
 
   getUrlId(): Readonly<number> {

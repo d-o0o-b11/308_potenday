@@ -13,9 +13,11 @@ import {
   UserEventHandler,
   GetUsersInRoomQueryHandler,
   UserUrlService,
+  UserUrlEventPublisher,
 } from './application';
 import {
   USER_REPOSITORY_TOKEN,
+  USER_URL_EVENT_PUBLISHER,
   USER_URL_REPOSITORY_TOKEN,
   USER_URL_SERVICE_TOKEN,
   UserEntity,
@@ -41,6 +43,7 @@ import {
     { provide: USER_REPOSITORY_TOKEN, useClass: UserRepository },
     { provide: USER_URL_REPOSITORY_TOKEN, useClass: UserUrlRepository },
     { provide: USER_URL_SERVICE_TOKEN, useClass: UserUrlService },
+    { provide: USER_URL_EVENT_PUBLISHER, useClass: UserUrlEventPublisher },
   ],
 })
 export class UserModule {}

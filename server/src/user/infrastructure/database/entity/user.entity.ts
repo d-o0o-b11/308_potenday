@@ -25,14 +25,6 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar', name: 'nickname', nullable: false })
   nickName: string;
 
-  @Column({
-    type: 'boolean',
-    name: 'onboarding',
-    default: false,
-    nullable: false,
-  })
-  onboarding: boolean;
-
   @Column({ type: 'int4', name: 'url_id', nullable: false })
   urlId: number;
 

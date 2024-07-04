@@ -6,6 +6,7 @@ import {
   UrlAlreadyClickButtonException,
   UrlMaximumUserAlreadyClickButtonException,
   UrlNotFoundException,
+  UrlStatusFalseException,
 } from '@common';
 import { USER_URL_REPOSITORY_TOKEN } from '../../infrastructure';
 
@@ -41,6 +42,10 @@ export class UserUrlService implements IUserUrlService {
 
     if (!findOneResult) {
       throw new UrlNotFoundException();
+    }
+
+    if (!findOneResult.getStatus()) {
+      throw new UrlStatusFalseException();
     }
 
     if ((await this.countUsersInRoom(dto.urlId)).userCount >= 4) {
