@@ -34,6 +34,22 @@ export class CreateBalanceDto extends SaveUserBalanceDto {
   urlId: number;
 }
 
+export class FindSubitUserDto {
+  /**
+   * USER ID
+   * @example 12
+   */
+  @IsNumber()
+  userId: number;
+
+  /**
+   * 밸런스 ID
+   * @example 1
+   */
+  @IsNumber()
+  balanceId: number;
+}
+
 /**
  * 쿼리 파라미터는 기본적으로 문자열로 전달됩니다.
  * 따라서, @IsNumberString() 데코레이터를 사용하는 것이 좋습니다.
@@ -63,4 +79,13 @@ export class FindBalanceListDto {
    */
   @IsNumber()
   balanceId: number;
+}
+
+export class UserBalanceSubmitCountDto {
+  /**
+   * 밸런스 의견 제출한 유저 수
+   * @example 2
+   */
+  @IsNumber()
+  submitCount: number;
 }

@@ -32,3 +32,12 @@ export class GroupByUserAdjectiveExpressionDto {
   @Type(() => AdjectiveExpression)
   adjectiveExpressions: AdjectiveExpression[];
 }
+
+export class UserAdjectiveExpressionSubmitCountDto {
+  /**
+   * 형용사 표현 제출한 유저 수
+   * @example 2
+   */
+  @IsNumber()
+  submitCount: number;
+}

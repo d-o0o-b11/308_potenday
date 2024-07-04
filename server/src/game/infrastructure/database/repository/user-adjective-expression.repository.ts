@@ -35,6 +35,16 @@ export class UserAdjectiveExpressionRepository
     });
   }
 
+  async isSubmitUser(userId: number) {
+    const findResult = await this.userAdjectiveExpressionRepository.find({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return findResult.length > 0;
+  }
+
   /**
    * getExpressionListUserCount 함수 대신해서 사용
    * 그리고 url의 총 인원수를 조회하는 코드를 inject후 조합하자

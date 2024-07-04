@@ -13,6 +13,8 @@ import {
   UserBalanceRepository,
   UserMbtiRepository,
   USER_MBTI_REPOSITORY_TOKEN,
+  USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
+  USER_BALANCE_SERVICE_TOKEN,
 } from './infrastructure';
 import {
   AdjectiveExpressionFactory,
@@ -34,6 +36,8 @@ import {
   GetUsersAdjectiveExpressionQueryHandler,
   GetUsersMbtiInUrlQueryHandler,
   UpdateCommonQuestionCommandHandler,
+  UserAdjectiveExpressionService,
+  UserBalanceService,
 } from './application';
 import {
   AdjectiveExpressionController,
@@ -110,6 +114,14 @@ import { UserBalanceEntity } from './infrastructure/database/entity/user-balance
     {
       provide: USER_MBTI_REPOSITORY_TOKEN,
       useClass: UserMbtiRepository,
+    },
+    {
+      provide: USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
+      useClass: UserAdjectiveExpressionService,
+    },
+    {
+      provide: USER_BALANCE_SERVICE_TOKEN,
+      useClass: UserBalanceService,
     },
   ],
   exports: [],
