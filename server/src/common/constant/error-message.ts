@@ -9,4 +9,6 @@ export const enum ErrorMessage {
   USER_ADJECTIVE_EXPRESSION_SUBMIT = '이미 형용사 표현 값을 제출하였습니다.',
 
   USER_BALANCE_SUBMIT = '이미 해당 라운드 밸런스 게임에 의견을 제출하였습니다.',
+
+  USER_MBTI_SUBMIT = '이미 해당 mbti 값을 제출하였습니다.',
 }
