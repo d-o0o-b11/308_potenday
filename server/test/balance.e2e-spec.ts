@@ -84,6 +84,7 @@ describe('BalanceController (e2e)', () => {
   describe('POST /balance', () => {
     let url: UserUrlEntity;
     let userId: number;
+    let submitUserId: number;
 
     beforeAll(async () => {
       url = await manager.save(UserUrlEntity, defaultUrl);
@@ -95,13 +96,20 @@ describe('BalanceController (e2e)', () => {
           onboarding: true,
         })
       ).id;
+      submitUserId = (
+        await manager.save(UserEntity, {
+          nickName: 'SUBMIT_USER',
+          imgId: 2,
+          urlId: url.id,
+          onboarding: true,
+        })
+      ).id;
     });
 
     it('밸런스 게임 투표', async () => {
       await request(app.getHttpServer())
         .post('/balance')
         .send({
-          url: url.url,
           urlId: url.id,
           userId: userId,
           balanceId: 1,
@@ -119,10 +127,40 @@ describe('BalanceController (e2e)', () => {
       expect(find).not.toBeNull();
     });
 
-    it.skip('밸런스 게임 투표 동일한 유저가 2번 이상 투표할 경우 에러', async () => {});
+    it('밸런스 게임 투표 동일한 유저가 2번 이상 투표할 경우 에러', async () => {
+      await manager.save(UserBalanceEntity, {
+        userId: submitUserId,
+        balanceId: 1,
+        balanceType: BalanceType.B,
+      });
+
+      await request(app.getHttpServer())
+        .post('/balance')
+        .send({
+          urlId: url.id,
+          userId: submitUserId,
+          balanceId: 1,
+          balanceType: BalanceType.A,
+        })
+        .expect({
+          code: 'USER_BALANCE_SUBMIT',
+          status: 409,
+          message: '이미 해당 라운드 밸런스 게임에 의견을 제출하였습니다.',
+        });
+
+      const find = await manager.find(UserBalanceEntity, {
+        where: {
+          userId: submitUserId,
+          balanceId: 1,
+        },
+      });
+
+      expect(find.length).toStrictEqual(1);
+    });
 
     afterAll(async () => {
       await manager.delete(UserEntity, userId);
+      await manager.delete(UserEntity, submitUserId);
       await manager.delete(UserUrlEntity, url.id);
     });
   });

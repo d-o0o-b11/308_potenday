@@ -59,6 +59,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
   describe('POST /adjective-expression', () => {
     let url: UserUrlEntity;
     let userId: number;
+    let submitUserId: number;
 
     beforeAll(async () => {
       url = await manager.save(UserUrlEntity, defaultUrl);
@@ -70,13 +71,20 @@ describe('AdjectiveExpressionController (e2e)', () => {
           onboarding: true,
         })
       ).id;
+      submitUserId = (
+        await manager.save(UserEntity, {
+          nickName: 'SUBMIT_USER',
+          imgId: 2,
+          urlId: url.id,
+          onboarding: true,
+        })
+      ).id;
     });
 
     it('밸런스 게임 투표', async () => {
       await request(app.getHttpServer())
         .post('/adjective-expression')
         .send({
-          url: url.url,
           urlId: url.id,
           userId: userId,
           expressionIds: [1, 2, 3],
@@ -92,10 +100,37 @@ describe('AdjectiveExpressionController (e2e)', () => {
       expect(find.length).toBe(3);
     });
 
-    it.skip('형용사 표현 게임 동일한 유저가 2번 입력시 에러', async () => {});
+    it('형용사 표현 게임 동일한 유저가 2번 입력시 에러', async () => {
+      await manager.save(UserAdjectiveExpressionEntity, {
+        userId: submitUserId,
+        adjectiveExpressionId: 1,
+      });
+
+      await request(app.getHttpServer())
+        .post('/adjective-expression')
+        .send({
+          urlId: url.id,
+          userId: submitUserId,
+          expressionIds: [1, 2, 3],
+        })
+        .expect({
+          code: 'USER_ADJECTIVE_EXPRESSION_SUBMIT',
+          status: 409,
+          message: '이미 형용사 표현 값을 제출하였습니다.',
+        });
+
+      const find = await manager.find(UserAdjectiveExpressionEntity, {
+        where: {
+          userId: submitUserId,
+        },
+      });
+
+      expect(find.length).toStrictEqual(1);
+    });
 
     afterAll(async () => {
       await manager.delete(UserEntity, userId);
+      await manager.delete(UserEntity, submitUserId);
       await manager.delete(UserUrlEntity, url.id);
     });
   });

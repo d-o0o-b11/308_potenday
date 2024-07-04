@@ -5,7 +5,14 @@ import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
 import { UserEntity, UserUrlEntity } from '@user';
 import { AppModule } from '@app.module';
-import { defaultUrl, defaultUser, maxUrl, maxUser } from './data';
+import {
+  defaultUrl,
+  defaultUser,
+  gamingUrl,
+  gamingUser,
+  maxUrl,
+  maxUser,
+} from './data';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -28,11 +35,16 @@ describe('UserController (e2e)', () => {
     let urlId: number;
     let userId: number;
 
+    let gamingUrlId: number;
+
     let maxUrlId: number;
     let maxUserId: number[] = [];
+
     beforeAll(async () => {
       urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
       maxUrlId = (await manager.save(UserUrlEntity, maxUrl)).id;
+
+      gamingUrlId = (await manager.save(UserUrlEntity, gamingUrl)).id;
 
       maxUserId = await Promise.all(
         Array.from({ length: 4 }).map(async () => {
@@ -59,7 +71,6 @@ describe('UserController (e2e)', () => {
         id: expect.any(Number),
         imgId: defaultUser.imgId,
         nickName: defaultUser.nickName,
-        onboarding: false,
         urlId: urlId,
       });
     });
@@ -74,6 +85,19 @@ describe('UserController (e2e)', () => {
           code: 'URL_NOT_FOUND',
           status: 404,
           message: '존재하지 않는 URL 입니다.',
+        });
+    });
+
+    it('해당 방이 게임중일 경우 에러가 반환됩니다.', async () => {
+      const createUserDto = { ...gamingUser, urlId: gamingUrlId };
+
+      await request(app.getHttpServer())
+        .post('/user/check-in')
+        .send(createUserDto)
+        .expect({
+          code: 'URL_STATUS_FALSE',
+          status: 409,
+          message: '해당 방은 게임 중이여서 입장이 불가능합니다.',
         });
     });
 
@@ -93,6 +117,7 @@ describe('UserController (e2e)', () => {
     afterAll(async () => {
       await manager.delete(UserEntity, userId);
       await manager.delete(UserUrlEntity, urlId);
+      await manager.delete(UserUrlEntity, gamingUrlId);
       await Promise.all(maxUserId.map((id) => manager.delete(UserEntity, id)));
       await manager.delete(UserUrlEntity, maxUrlId);
     });

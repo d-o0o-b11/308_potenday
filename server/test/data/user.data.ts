@@ -3,6 +3,17 @@ export const defaultUrl = {
   status: true,
 } as const;
 
+export const gamingUrl = {
+  url: 'GAMING_URL',
+  status: false,
+} as const;
+
+export const gamingUser = {
+  url: gamingUrl.url,
+  imgId: 2,
+  nickName: 'TEST NICK',
+} as const;
+
 export const defaultUser = {
   url: defaultUrl.url,
   imgId: 2,
