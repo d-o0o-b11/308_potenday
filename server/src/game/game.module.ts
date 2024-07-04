@@ -15,6 +15,7 @@ import {
   USER_MBTI_REPOSITORY_TOKEN,
   USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
   USER_BALANCE_SERVICE_TOKEN,
+  USER_MBTI_SERVICE_TOKEN,
 } from './infrastructure';
 import {
   AdjectiveExpressionFactory,
@@ -38,6 +39,7 @@ import {
   UpdateCommonQuestionCommandHandler,
   UserAdjectiveExpressionService,
   UserBalanceService,
+  UserMbtiService,
 } from './application';
 import {
   AdjectiveExpressionController,
@@ -122,6 +124,10 @@ import { UserBalanceEntity } from './infrastructure/database/entity/user-balance
     {
       provide: USER_BALANCE_SERVICE_TOKEN,
       useClass: UserBalanceService,
+    },
+    {
+      provide: USER_MBTI_SERVICE_TOKEN,
+      useClass: UserMbtiService,
     },
   ],
   exports: [],

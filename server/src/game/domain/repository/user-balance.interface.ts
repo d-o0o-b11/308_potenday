@@ -1,6 +1,6 @@
 import {
   CalculatePercentagesResponseDto,
-  FindSubitUserDto,
+  FindSubmitUserDto,
   FindUserBalanceDto,
   FindUserCountResponseDto,
   SaveUserBalanceDto,
@@ -17,7 +17,7 @@ export interface IUserBalanceRepository {
    * 유저가 의견 제출한 경우 true
    * 제출하지 않은 경우 false
    */
-  isSubmitUser: (dto: FindSubitUserDto) => Promise<boolean>;
+  isSubmitUser: (dto: FindSubmitUserDto) => Promise<boolean>;
 
   /**
    * 밸런스 게임 답변한 인원 수

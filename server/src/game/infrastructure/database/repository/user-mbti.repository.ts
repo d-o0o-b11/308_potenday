@@ -3,6 +3,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { UserMbtiMapper } from '../mapper';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
+  FindSubmitMbtiDto,
   FindUserMbtiByUrlIdDto,
   FindUserMbtiDto,
   SaveUserMbtiDto,
@@ -34,6 +35,17 @@ export class UserMbtiRepository implements IUserMbtiRepository {
 
       manager.save(UserMbtiEntity, entity);
     });
+  }
+
+  async isSubmitUser(dto: FindSubmitMbtiDto) {
+    const findResult = await this.userMbtiRepository.findOne({
+      where: {
+        userId: dto.userId,
+        toUserId: dto.toUserId,
+      },
+    });
+
+    return findResult ? true : false;
   }
 
   async find(dto: FindUserMbtiDto) {

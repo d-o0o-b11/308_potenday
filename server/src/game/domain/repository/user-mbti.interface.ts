@@ -1,5 +1,6 @@
 import { FindUserMbtiAnswerResponseDto } from '@game/interface/dto/user-mbti.response.dto';
 import {
+  FindSubmitMbtiDto,
   FindUserMbtiByUrlIdDto,
   FindUserMbtiDto,
   SaveUserMbtiDto,
@@ -11,6 +12,13 @@ export interface IUserMbtiRepository {
    * 추측한 유저 mbti 정보 저장
    */
   save: (dto: SaveUserMbtiDto) => Promise<void>;
+
+  /**
+   * 유저가 mbti 값을 제출했는지 여부 조회
+   * 유저가 값을 제출한 경우 true
+   * 제출하지 않은 경우 false
+   */
+  isSubmitUser: (dto: FindSubmitMbtiDto) => Promise<boolean>;
 
   /**
    * 추측한 유저 mbti 데이터 조회

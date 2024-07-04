@@ -9,7 +9,7 @@ import {
 import { UserBalanceMapper } from '../mapper';
 import {
   CalculatePercentagesResponseDto,
-  FindSubitUserDto,
+  FindSubmitUserDto,
   FindUserBalanceDto,
   FindUserBalanceResponseDto,
   GroupedByBalanceTypeDto,
@@ -37,15 +37,15 @@ export class UserBalanceRepository implements IUserBalanceRepository {
     });
   }
 
-  async isSubmitUser(dto: FindSubitUserDto) {
-    const findResult = await this.userBalanceRepository.find({
+  async isSubmitUser(dto: FindSubmitUserDto) {
+    const findResult = await this.userBalanceRepository.findOne({
       where: {
         userId: dto.userId,
         balanceId: dto.balanceId,
       },
     });
 
-    return findResult.length > 0;
+    return findResult ? true : false;
   }
 
   async findUserCount(dto: FindUserBalanceDto) {

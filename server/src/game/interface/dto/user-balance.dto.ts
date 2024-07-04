@@ -34,7 +34,7 @@ export class CreateBalanceDto extends SaveUserBalanceDto {
   urlId: number;
 }
 
-export class FindSubitUserDto {
+export class FindSubmitUserDto {
   /**
    * USER ID
    * @example 12

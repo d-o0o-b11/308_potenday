@@ -5,7 +5,7 @@ export class FindMbtiRoundDto {
    * URL ID
    * @example 11
    */
-  @IsNumber()
+  @IsNumberString()
   urlId: number;
 
   /**
@@ -14,6 +14,22 @@ export class FindMbtiRoundDto {
    */
   @IsNumberString()
   roundId: number;
+}
+
+export class FindSubmitMbtiDto {
+  /**
+   * USER ID
+   * @example 12
+   */
+  @IsNumber()
+  userId: number;
+
+  /**
+   * 대상 사용자 ID
+   * @example 11
+   */
+  @IsNumber()
+  toUserId: number;
 }
 
 export class SaveMbtiDto {
@@ -93,4 +109,13 @@ export class FindUserMbtiByUrlIdDto {
    */
   @IsNumber()
   urlId: number;
+}
+
+export class UserMbtiSubmitCountDto {
+  /**
+   * mbti 의견 제출한 유저 수
+   * @example 2
+   */
+  @IsNumber()
+  submitCount: number;
 }
