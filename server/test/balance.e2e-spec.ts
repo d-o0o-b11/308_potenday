@@ -101,7 +101,6 @@ describe('BalanceController (e2e)', () => {
           nickName: 'SUBMIT_USER',
           imgId: 2,
           urlId: url.id,
-          onboarding: true,
         })
       ).id;
     });
@@ -156,6 +155,27 @@ describe('BalanceController (e2e)', () => {
       });
 
       expect(find.length).toStrictEqual(1);
+    });
+
+    it('다음 라운드 밸런스 게임 투표 저장', async () => {
+      await request(app.getHttpServer())
+        .post('/balance')
+        .send({
+          urlId: url.id,
+          userId: userId,
+          balanceId: 2,
+          balanceType: BalanceType.B,
+        })
+        .expect(HttpStatus.CREATED);
+
+      const find = await manager.findOne(UserBalanceEntity, {
+        where: {
+          userId: userId,
+          balanceId: 2,
+        },
+      });
+
+      expect(find).not.toBeNull();
     });
 
     afterAll(async () => {

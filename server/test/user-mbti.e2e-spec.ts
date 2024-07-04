@@ -26,22 +26,22 @@ describe('AdjectiveExpressionController (e2e)', () => {
   });
 
   describe('GET /mbti', () => {
-    let url: UserUrlEntity;
+    let urlId: number;
     let userId1: number;
     let userId2: number;
 
     beforeAll(async () => {
-      url = await manager.save(UserUrlEntity, defaultUrl);
+      urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
       userId1 = (
         await manager.save(UserEntity, {
-          urlId: url.id,
+          urlId: urlId,
           ...mbtiUserId1,
         })
       ).id;
 
       userId2 = (
         await manager.save(UserEntity, {
-          urlId: url.id,
+          urlId: urlId,
           ...mbtiUserId2,
         })
       ).id;
@@ -51,7 +51,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .get('/mbti')
         .query({
-          url: url.url,
+          urlId: urlId,
           roundId: roundId,
         })
         .expect(HttpStatus.OK);
@@ -60,7 +60,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
         id: expect.any(Number),
         imgId: expectedUser.imgId,
         nickName: expectedUser.nickName,
-        urlId: url.id,
+        urlId: urlId,
       });
     };
 
@@ -75,28 +75,46 @@ describe('AdjectiveExpressionController (e2e)', () => {
     afterAll(async () => {
       await manager.delete(UserEntity, userId1);
       await manager.delete(UserEntity, userId2);
-      await manager.delete(UserUrlEntity, url.id);
+      await manager.delete(UserUrlEntity, urlId);
     });
   });
 
   describe('POST /mbti', () => {
-    let url: UserUrlEntity;
+    let urlId: number;
     let userId1: number;
     let userId2: number;
+    let submitUserId: number;
+    let otherUserId: number;
 
     beforeAll(async () => {
-      url = await manager.save(UserUrlEntity, defaultUrl);
+      urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
       userId1 = (
         await manager.save(UserEntity, {
-          urlId: url.id,
+          urlId: urlId,
           ...mbtiUserId1,
         })
       ).id;
 
       userId2 = (
         await manager.save(UserEntity, {
-          urlId: url.id,
+          urlId: urlId,
           ...mbtiUserId2,
+        })
+      ).id;
+
+      submitUserId = (
+        await manager.save(UserEntity, {
+          nickName: 'SUBMIT_USER',
+          imgId: 2,
+          urlId: urlId,
+        })
+      ).id;
+
+      otherUserId = (
+        await manager.save(UserEntity, {
+          nickName: 'OTHER_USER',
+          imgId: 2,
+          urlId: urlId,
         })
       ).id;
     });
@@ -105,8 +123,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
       await request(app.getHttpServer())
         .post('/mbti')
         .send({
-          url: url.url,
-          urlId: url.id,
+          urlId: urlId,
           userId: userId1,
           mbti: 'ISTJ',
           toUserId: userId1,
@@ -127,8 +144,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
       await request(app.getHttpServer())
         .post('/mbti')
         .send({
-          url: url.url,
-          urlId: url.id,
+          urlId: urlId,
           userId: userId1,
           mbti: 'ISTP',
           toUserId: userId2,
@@ -145,10 +161,70 @@ describe('AdjectiveExpressionController (e2e)', () => {
       expect(find.mbti).toStrictEqual('ISTP');
     });
 
+    it('mbti 값을 동일한 유저가 2번 이상 입력할 경우 에러', async () => {
+      await manager.save(UserMbtiEntity, {
+        userId: submitUserId,
+        mbti: 'ISTJ',
+        toUserId: userId1,
+      });
+
+      await request(app.getHttpServer())
+        .post('/mbti')
+        .send({
+          urlId: urlId,
+          userId: submitUserId,
+          mbti: 'ISTP',
+          toUserId: userId1,
+        })
+        .expect({
+          code: 'USER_MBTI_SUBMIT',
+          status: 409,
+          message: '이미 해당 mbti 값을 제출하였습니다.',
+        });
+
+      const find = await manager.find(UserMbtiEntity, {
+        where: {
+          userId: submitUserId,
+          toUserId: userId1,
+        },
+      });
+
+      expect(find.length).toStrictEqual(1);
+    });
+
+    it('다음 라운드 유저 mbti 추측값 저장', async () => {
+      await manager.save(UserMbtiEntity, {
+        userId: userId1,
+        mbti: 'ISTJ',
+        toUserId: submitUserId,
+      });
+
+      await request(app.getHttpServer())
+        .post('/mbti')
+        .send({
+          urlId: urlId,
+          userId: userId1,
+          mbti: 'ISTP',
+          toUserId: otherUserId,
+        })
+        .expect(HttpStatus.CREATED);
+
+      const find = await manager.findOne(UserMbtiEntity, {
+        where: {
+          userId: userId1,
+          toUserId: otherUserId,
+        },
+      });
+
+      expect(find.mbti).toStrictEqual('ISTP');
+    });
+
     afterAll(async () => {
+      await manager.delete(UserEntity, submitUserId);
       await manager.delete(UserEntity, userId1);
       await manager.delete(UserEntity, userId2);
-      await manager.delete(UserUrlEntity, url.id);
+      await manager.delete(UserEntity, otherUserId);
+      await manager.delete(UserUrlEntity, urlId);
     });
   });
 

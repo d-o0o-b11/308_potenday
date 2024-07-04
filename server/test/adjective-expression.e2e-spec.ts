@@ -76,7 +76,6 @@ describe('AdjectiveExpressionController (e2e)', () => {
           nickName: 'SUBMIT_USER',
           imgId: 2,
           urlId: url.id,
-          onboarding: true,
         })
       ).id;
     });
