@@ -28,7 +28,6 @@ export class UserUrlRepository implements IUserUrlRepository {
 
   async save(dto: CreateUserUrlDto) {
     return await this.manager.transaction(async (manager) => {
-      console.log('여기여기');
       const userUrlEntity = UserUrlMapper.toEntity(dto.url);
       const result = await manager.save(userUrlEntity);
 

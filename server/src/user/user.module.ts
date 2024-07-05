@@ -20,11 +20,11 @@ import {
   USER_URL_EVENT_PUBLISHER,
   USER_URL_REPOSITORY_TOKEN,
   USER_URL_SERVICE_TOKEN,
-  UserEntity,
   UserRepository,
-  UserUrlEntity,
   UserUrlRepository,
 } from './infrastructure';
+import { UserUrlEntity } from './infrastructure/database/entity/user-url.entity';
+import { UserEntity } from './infrastructure/database/entity/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity, UserUrlEntity]), CqrsModule],
