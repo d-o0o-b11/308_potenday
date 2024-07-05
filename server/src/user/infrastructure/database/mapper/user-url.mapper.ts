@@ -1,4 +1,4 @@
-import { UserUrlEntity } from '../entity';
+import { UserUrlEntity } from '../entity/user-url.entity';
 
 export class UserUrlMapper {
   static toEntity(url: string): UserUrlEntity {

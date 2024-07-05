@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class StockCreatedListener {
+  constructor(private readonly eventEmitter: EventEmitter2) {}
+
   @OnEvent('statusUpdated')
   handleStockCreatedEvent(event) {
-    console.log('이벤트', event);
+    this.eventEmitter.emit('statusUpdated', event);
   }
 }

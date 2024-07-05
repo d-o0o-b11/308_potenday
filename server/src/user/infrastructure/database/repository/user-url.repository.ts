@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { UserUrlEntity } from '../entity';
 import { UserUrlMapper } from '../mapper';
 import {
   IUserUrlRepository,
@@ -15,6 +14,7 @@ import {
   FindOneUserWithUrlDto,
   UpdateUserUrlDto,
 } from '../../../interface';
+import { UserUrlEntity } from '../entity/user-url.entity';
 
 @Injectable()
 export class UserUrlRepository implements IUserUrlRepository {
@@ -26,9 +26,9 @@ export class UserUrlRepository implements IUserUrlRepository {
     private userFactory: UserFactory,
   ) {}
 
-  //반환값 다시 확인
   async save(dto: CreateUserUrlDto) {
     return await this.manager.transaction(async (manager) => {
+      console.log('여기여기');
       const userUrlEntity = UserUrlMapper.toEntity(dto.url);
       const result = await manager.save(userUrlEntity);
 

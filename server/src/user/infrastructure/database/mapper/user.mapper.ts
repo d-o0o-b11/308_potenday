@@ -1,5 +1,5 @@
 import { CreateUserDto } from '../../../interface';
-import { UserEntity } from '../entity';
+import { UserEntity } from '../entity/user.entity';
 
 export class UserMapper {
   static toEntity(dto: CreateUserDto): UserEntity {
