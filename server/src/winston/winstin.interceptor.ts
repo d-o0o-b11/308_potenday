@@ -4,7 +4,6 @@ import {
   ExecutionContext,
   CallHandler,
   Scope,
-  HttpException,
 } from '@nestjs/common';
 // import { Observable } from "rxjs";
 import { catchError, Observable, throwError, finalize } from 'rxjs';
@@ -15,26 +14,21 @@ export class LoggingInterceptor implements NestInterceptor {
   constructor(private readonly logger: LoggerService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    // const request = context.switchToHttp().getRequest();
-    const incomingMessage = context.getArgByIndex(0);
+    const req = context.switchToHttp().getRequest();
+    const { method, originalUrl } = req;
 
-    const http = context.switchToHttp();
-    const req = http.getRequest();
-    // this.logger.log(`Request ${request.method} ${request.url}`);
-    this.logger.req(req.method, req?.originalUrl);
+    this.logger.req(method, originalUrl);
 
     return next.handle().pipe(
       catchError((e) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { message, ...meta } = e;
+        this.logger.error(`Error on ${originalUrl}`, { message, ...meta });
 
-        const { message, ...res } = e;
-        this.logger.error(incomingMessage?.originalUrl, res);
-
-        // throw again the error
         return throwError(() => e);
       }),
       finalize(() => {
-        this.logger.res(incomingMessage.method, incomingMessage?.originalUrl);
+        const res = context.switchToHttp().getResponse();
+        this.logger.res(method, originalUrl);
       }),
     );
   }

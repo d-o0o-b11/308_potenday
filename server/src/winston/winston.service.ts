@@ -9,31 +9,38 @@ export class LoggerService implements NestLoggerService {
 
   constructor() {
     this.logger = winston.createLogger({
-      // 원하는 로그 설정
-
       transports: [
         new winston.transports.Console({
           level: process.env.NODE_ENV === 'development' ? 'info' : 'silly',
           format: winston.format.combine(
-            winston.format.timestamp({
-              format: 'YYYY-MM-DD hh:mm:ss A',
-            }),
-            utilities.format.nestLike('308_POTEN_DAY', {
-              prettyPrint: true,
+            winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss A' }),
+            winston.format.colorize({ all: true }),
+            winston.format.printf(({ timestamp, level, message, context }) => {
+              return `[${level}] ${timestamp} ${
+                context ? `[${context}] ` : ''
+              }${message}`;
             }),
           ),
         }),
-        // 다른 원하는 트랜스포트를 추가할 수 있습니다 (파일, HTTP 등)
       ],
     });
   }
+
+  private formatContextMessage(
+    method: string,
+    url: string,
+    direction: string,
+  ): string {
+    return `${direction} : ${method} ${url}`;
+  }
+
   /**
    * @name 요청_객체_로거
    * @param method context.method (GET, POST ...)
    * @param url context.url
    */
   req(method: string, url: string) {
-    this.logger.info('-> IN  : ' + method + ' ' + url);
+    this.logger.info(this.formatContextMessage(method, url, '-> IN'));
   }
 
   /**
@@ -42,22 +49,19 @@ export class LoggerService implements NestLoggerService {
    * @param url context.url
    */
   res(method: string, url: string) {
-    this.logger.info('<- OUT : ' + method + ' ' + url);
+    this.logger.info(this.formatContextMessage(method, url, '<- OUT'));
   }
 
   log(message: string) {
     this.logger.info(message);
   }
 
-  //   error(message: string, trace: string) {
-  //     this.logger.error(message, trace);
-  //   }
   error<T>(message: string, exception: ExceptionIntf<T>) {
-    this.logger.error(message, exception);
+    this.logger.error(`${message} - ${JSON.stringify(exception)}`);
   }
 
   warn(message: string) {
-    this.logger.warning(message);
+    this.logger.warn(message);
   }
 
   debug(message: string) {
@@ -67,5 +71,4 @@ export class LoggerService implements NestLoggerService {
   verbose(message: string) {
     this.logger.verbose(message);
   }
-  // 원하는 다른 로그 메소드를 추가
 }
