@@ -1,5 +1,5 @@
 import { BaseEntity } from '@common';
-import { UserUrlEntity } from '@user';
+import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 
 @Entity('common_question')

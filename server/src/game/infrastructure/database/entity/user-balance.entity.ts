@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BalanceListEntity } from './balance-list.entity';
-import { UserEntity } from '@user';
 import { BaseEntity } from '@common';
 import { IsEnum } from 'class-validator';
 import { BalanceType } from '../../../domain';
+import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 @Entity('user_balance')
 export class UserBalanceEntity extends BaseEntity {

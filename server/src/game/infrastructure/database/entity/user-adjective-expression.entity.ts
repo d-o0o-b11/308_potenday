@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AdjectiveExpressionEntity } from './adjective-expression.entity';
-import { UserEntity } from '@user';
 import { BaseEntity } from '@common';
+import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 @Entity('user_adjective_expression')
 export class UserAdjectiveExpressionEntity extends BaseEntity {
