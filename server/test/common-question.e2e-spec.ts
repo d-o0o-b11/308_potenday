@@ -3,10 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
-import { UserUrlEntity } from '@user';
 import { AppModule } from '@app.module';
 import { defaultUrl } from './data';
 import { CommonQuestionEntity } from '@game/infrastructure/database/entity/common-question.entity';
+import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
 
 describe('CommonQuestionController (e2e)', () => {
   let app: INestApplication;

@@ -4,7 +4,6 @@ import * as request from 'supertest';
 import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
 import { AppModule } from '@app.module';
-import { UserEntity, UserUrlEntity } from '@user';
 import {
   updateFalseUrl,
   updateTrueUrl,
@@ -13,6 +12,8 @@ import {
   waitingUrl,
   waitingUser,
 } from './data';
+import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
+import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 describe('UserUrlController (e2e)', () => {
   let app: INestApplication;

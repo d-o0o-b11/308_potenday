@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
-import { UserEntity, UserUrlEntity } from '@user';
 import { AppModule } from '@app.module';
 import {
   adjectiveExpressionUserId1,
@@ -11,6 +10,8 @@ import {
   defaultUrl,
 } from './data';
 import { UserAdjectiveExpressionEntity } from '@game/infrastructure/database/entity/user-adjective-expression.entity';
+import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
+import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;
@@ -105,18 +106,21 @@ describe('AdjectiveExpressionController (e2e)', () => {
         adjectiveExpressionId: 1,
       });
 
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/adjective-expression')
         .send({
           urlId: url.id,
           userId: submitUserId,
           expressionIds: [1, 2, 3],
-        })
-        .expect({
-          code: 'USER_ADJECTIVE_EXPRESSION_SUBMIT',
-          status: 409,
-          message: '이미 형용사 표현 값을 제출하였습니다.',
         });
+
+      expect(response.body).toStrictEqual({
+        code: 'USER_ADJECTIVE_EXPRESSION_SUBMIT',
+        status: 409,
+        timestamp: expect.any(String),
+        path: 'POST /adjective-expression',
+        message: '이미 형용사 표현 값을 제출하였습니다.',
+      });
 
       const find = await manager.find(UserAdjectiveExpressionEntity, {
         where: {

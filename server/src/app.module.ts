@@ -6,7 +6,7 @@ import { SseModule } from './sse/sse.module';
 import { TransactionModule } from 'nestjs-transaction';
 import { UserModule } from '@user';
 import { APP_FILTER } from '@nestjs/core';
-import { BasicExceptionFilter } from '@common';
+import { AllExceptionsFilter } from '@common';
 import { DataBaseModule } from '@database';
 import { GameModule } from '@game';
 
@@ -40,7 +40,7 @@ import { GameModule } from '@game';
   providers: [
     {
       provide: APP_FILTER,
-      useClass: BasicExceptionFilter,
+      useClass: AllExceptionsFilter,
     },
   ],
 })

@@ -3,10 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
-import { UserEntity, UserUrlEntity } from '@user';
 import { AppModule } from '@app.module';
 import { mbtiUserId1, mbtiUserId2, defaultUrl } from './data';
 import { UserMbtiEntity } from '@game/infrastructure/database/entity/user-mbti.entity';
+import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
+import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;
@@ -168,19 +169,20 @@ describe('AdjectiveExpressionController (e2e)', () => {
         toUserId: userId1,
       });
 
-      await request(app.getHttpServer())
-        .post('/mbti')
-        .send({
-          urlId: urlId,
-          userId: submitUserId,
-          mbti: 'ISTP',
-          toUserId: userId1,
-        })
-        .expect({
-          code: 'USER_MBTI_SUBMIT',
-          status: 409,
-          message: '이미 해당 mbti 값을 제출하였습니다.',
-        });
+      const response = await request(app.getHttpServer()).post('/mbti').send({
+        urlId: urlId,
+        userId: submitUserId,
+        mbti: 'ISTP',
+        toUserId: userId1,
+      });
+
+      expect(response.body).toStrictEqual({
+        code: 'USER_MBTI_SUBMIT',
+        status: 409,
+        timestamp: expect.any(String),
+        path: 'POST /mbti',
+        message: '이미 해당 mbti 값을 제출하였습니다.',
+      });
 
       const find = await manager.find(UserMbtiEntity, {
         where: {

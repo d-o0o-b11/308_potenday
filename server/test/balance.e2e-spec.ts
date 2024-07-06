@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
-import { UserEntity, UserUrlEntity } from '@user';
 import { AppModule } from '@app.module';
 import {
   balanceUserId1,
@@ -13,6 +12,8 @@ import {
 } from './data';
 import { BalanceType } from '@game';
 import { UserBalanceEntity } from '@game/infrastructure/database/entity/user-balance.entity';
+import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
+import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 describe('BalanceController (e2e)', () => {
   let app: INestApplication;
@@ -133,19 +134,22 @@ describe('BalanceController (e2e)', () => {
         balanceType: BalanceType.B,
       });
 
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/balance')
         .send({
           urlId: url.id,
           userId: submitUserId,
           balanceId: 1,
           balanceType: BalanceType.A,
-        })
-        .expect({
-          code: 'USER_BALANCE_SUBMIT',
-          status: 409,
-          message: '이미 해당 라운드 밸런스 게임에 의견을 제출하였습니다.',
         });
+
+      expect(response.body).toStrictEqual({
+        code: 'USER_BALANCE_SUBMIT',
+        status: 409,
+        path: 'POST /balance',
+        timestamp: expect.any(String),
+        message: '이미 해당 라운드 밸런스 게임에 의견을 제출하였습니다.',
+      });
 
       const find = await manager.find(UserBalanceEntity, {
         where: {
