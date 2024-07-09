@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserAdjectiveExpressionEntity } from './user-adjective-expression.entity';
-import { IsEnum } from 'class-validator';
-import { Adjective } from '../../../domain';
+import { IsIn } from 'class-validator';
+import { ADJECTIVES, Adjective } from '../../../domain';
 
 @Entity('adjective_expression')
 export class AdjectiveExpressionEntity {
@@ -26,7 +26,7 @@ export class AdjectiveExpressionEntity {
   //   nullable: false
   // })
   @Column({ type: 'varchar', name: 'adjective', nullable: false })
-  @IsEnum(Adjective)
+  @IsIn(Object.values(ADJECTIVES))
   adjective: Adjective;
 
   @OneToMany(

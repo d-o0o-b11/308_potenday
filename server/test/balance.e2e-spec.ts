@@ -10,7 +10,7 @@ import {
   balanceUserId3,
   defaultUrl,
 } from './data';
-import { BalanceType } from '@game';
+import { BALANCE_TYPES } from '@game';
 import { UserBalanceEntity } from '@game/infrastructure/database/entity/user-balance.entity';
 import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
 import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
@@ -113,7 +113,7 @@ describe('BalanceController (e2e)', () => {
           urlId: url.id,
           userId: userId,
           balanceId: 1,
-          balanceType: BalanceType.A,
+          balanceType: BALANCE_TYPES.A,
         })
         .expect(HttpStatus.CREATED);
 
@@ -131,7 +131,7 @@ describe('BalanceController (e2e)', () => {
       await manager.save(UserBalanceEntity, {
         userId: submitUserId,
         balanceId: 1,
-        balanceType: BalanceType.B,
+        balanceType: BALANCE_TYPES.B,
       });
 
       const response = await request(app.getHttpServer())
@@ -140,7 +140,7 @@ describe('BalanceController (e2e)', () => {
           urlId: url.id,
           userId: submitUserId,
           balanceId: 1,
-          balanceType: BalanceType.A,
+          balanceType: BALANCE_TYPES.A,
         });
 
       expect(response.body).toStrictEqual({
@@ -168,7 +168,7 @@ describe('BalanceController (e2e)', () => {
           urlId: url.id,
           userId: userId,
           balanceId: 2,
-          balanceType: BalanceType.B,
+          balanceType: BALANCE_TYPES.B,
         })
         .expect(HttpStatus.CREATED);
 
@@ -222,27 +222,27 @@ describe('BalanceController (e2e)', () => {
         {
           userId: userId1,
           balanceId: 1,
-          balanceType: BalanceType.A,
+          balanceType: BALANCE_TYPES.A,
         },
         {
           userId: userId2,
           balanceId: 1,
-          balanceType: BalanceType.A,
+          balanceType: BALANCE_TYPES.A,
         },
         {
           userId: userId1,
           balanceId: 2,
-          balanceType: BalanceType.A,
+          balanceType: BALANCE_TYPES.A,
         },
         {
           userId: userId2,
           balanceId: 2,
-          balanceType: BalanceType.A,
+          balanceType: BALANCE_TYPES.A,
         },
         {
           userId: userId3,
           balanceId: 2,
-          balanceType: BalanceType.B,
+          balanceType: BALANCE_TYPES.B,
         },
       ]);
     });

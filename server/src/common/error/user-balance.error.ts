@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { BasicException } from './base.error';
-import { ErrorCode, ErrorMessage } from '../constant';
+import { ERROR_CODES, ERROR_MESSAGES } from '../constant';
 
 export class UserBalanceException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.USER_BALANCE_SUBMIT,
+      ERROR_MESSAGES.USER_BALANCE_SUBMIT,
       HttpStatus.CONFLICT,
-      ErrorCode.USER_BALANCE_SUBMIT,
+      ERROR_CODES.USER_BALANCE_SUBMIT,
     );
   }
 }

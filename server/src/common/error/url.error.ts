@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { BasicException } from './base.error';
-import { ErrorCode, ErrorMessage } from '../constant';
+import { ERROR_MESSAGES, ERROR_CODES } from '../constant';
 
 export class UrlNotFoundException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.URL_NOT_FOUND,
+      ERROR_MESSAGES.URL_NOT_FOUND,
       HttpStatus.NOT_FOUND,
-      ErrorCode.URL_NOT_FOUND,
+      ERROR_CODES.URL_NOT_FOUND,
     );
   }
 }
@@ -19,9 +19,9 @@ export class UrlNotFoundException extends BasicException {
 export class UrlAlreadyClickButtonException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.URL_ALREADY_CLICK_BUTTON,
+      ERROR_MESSAGES.URL_ALREADY_CLICK_BUTTON,
       HttpStatus.CONFLICT,
-      ErrorCode.URL_ALREADY_CLICK_BUTTON,
+      ERROR_CODES.URL_ALREADY_CLICK_BUTTON,
     );
   }
 }
@@ -29,9 +29,9 @@ export class UrlAlreadyClickButtonException extends BasicException {
 export class UrlMaximumUserAlreadyClickButtonException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.URL_MAXIMUM_USER,
+      ERROR_MESSAGES.URL_MAXIMUM_USER,
       HttpStatus.CONFLICT,
-      ErrorCode.URL_MAXIMUM_USER,
+      ERROR_CODES.URL_MAXIMUM_USER,
     );
   }
 }
@@ -39,9 +39,9 @@ export class UrlMaximumUserAlreadyClickButtonException extends BasicException {
 export class UrlStatusFalseException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.URL_STATUS_FALSE,
+      ERROR_MESSAGES.URL_STATUS_FALSE,
       HttpStatus.CONFLICT,
-      ErrorCode.URL_STATUS_FALSE,
+      ERROR_CODES.URL_STATUS_FALSE,
     );
   }
 }

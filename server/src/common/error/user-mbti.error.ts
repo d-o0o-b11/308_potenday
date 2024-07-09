@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { BasicException } from './base.error';
-import { ErrorCode, ErrorMessage } from '../constant';
+import { ERROR_CODES, ERROR_MESSAGES } from '../constant';
 
 export class UserMbtiException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.USER_MBTI_SUBMIT,
+      ERROR_MESSAGES.USER_MBTI_SUBMIT,
       HttpStatus.CONFLICT,
-      ErrorCode.USER_MBTI_SUBMIT,
+      ERROR_CODES.USER_MBTI_SUBMIT,
     );
   }
 }
