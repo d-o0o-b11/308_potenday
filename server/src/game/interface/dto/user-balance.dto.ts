@@ -1,5 +1,5 @@
-import { BalanceType } from '../../domain';
-import { IsEnum, IsNumber, IsNumberString, IsString } from 'class-validator';
+import { BALANCE_TYPES, BalanceType } from '../../domain';
+import { IsIn, IsNumber, IsNumberString } from 'class-validator';
 
 export class SaveUserBalanceDto {
   /**
@@ -21,7 +21,7 @@ export class SaveUserBalanceDto {
    * @example A
    */
   // @IsString()
-  @IsEnum(BalanceType)
+  @IsIn(Object.values(BALANCE_TYPES))
   balanceType: BalanceType;
 }
 

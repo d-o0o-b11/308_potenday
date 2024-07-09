@@ -7,8 +7,8 @@ import {
 } from 'typeorm';
 import { BalanceListEntity } from './balance-list.entity';
 import { BaseEntity } from '@common';
-import { IsEnum } from 'class-validator';
-import { BalanceType } from '../../../domain';
+import { IsIn } from 'class-validator';
+import { BALANCE_TYPES, BalanceType } from '../../../domain';
 import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 
 @Entity('user_balance')
@@ -23,7 +23,7 @@ export class UserBalanceEntity extends BaseEntity {
   balanceId: number;
 
   @Column({ type: 'varchar', name: 'balance_type', nullable: false })
-  @IsEnum(BalanceType)
+  @IsIn(Object.values(BALANCE_TYPES))
   balanceType: BalanceType;
 
   @ManyToOne(() => UserEntity, (user) => user.userBalanceGames, {

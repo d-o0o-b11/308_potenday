@@ -1,13 +1,13 @@
 import { HttpStatus } from '@nestjs/common';
 import { BasicException } from './base.error';
-import { ErrorCode, ErrorMessage } from '../constant';
+import { ERROR_CODES, ERROR_MESSAGES } from '../constant';
 
 export class UserSubmitAdjectiveExpressionException extends BasicException {
   constructor() {
     super(
-      ErrorMessage.USER_ADJECTIVE_EXPRESSION_SUBMIT,
+      ERROR_MESSAGES.USER_ADJECTIVE_EXPRESSION_SUBMIT,
       HttpStatus.CONFLICT,
-      ErrorCode.USER_ADJECTIVE_EXPRESSION_SUBMIT,
+      ERROR_CODES.USER_ADJECTIVE_EXPRESSION_SUBMIT,
     );
   }
 }
