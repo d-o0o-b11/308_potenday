@@ -80,7 +80,7 @@ export class UserUrlRepository implements IUserUrlRepository {
   }
 
   async findOneWithUser(dto: FindOneUserUrlWithUserDto) {
-    const result = await this.userUrlRepository.findOne({
+    const result = await this.userUrlRepository.findOneOrFail({
       where: {
         id: dto.urlId,
       },
