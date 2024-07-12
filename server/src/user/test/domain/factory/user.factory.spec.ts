@@ -28,7 +28,7 @@ describe('UserFactory', () => {
   });
 
   describe('create', () => {
-    it('유저 객체를 생성하고 UserCreateEvent를 발행해야 합니다', () => {
+    it('유저 객체를 생성하고 UserCreateEvent를 발행해야 한다', () => {
       const dto: CreateFactoryUserDto = {
         userId: 1,
         imgId: 1,
@@ -51,7 +51,7 @@ describe('UserFactory', () => {
   });
 
   describe('reconstituteArray', () => {
-    it('유저 객체를 재구성해야 합니다', () => {
+    it('유저 객체를 재구성해야 한다', () => {
       const dto: ReconstituteArrayUserFactoryDto = {
         id: 1,
         imgId: 1,
