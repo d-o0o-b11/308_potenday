@@ -15,6 +15,7 @@ export class UserFactory {
    * 유저 객체 생성
    * -> UserCreateEvent 발행
    * 이후 생성한 유저 도메인 객체 리턴
+   * 유저 객체 생성 시 항상 이벤트를 발행해야 한다
    */
   create(dto: CreateFactoryUserDto): User {
     const user = new User(dto.userId, dto.imgId, dto.nickName, dto.urlId);
