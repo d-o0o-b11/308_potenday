@@ -37,6 +37,7 @@ describe('UserUrlRepository', () => {
           provide: getRepositoryToken(UserUrlEntity),
           useValue: {
             findOne: jest.fn(),
+            findOneOrFail: jest.fn(),
           },
         },
         {
@@ -266,8 +267,8 @@ describe('UserUrlRepository', () => {
     } as any;
 
     it('URL ID로 엔티티와 연관된 유저들을 찾습니다', async () => {
-      const findOne = jest
-        .spyOn(userUrlRepository, 'findOne')
+      const findOneOrFail = jest
+        .spyOn(userUrlRepository, 'findOneOrFail')
         .mockResolvedValue(userUrlEntity);
       const reconstituteArray = jest
         .spyOn(userFactory, 'reconstituteArray')
@@ -282,7 +283,7 @@ describe('UserUrlRepository', () => {
         findOneUserUrlWithUserDto,
       );
 
-      expect(findOne).toHaveBeenCalledWith({
+      expect(findOneOrFail).toHaveBeenCalledWith({
         where: { id: findOneUserUrlWithUserDto.urlId },
         relations: { user: true },
         order: { user: { createdAt: 'ASC' } },
