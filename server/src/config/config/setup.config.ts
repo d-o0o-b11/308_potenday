@@ -1,9 +1,9 @@
+import { NestExpressApplication } from '@nestjs/platform-express';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import { NestExpressApplication } from '@nestjs/platform-express';
 
 export class SetUpConfig {
   constructor(private readonly app: NestExpressApplication) {}

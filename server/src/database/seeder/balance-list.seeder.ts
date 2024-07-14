@@ -26,14 +26,22 @@ export default class BalanceListSeeder implements Seeder {
 
     for (let index = 0; index < questions.length; index++) {
       const question = questions[index];
-      /**
-       * INSERT ON CONFLICT
-       * 데이터가 이미 존재하는 경우 업데이트되도록
-       */
-      await dataSource.query(
-        `INSERT INTO public.balance_list (id, "type_A", "type_B") VALUES ($1, $2, $3);`,
-        [index + 1, question.type_A, question.type_B],
+
+      //id 존재 여부 확인
+      const existingRecord = await dataSource.query(
+        `SELECT * FROM public.balance_list WHERE id = $1;`,
+        [index + 1],
       );
+
+      if (existingRecord.length === 0) {
+        await dataSource.query(
+          `INSERT INTO public.balance_list (id, "type_A", "type_B") VALUES ($1, $2, $3);`,
+          [index + 1, question.type_A, question.type_B],
+        );
+        console.log(`Inserted record with id ${index + 1}.`);
+      } else {
+        console.log(`Record with id ${index + 1} already exists. Skipping...`);
+      }
     }
   }
 }
