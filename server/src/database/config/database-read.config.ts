@@ -6,9 +6,9 @@ dotenv.config({
   path: __dirname + `envs/${nodeEnv()}.env`,
 });
 
-const readConfig = {
+const config = {
   env: process.env.NODE_ENV,
   db: readDataBaseConfig(),
 };
 
-export default readConfig;
+export default config;
