@@ -34,6 +34,12 @@ export default class BalanceListSeeder implements Seeder {
         `INSERT INTO public.balance_list (id, "type_A", "type_B") VALUES ($1, $2, $3);`,
         [index + 1, question.type_A, question.type_B],
       );
+      // await dataSource.query(
+      //   `INSERT INTO public.balance_list (id, type_A, type_B)
+      //    VALUES ($1, $2, $3)
+      //    ON CONFLICT (id) DO UPDATE SET type_A = EXCLUDED.type_A, type_B = EXCLUDED.type_B;`,
+      //   [index + 1, question.type_A, question.type_B],
+      // );
     }
   }
 }
