@@ -1,4 +1,4 @@
-import { readDataBaseConfig } from '@config';
+import { dataBaseConfig } from '@config';
 import { nodeEnv } from '../../common';
 import * as dotenv from 'dotenv';
 
@@ -6,9 +6,9 @@ dotenv.config({
   path: __dirname + `envs/${nodeEnv()}.env`,
 });
 
-const readConfig = {
+const config = {
   env: process.env.NODE_ENV,
-  db: readDataBaseConfig(),
+  db: dataBaseConfig(),
 };
 
-export default readConfig;
+export default config;

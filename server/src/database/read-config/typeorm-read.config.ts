@@ -1,8 +1,9 @@
 import { SeederOptions } from 'typeorm-extension';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import readConfig from './database.config';
+import readConfig from './database-read.config';
 
 export const AppReadDataSource: DataSourceOptions & SeederOptions = {
+  name: 'read',
   type: 'postgres',
   host: readConfig.db.host,
   port: Number(readConfig.db.port),
