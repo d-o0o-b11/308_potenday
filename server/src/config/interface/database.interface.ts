@@ -7,4 +7,11 @@ export interface IDataBase {
   username: string;
   password: string;
   database: string;
+
+  readType: DatabaseType;
+  readHost: string;
+  readPort: number;
+  readUsername: string;
+  readPassword: string;
+  readDatabase: string;
 }
