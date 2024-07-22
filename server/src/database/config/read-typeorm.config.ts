@@ -1,14 +1,15 @@
 import { SeederOptions } from 'typeorm-extension';
-import config from './database.config';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import config from './database.config';
 
-export const AppDataSource: DataSourceOptions & SeederOptions = {
+export const AppReadDataSource: DataSourceOptions & SeederOptions = {
   type: 'postgres',
-  host: config.db.host,
-  port: Number(config.db.port),
-  username: config.db.username,
-  password: config.db.password,
-  database: config.db.database,
+  name: 'read',
+  host: config.db.readHost,
+  port: Number(config.db.readPort),
+  username: config.db.readUsername,
+  password: config.db.readPassword,
+  database: config.db.readDatabase,
   entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   synchronize: false, //config.env === 'test' ? true : false
   logging: config.env === 'test' ? false : false,
@@ -17,4 +18,4 @@ export const AppDataSource: DataSourceOptions & SeederOptions = {
   seeds: [__dirname + '/../seeder/*{.ts,.js}'],
 };
 
-export const appDataSource = new DataSource(AppDataSource);
+export const readDataSource = new DataSource(AppReadDataSource);
