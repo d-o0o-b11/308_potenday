@@ -4,11 +4,10 @@ import { LoggerModule } from './winston/winston.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { SseModule } from './sse/sse.module';
 import { TransactionModule } from 'nestjs-transaction';
-import { UserModule } from '@user';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from '@common';
 import { DataBaseModule } from '@database';
-import { GameModule } from '@game';
+import { GameModule, UserModule } from '@application';
 
 @Module({
   imports: [

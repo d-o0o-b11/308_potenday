@@ -41,12 +41,12 @@ import {
   UserBalanceService,
   UserMbtiService,
 } from './application';
-import {
-  AdjectiveExpressionController,
-  BalanceController,
-  CommonQuestionController,
-  UserMbtiController,
-} from './interface';
+// import {
+//   AdjectiveExpressionController,
+//   BalanceController,
+//   CommonQuestionController,
+//   UserMbtiController,
+// } from './interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CreateCommonQuestionCommandHandler } from './application';
 import { UserAdjectiveExpressionEntity } from './infrastructure/database/entity/user-adjective-expression.entity';
@@ -69,10 +69,10 @@ import { UserBalanceEntity } from './infrastructure/database/entity/user-balance
     CqrsModule,
   ],
   controllers: [
-    AdjectiveExpressionController,
-    CommonQuestionController,
-    BalanceController,
-    UserMbtiController,
+    // AdjectiveExpressionController,
+    // CommonQuestionController,
+    // BalanceController,
+    // UserMbtiController,
   ],
   providers: [
     GameEventHandler,

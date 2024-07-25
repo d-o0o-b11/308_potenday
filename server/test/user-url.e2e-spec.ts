@@ -12,8 +12,8 @@ import {
   waitingUrl,
   waitingUser,
 } from './data';
-import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
 
 describe('UserUrlController (e2e)', () => {
   let app: INestApplication;

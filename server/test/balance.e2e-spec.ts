@@ -10,10 +10,10 @@ import {
   balanceUserId3,
   defaultUrl,
 } from './data';
-import { BALANCE_TYPES } from '@game';
-import { UserBalanceEntity } from '@game/infrastructure/database/entity/user-balance.entity';
-import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { BALANCE_TYPES } from '@domain';
+import { UserBalanceEntity } from '@infrastructure/game/database/entity/user-balance.entity';
 
 describe('BalanceController (e2e)', () => {
   let app: INestApplication;

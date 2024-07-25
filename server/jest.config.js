@@ -8,7 +8,8 @@ module.exports = {
   moduleDirectories: ['node_modules', 'src'],
   rootDir: '.',
   moduleNameMapper: {
-    '^@(database|common|config|app|user|game)(.*)$': '<rootDir>/src/$1$2',
+    '^@(database|common|config|app|user|game|domain|application|infrastructure|interface)(.*)$':
+      '<rootDir>/src/$1$2',
     '^@app.module$': '<rootDir>/src/app.module',
   },
 };
