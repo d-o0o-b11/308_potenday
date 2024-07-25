@@ -8,8 +8,8 @@ import {
 import { BalanceListEntity } from './balance-list.entity';
 import { BaseEntity } from '@common';
 import { IsIn } from 'class-validator';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
 import { BALANCE_TYPES, BalanceType } from '@domain';
+import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
 
 @Entity('user_balance')
 export class UserBalanceEntity extends BaseEntity {

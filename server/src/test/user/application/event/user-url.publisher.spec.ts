@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventBus } from '@nestjs/cqrs';
-import { StatusUpdatedEvent } from '@user/domain';
 import { UserUrlEventPublisher } from '@application';
-import { UpdateUserUrlFactoryDto } from '@user/interface';
+import { UpdateUserUrlFactoryDto } from '@interface';
+import { StatusUpdatedEvent } from '@domain';
 
 describe('UserUrlEventPublisher', () => {
   let eventPublisher: UserUrlEventPublisher;
