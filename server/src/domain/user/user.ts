@@ -5,7 +5,7 @@
  * 이를 통해 데이터와 로직을 명확히 분리하고, 유지보수성과 테스트 용이성을 높일 수 있다.
  */
 
-import { UserAdjectiveExpression } from '@game';
+import { UserAdjectiveExpression } from '@domain';
 
 export class User {
   constructor(
