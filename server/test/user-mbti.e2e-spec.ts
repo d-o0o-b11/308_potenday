@@ -5,9 +5,9 @@ import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
 import { AppModule } from '@app.module';
 import { mbtiUserId1, mbtiUserId2, defaultUrl } from './data';
-import { UserMbtiEntity } from '@game/infrastructure/database/entity/user-mbti.entity';
-import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { UserMbtiEntity } from '@infrastructure/game/database/entity/user-mbti.entity';
 
 describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;

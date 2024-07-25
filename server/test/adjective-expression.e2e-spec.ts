@@ -9,9 +9,9 @@ import {
   adjectiveExpressionUserId2,
   defaultUrl,
 } from './data';
-import { UserAdjectiveExpressionEntity } from '@game/infrastructure/database/entity/user-adjective-expression.entity';
-import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/user-adjective-expression.entity';
 
 describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;

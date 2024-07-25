@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserFactory, UserUrlFactory } from './domain';
-import { UserController, UserUrlController } from './interface';
+// import { UserController, UserUrlController } from './interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -28,7 +28,7 @@ import { UserEntity } from './infrastructure/database/entity/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity, UserUrlEntity]), CqrsModule],
-  controllers: [UserController, UserUrlController],
+  // controllers: [UserController, UserUrlController],
   providers: [
     UserEventHandler,
     CreateUserHandler,
