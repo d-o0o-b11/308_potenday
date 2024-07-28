@@ -1,0 +1,35 @@
+{
+  "_id": "user_id",
+  "img_id": "img_id",
+  "nickname": "nickname",
+  "url_id": "url_id",
+  "created_at": "created_at",
+  "updated_at": "updated_at",
+  "deleted_at": "deleted_at",
+  "balance": [
+    {
+      "balance_id": "balance_id",
+      "balance_type": "balance_type",
+      "created_at": "created_at",
+      "updated_at": "updated_at",
+      "deleted_at": "deleted_at"
+    }
+  ],
+  "mbti": [
+    {
+      "mbti": "mbti",
+      "to_user_id": "to_user_id",
+      "created_at": "created_at",
+      "updated_at": "updated_at",
+      "deleted_at": "deleted_at"
+    }
+  ],
+  "adjective_expressions": [
+    {
+      "adjective_expression_id": "adjective_expression_id",
+      "created_at": "created_at",
+      "updated_at": "updated_at",
+      "deleted_at": "deleted_at"
+    }
+  ]
+}

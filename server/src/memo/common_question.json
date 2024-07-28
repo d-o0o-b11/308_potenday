@@ -1,0 +1,10 @@
+{
+  "url_id": "url_id",
+  "question_1": "question_1",
+  "question_2": "question_2",
+  "question_3": "question_3",
+  "question_4": "question_4",
+  "created_at": "created_at",
+  "updated_at": "updated_at",
+  "deleted_at": "deleted_at"
+}
