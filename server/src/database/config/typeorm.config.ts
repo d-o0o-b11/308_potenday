@@ -1,7 +1,10 @@
 import { SeederOptions } from 'typeorm-extension';
 import config from './database.config';
 import { DataSource, DataSourceOptions } from 'typeorm';
-
+/**
+ * @memo
+ * cud 폴더 - appDataSource , read 폴더 - readAppDataSource 로 분리하기
+ */
 export const AppDataSource: DataSourceOptions & SeederOptions = {
   type: 'postgres',
   host: config.db.host,

@@ -1,5 +1,5 @@
 import { UserMapper } from '@infrastructure';
-import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
 import { CreateUserDto } from '@interface';
 
 describe('UserMapper', () => {

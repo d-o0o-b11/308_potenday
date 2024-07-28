@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { AdjectiveExpressionEntity } from './adjective-expression.entity';
 import { BaseEntity } from '@common';
-import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
 
 @Entity('user_adjective_expression')
 export class UserAdjectiveExpressionEntity extends BaseEntity {

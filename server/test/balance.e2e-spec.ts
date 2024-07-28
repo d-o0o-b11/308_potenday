@@ -10,8 +10,8 @@ import {
   balanceUserId3,
   defaultUrl,
 } from './data';
-import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
-import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
 import { BALANCE_TYPES } from '@domain';
 import { UserBalanceEntity } from '@infrastructure/game/database/entity/user-balance.entity';
 

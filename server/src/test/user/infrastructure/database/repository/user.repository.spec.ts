@@ -3,7 +3,7 @@ import { UserRepository } from '@infrastructure';
 import { EntityManager } from 'typeorm';
 import { UserFactory } from '@domain';
 import { CreateUserDto } from '@interface';
-import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
+import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
 
 describe('UserRepository', () => {
   let repository: UserRepository;
