@@ -1,5 +1,5 @@
 import { UserUrlMapper } from '@infrastructure';
-import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
 
 describe('UserUrlMapper', () => {
   describe('toEntity', () => {

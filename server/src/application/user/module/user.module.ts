@@ -3,18 +3,6 @@ import { UserFactory, UserUrlFactory } from '@domain';
 import { UserController, UserUrlController } from '@interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import {
-//   CountUsersInRoomQueryHandler,
-//   CreateUserHandler,
-//   GetUrlQueryHandler,
-//   GetUrlStatusHandler,
-//   NextStepHandler,
-//   UpdateStatusFalseHandler,
-//   UserEventHandler,
-//   GetUsersInRoomQueryHandler,
-//   UserUrlService,
-//   UserUrlEventPublisher,
-// } from '@application';
 import {
   USER_REPOSITORY_TOKEN,
   USER_URL_EVENT_PUBLISHER,
@@ -23,8 +11,6 @@ import {
   UserRepository,
   UserUrlRepository,
 } from '@infrastructure';
-import { UserEntity } from '@infrastructure/user/database/entity/user.entity';
-import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
 import { UserEventHandler, UserUrlEventPublisher } from '../event';
 import {
   CreateUserHandler,
@@ -38,9 +24,17 @@ import {
   GetUsersInRoomQueryHandler,
 } from '../query';
 import { UserUrlService } from '../service';
+import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
+import { UrlReadEntity } from '@infrastructure/user/database/entity/read/url-read.entity';
+import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, UserUrlEntity]), CqrsModule],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity, UserUrlEntity]),
+    TypeOrmModule.forFeature([UrlReadEntity, UserReadEntity], 'read'),
+    CqrsModule,
+  ],
   controllers: [UserController, UserUrlController],
   providers: [
     UserEventHandler,

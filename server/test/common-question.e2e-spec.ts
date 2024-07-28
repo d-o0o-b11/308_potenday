@@ -5,7 +5,7 @@ import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
 import { AppModule } from '@app.module';
 import { defaultUrl } from './data';
-import { UserUrlEntity } from '@infrastructure/user/database/entity/user-url.entity';
+import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
 import { CommonQuestionEntity } from '@infrastructure/game/database/entity/common-question.entity';
 
 describe('CommonQuestionController (e2e)', () => {

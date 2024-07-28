@@ -10,7 +10,7 @@ import {
   FindOneUserWithUrlDto,
   UpdateUserUrlDto,
 } from '@interface';
-import { UserUrlEntity } from '../entity/user-url.entity';
+import { UserUrlEntity } from '../entity/cud/user-url.entity';
 
 @Injectable()
 export class UserUrlRepository implements IUserUrlRepository {
