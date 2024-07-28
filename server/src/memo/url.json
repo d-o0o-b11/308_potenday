@@ -1,0 +1,9 @@
+{
+  "_id": "url_id",
+  "url": "url",
+  "status": "status",
+  "created_at": "created_at",
+  "updated_at": "updated_at",
+  "deleted_at": "deleted_at",
+  "user_ids": ["user_id1", "user_id2"]
+}
