@@ -12,10 +12,10 @@ export const AppDataSource: DataSourceOptions & SeederOptions = {
   username: config.db.username,
   password: config.db.password,
   database: config.db.database,
-  entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../../**/**/**/**/cud/*.entity{.ts,.js}'],
   synchronize: false, //config.env === 'test' ? true : false
   logging: config.env === 'test' ? false : false,
-  migrations: [__dirname + '/../migrations/*{.ts,.js}'], // migration 수행할 파일
+  migrations: [__dirname + '/../migrations/cud/*{.ts,.js}'], // migration 수행할 파일
   migrationsTableName: 'migrations', // migration 내용이 기록될 테이블명(default = migration)
   seeds: [__dirname + '/../seeder/*{.ts,.js}'],
 };

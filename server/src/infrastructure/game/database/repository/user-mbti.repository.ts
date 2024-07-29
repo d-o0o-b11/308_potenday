@@ -10,7 +10,7 @@ import {
   UserMbtiRawDto,
 } from '@interface';
 import { IUserMbtiRepository, UserMbti, UserMbtiFactory } from '@domain';
-import { UserMbtiEntity } from '../entity/user-mbti.entity';
+import { UserMbtiEntity } from '../entity/cud/user-mbti.entity';
 
 @Injectable()
 export class UserMbtiRepository implements IUserMbtiRepository {

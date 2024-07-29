@@ -13,7 +13,7 @@ import {
 import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
 import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
 import { BALANCE_TYPES } from '@domain';
-import { UserBalanceEntity } from '@infrastructure/game/database/entity/user-balance.entity';
+import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
 
 describe('BalanceController (e2e)', () => {
   let app: INestApplication;

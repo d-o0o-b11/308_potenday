@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BalanceListFactory, IBalanceListRepository } from '@domain';
 import { FindBalanceListDto } from '@interface';
-import { BalanceListEntity } from '../entity/balance-list.entity';
+import { BalanceListEntity } from '../entity/cud/balance-list.entity';
 
 @Injectable()
 export class BalanceListRepository implements IBalanceListRepository {

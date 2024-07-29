@@ -5,7 +5,7 @@ import {
   AdjectiveExpressionFactory,
   IAdjectiveExpressionRepository,
 } from '@domain';
-import { AdjectiveExpressionEntity } from '../entity/adjective-expression.entity';
+import { AdjectiveExpressionEntity } from '../entity/cud/adjective-expression.entity';
 
 @Injectable()
 export class AdjectiveExpressionRepository

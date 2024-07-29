@@ -3,7 +3,7 @@ import { EntityManager } from 'typeorm';
 import { CommonQuestionMapper } from '../mapper';
 import { ICommonQuestionRepository } from '@domain';
 import { PatchCommonQuestionDto, SaveCommonQuestionDto } from '@interface';
-import { CommonQuestionEntity } from '../entity/common-question.entity';
+import { CommonQuestionEntity } from '../entity/cud/common-question.entity';
 
 @Injectable()
 export class CommonQuestionRepository implements ICommonQuestionRepository {
