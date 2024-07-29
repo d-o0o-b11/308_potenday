@@ -13,7 +13,7 @@ export const AppReadDataSource: DataSourceOptions & SeederOptions = {
   entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
   synchronize: false, //config.env === 'test' ? true : false
   logging: config.env === 'test' ? false : false,
-  migrations: [__dirname + '/../migrations/*{.ts,.js}'], // migration 수행할 파일
+  migrations: [__dirname + '/../../**/**/**/**/read/*.entity{.ts,.js}'], // migration 수행할 파일
   migrationsTableName: 'migrations', // migration 내용이 기록될 테이블명(default = migration)
   seeds: [__dirname + '/../seeder/*{.ts,.js}'],
 };

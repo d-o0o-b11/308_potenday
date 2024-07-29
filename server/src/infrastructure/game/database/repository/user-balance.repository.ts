@@ -15,7 +15,7 @@ import {
   GroupedByBalanceTypeDto,
   SaveUserBalanceDto,
 } from '@interface';
-import { UserBalanceEntity } from '../entity/user-balance.entity';
+import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
 
 @Injectable()
 export class UserBalanceRepository implements IUserBalanceRepository {

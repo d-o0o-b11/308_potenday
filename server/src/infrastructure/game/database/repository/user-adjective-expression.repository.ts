@@ -12,7 +12,7 @@ import {
   GroupByUserAdjectiveExpressionDto,
   SaveUserAdjectiveExpressionDto,
 } from '@interface';
-import { UserAdjectiveExpressionEntity } from '../entity/user-adjective-expression.entity';
+import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
 
 @Injectable()
 export class UserAdjectiveExpressionRepository

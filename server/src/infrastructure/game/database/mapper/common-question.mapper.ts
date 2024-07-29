@@ -1,4 +1,4 @@
-import { CommonQuestionEntity } from '../entity/common-question.entity';
+import { CommonQuestionEntity } from '../entity/cud/common-question.entity';
 
 export class CommonQuestionMapper {
   static toEntity(urlId: number): CommonQuestionEntity {

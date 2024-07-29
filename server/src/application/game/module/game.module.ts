@@ -25,23 +25,6 @@ import {
   UserBalanceFactory,
   UserMbtiFactory,
 } from '@domain';
-// import {
-//   CreateCommonQuestionCommandHandler,
-//   CreateUserAdjectiveExpressionHandler,
-//   CreateUserBalanceCommandHandler,
-//   CreateUserMbtiCommandHandler,
-//   GameEventHandler,
-//   GetAdjectiveExpressionQueryHandler,
-//   GetBalanceListQueryHandler,
-//   GetBalanceResultQueryHandler,
-//   GetUserMbtiQueryHandler,
-//   GetUsersAdjectiveExpressionQueryHandler,
-//   GetUsersMbtiInUrlQueryHandler,
-//   UpdateCommonQuestionCommandHandler,
-//   UserAdjectiveExpressionService,
-//   UserBalanceService,
-//   UserMbtiService,
-// } from '@application';
 import {
   AdjectiveExpressionController,
   BalanceController,
@@ -49,12 +32,12 @@ import {
   UserMbtiController,
 } from '@interface';
 import { CqrsModule } from '@nestjs/cqrs';
-import { AdjectiveExpressionEntity } from '@infrastructure/game/database/entity/adjective-expression.entity';
-import { BalanceListEntity } from '@infrastructure/game/database/entity/balance-list.entity';
-import { CommonQuestionEntity } from '@infrastructure/game/database/entity/common-question.entity';
-import { UserMbtiEntity } from '@infrastructure/game/database/entity/user-mbti.entity';
-import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/user-adjective-expression.entity';
-import { UserBalanceEntity } from '@infrastructure/game/database/entity/user-balance.entity';
+import { AdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/adjective-expression.entity';
+import { BalanceListEntity } from '@infrastructure/game/database/entity/cud/balance-list.entity';
+import { CommonQuestionEntity } from '@infrastructure/game/database/entity/cud/common-question.entity';
+import { UserMbtiEntity } from '@infrastructure/game/database/entity/cud/user-mbti.entity';
+import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
+import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
 import { GameEventHandler } from '../event';
 import {
   GetAdjectiveExpressionQueryHandler,
