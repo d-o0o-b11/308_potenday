@@ -24,12 +24,10 @@
       "deleted_at": "deleted_at"
     }
   ],
-  "adjective_expressions": [
-    {
-      "adjective_expression_id": "adjective_expression_id",
-      "created_at": "created_at",
-      "updated_at": "updated_at",
-      "deleted_at": "deleted_at"
-    }
-  ]
+  "adjective_expressions": {
+    "adjective_expression_id": [1, 2, 3],
+    "created_at": "created_at",
+    "updated_at": "updated_at",
+    "deleted_at": "deleted_at"
+  }
 }
