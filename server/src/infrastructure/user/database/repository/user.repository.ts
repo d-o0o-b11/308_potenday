@@ -3,15 +3,16 @@ import { IUserRepository, UserFactory } from '@domain';
 import { EntityManager } from 'typeorm';
 import { CreateUserDto } from '@interface';
 import { UserMapper } from '../mapper';
+import { InjectEntityManager } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
   constructor(
-    private manager: EntityManager,
+    @InjectEntityManager() private readonly manager: EntityManager,
     private userFactory: UserFactory,
   ) {}
 
-  async save(dto: CreateUserDto) {
+  async create(dto: CreateUserDto) {
     return await this.manager.transaction(async (manager) => {
       const userEntity = UserMapper.toEntity(dto);
       const result = await manager.save(userEntity);
@@ -21,14 +22,12 @@ export class UserRepository implements IUserRepository {
         imgId: result.imgId,
         urlId: result.urlId,
         nickName: result.nickName,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+        deletedAt: result.deletedAt,
       });
 
-      return {
-        id: user.getId(),
-        imgId: user.getImgId(),
-        nickName: user.getNickName(),
-        urlId: user.getUrlId(),
-      };
+      return user;
     });
   }
 }

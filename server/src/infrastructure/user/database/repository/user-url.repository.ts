@@ -5,76 +5,46 @@ import { UserUrlMapper } from '../mapper';
 import { IUserUrlRepository, UserFactory, UserUrlFactory } from '@domain';
 import {
   CreateUserUrlDto,
-  FindOneUserUrlDto,
   FindOneUserUrlWithUserDto,
-  FindOneUserWithUrlDto,
   UpdateUserUrlDto,
 } from '@interface';
 import { UserUrlEntity } from '../entity/cud/user-url.entity';
+import { UpdateException } from '@common';
 
 @Injectable()
 export class UserUrlRepository implements IUserUrlRepository {
   constructor(
-    private manager: EntityManager,
     @InjectRepository(UserUrlEntity)
     private userUrlRepository: Repository<UserUrlEntity>,
     private userUrlFactory: UserUrlFactory,
     private userFactory: UserFactory,
   ) {}
 
-  async save(dto: CreateUserUrlDto) {
-    return await this.manager.transaction(async (manager) => {
-      const userUrlEntity = UserUrlMapper.toEntity(dto.url);
-      const result = await manager.save(userUrlEntity);
-
-      return this.userUrlFactory.reconstitute({
-        id: result.id,
-        url: result.url,
-        status: result.status,
-      });
-    });
-  }
-
-  async update(dto: UpdateUserUrlDto) {
-    return await this.manager.transaction(async (manager) => {
-      const result = await manager.update(UserUrlEntity, dto.urlId, {
-        status: false,
-      });
-
-      if (!result.affected) {
-        throw new Error('url 상태 변경 실패');
-      }
-    });
-  }
-
-  async findOne(dto: FindOneUserUrlDto) {
-    const userUrl = await this.userUrlRepository.findOne({
-      where: {
-        id: dto.urlId,
-      },
-    });
-
-    if (!userUrl) return null;
+  async save(dto: CreateUserUrlDto, manager: EntityManager) {
+    const userUrlEntity = UserUrlMapper.toEntity(dto.url);
+    const result = await manager.save(userUrlEntity);
 
     return this.userUrlFactory.reconstitute({
-      id: userUrl.id,
-      url: userUrl.url,
-      status: userUrl.status,
+      id: result.id,
+      url: result.url,
+      status: result.status,
+      createdAt: result.createdAt,
+      updatedAt: result.updatedAt,
+      deletedAt: result.deletedAt,
     });
   }
 
-  async findOneWithUrl(dto: FindOneUserWithUrlDto) {
-    const userUrl = await this.userUrlRepository.findOne({
-      where: {
-        url: dto.url,
-      },
+  async update(dto: UpdateUserUrlDto, manager: EntityManager) {
+    const result = await manager.update(UserUrlEntity, dto.urlId, {
+      status: false,
     });
 
-    if (!userUrl) return null;
-
-    return true;
+    if (!result.affected) {
+      throw new UpdateException();
+    }
   }
 
+  //manager받도록 수정
   async findOneWithUser(dto: FindOneUserUrlWithUserDto) {
     const result = await this.userUrlRepository.findOneOrFail({
       where: {
@@ -105,5 +75,9 @@ export class UserUrlRepository implements IUserUrlRepository {
       status: result.status,
       users: users,
     });
+  }
+
+  delete(id: number, manager: EntityManager) {
+    return manager.delete(UserUrlEntity, id);
   }
 }
