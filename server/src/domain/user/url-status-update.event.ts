@@ -5,7 +5,4 @@ export class StatusUpdatedEvent implements IEvent {
     public readonly urlId: number,
     public readonly status: boolean,
   ) {}
-  get name(): string {
-    return this.constructor.name;
-  }
 }

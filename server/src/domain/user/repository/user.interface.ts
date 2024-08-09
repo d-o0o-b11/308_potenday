@@ -1,5 +1,6 @@
-import { CreateUserDto, UserResponseDto } from '@interface';
+import { CreateUserDto } from '@interface';
+import { User } from '../user';
 
 export interface IUserRepository {
-  save: (dto: CreateUserDto) => Promise<UserResponseDto>;
+  create: (dto: CreateUserDto) => Promise<User>;
 }
