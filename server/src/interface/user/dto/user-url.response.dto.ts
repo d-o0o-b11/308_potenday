@@ -1,5 +1,5 @@
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
-import { User } from '@domain';
+import { UserRead } from '@domain';
 
 export class SetUrlResponseDto {
   /**
@@ -28,7 +28,7 @@ export class CountUsersInRoomResponseDto {
    * 인원 정보
    * @example []
    */
-  userInfo: User[];
+  userInfo: UserRead[];
 }
 
 export class GetUrlStatusResponseDto {

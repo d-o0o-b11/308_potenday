@@ -7,17 +7,40 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   CountUsersInRoomQuery,
-  GetUrlQuery,
+  GetUrlCommand,
   GetUrlStatusQuery,
   NextStepCommand,
   UpdateStatusFalseCommand,
 } from '@application';
-import { CountUsersInRoomResponseDto, GetUrlStatusResponseDto } from './dto';
+import {
+  CountUsersInRoomResponseDto,
+  GetUrlStatusResponseDto,
+  SetUrlResponseDto,
+} from './dto';
+import {
+  UpdateException,
+  UrlAlreadyClickButtonException,
+  UrlNotFoundException,
+  UrlStatusFalseException,
+} from '@common';
 
+/**
+ * 개선 사항
+ * 에러 핸들링
+ * 유효성 검사
+ */
 @ApiTags('URL API')
 @Controller('url')
 export class UserUrlController {
@@ -29,14 +52,18 @@ export class UserUrlController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: '무작위 url이 반환됩니다.',
-    type: String,
+    type: SetUrlResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: '서버 에러 발생',
   })
   @ApiOperation({
     summary: 'url 발급',
   })
-  @Get()
+  @Post()
   async getUrl() {
-    return await this.queryBus.execute(new GetUrlQuery());
+    return await this.commandBus.execute(new GetUrlCommand());
   }
 
   @ApiOperation({
@@ -45,6 +72,18 @@ export class UserUrlController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: CountUsersInRoomResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: '서버 에러 발생',
+  })
+  @ApiNotFoundResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: UrlNotFoundException,
+  })
+  @ApiConflictResponse({
+    status: HttpStatus.CONFLICT,
+    type: UrlStatusFalseException,
   })
   @ApiQuery({
     name: 'urlId',
@@ -56,10 +95,26 @@ export class UserUrlController {
   }
 
   @Patch('status')
+  @ApiInternalServerErrorResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: '서버 에러 발생',
+  })
+  @ApiInternalServerErrorResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: UpdateException,
+  })
+  @ApiNotFoundResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: UrlNotFoundException,
+  })
+  @ApiConflictResponse({
+    status: HttpStatus.CONFLICT,
+    type: UrlAlreadyClickButtonException,
+  })
   @ApiOperation({
     summary: '[모두 모였어요] 버튼 클릭 시 상태 변경',
     description:
-      '시작되면 더 이상의 인원 수 추가는 받지 않기 위한 api, return true -> 변경 성공',
+      '게임 시작 후 추가 인원을 더 이상 받지 않기 위해 URL의 상태를 변경합니다.',
   })
   @ApiQuery({
     name: 'urlId',
@@ -73,6 +128,10 @@ export class UserUrlController {
   @ApiOperation({
     summary: '방 입장여부',
     description: 'true - 입장 가능 , false - 입장 불가능',
+  })
+  @ApiInternalServerErrorResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: '서버 에러 발생',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -90,6 +149,10 @@ export class UserUrlController {
   @Post('next')
   @ApiOperation({
     summary: '다음 게임으로 넘어가기',
+  })
+  @ApiInternalServerErrorResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: '서버 에러 발생',
   })
   @ApiQuery({
     name: 'urlId',
