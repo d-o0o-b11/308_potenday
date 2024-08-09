@@ -13,7 +13,10 @@ export class User {
     private readonly imgId: number,
     private readonly nickName: string,
     private readonly urlId: number,
-    private readonly adjectiveExpressions?: UserAdjectiveExpression[],
+    private readonly createdAt?: Date,
+    private readonly updatedAt?: Date,
+    private readonly deletedAt?: Date,
+    private readonly adjectiveExpressions?: UserAdjectiveExpression[], //이게 여기있는 이유는..? @memo
   ) {}
 
   getId(): Readonly<number> {
@@ -30,6 +33,18 @@ export class User {
 
   getUrlId(): Readonly<number> {
     return this.urlId;
+  }
+
+  getCreatedAt(): Readonly<Date> {
+    return this.createdAt;
+  }
+
+  getUpdatedAt(): Readonly<Date> {
+    return this.updatedAt;
+  }
+
+  getDeletedAt(): Readonly<Date> {
+    return this.deletedAt;
   }
 
   getAdjectiveExpressions(): Readonly<UserAdjectiveExpression[] | undefined> {

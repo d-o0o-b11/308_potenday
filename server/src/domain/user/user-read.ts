@@ -1,6 +1,6 @@
 import { BalanceType } from '@domain';
 
-class Balance {
+export class Balance {
   balanceId: number;
   balanceType: BalanceType;
   createdAt: string;
@@ -8,7 +8,7 @@ class Balance {
   deletedAt: string | null;
 }
 
-class Mbti {
+export class Mbti {
   mbti: string;
   toUserId: number;
   createdAt: string;
@@ -16,8 +16,8 @@ class Mbti {
   deletedAt: string | null;
 }
 
-class AdjectiveExpression {
-  adjectiveExpressionId: number;
+export class AdjectiveExpressionList {
+  adjectiveExpressionId: number[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -29,12 +29,12 @@ export class UserRead {
     private readonly imgId: number,
     private readonly nickname: string,
     private readonly urlId: number,
-    private readonly createdAt: string,
-    private readonly updatedAt: string,
-    private readonly deletedAt: string | null,
-    private readonly balance: Balance[],
-    private readonly mbti: Mbti[],
-    private readonly adjectiveExpressionList: AdjectiveExpression[],
+    private readonly createdAt: Date,
+    private readonly updatedAt: Date,
+    private readonly deletedAt: Date | null,
+    private readonly balance?: Balance[],
+    private readonly mbti?: Mbti[],
+    private readonly adjectiveExpressionList?: AdjectiveExpressionList,
   ) {}
 
   getUserId(): Readonly<number> {
@@ -53,15 +53,15 @@ export class UserRead {
     return this.urlId;
   }
 
-  getCreatedAt(): Readonly<string> {
+  getCreatedAt(): Readonly<Date> {
     return this.createdAt;
   }
 
-  getUpdatedAt(): Readonly<string> {
+  getUpdatedAt(): Readonly<Date> {
     return this.updatedAt;
   }
 
-  getDeletedAt(): Readonly<string | null> {
+  getDeletedAt(): Readonly<Date | null> {
     return this.deletedAt;
   }
 
@@ -73,7 +73,7 @@ export class UserRead {
     return this.mbti;
   }
 
-  getAdjectiveExpressions(): Readonly<AdjectiveExpression[]> {
+  getAdjectiveExpressions(): Readonly<AdjectiveExpressionList> {
     return this.adjectiveExpressionList;
   }
 }

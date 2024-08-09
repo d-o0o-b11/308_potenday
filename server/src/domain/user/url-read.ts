@@ -3,10 +3,10 @@ export class UrlRead {
     private readonly urlId: number,
     private readonly url: string,
     private readonly status: boolean,
-    private readonly createdAt: string,
-    private readonly updatedAt: string,
-    private readonly deletedAt: string | null,
-    private readonly userIdList: number[],
+    private readonly createdAt: Date | null,
+    private readonly updatedAt: Date | null,
+    private readonly deletedAt: Date | null,
+    private readonly userIdList?: number[],
   ) {}
 
   /**
@@ -28,15 +28,15 @@ export class UrlRead {
     return this.status;
   }
 
-  getCreatedAt(): Readonly<string> {
+  getCreatedAt(): Readonly<Date | null> {
     return this.createdAt;
   }
 
-  getUpdatedAt(): Readonly<string> {
+  getUpdatedAt(): Readonly<Date | null> {
     return this.updatedAt;
   }
 
-  getDeletedAt(): Readonly<string | null> {
+  getDeletedAt(): Readonly<Date | null> {
     return this.deletedAt;
   }
 
