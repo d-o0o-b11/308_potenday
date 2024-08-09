@@ -12,7 +12,10 @@ export const AppDataSource: DataSourceOptions & SeederOptions = {
   username: config.db.username,
   password: config.db.password,
   database: config.db.database,
-  entities: [__dirname + '/../../**/**/**/**/cud/*.entity{.ts,.js}'],
+  entities: [
+    __dirname + '/../../**/**/**/**/cud/*.entity{.ts,.js}',
+    __dirname + '/../../common/*.entity{.ts,.js}', //common에 entity 폴더에 저장하도록 수정하기 @memo
+  ],
   synchronize: false, //config.env === 'test' ? true : false
   logging: config.env === 'test' ? false : false,
   migrations: [__dirname + '/../migrations/cud/*{.ts,.js}'], // migration 수행할 파일
