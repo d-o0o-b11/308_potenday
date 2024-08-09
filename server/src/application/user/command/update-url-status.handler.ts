@@ -1,12 +1,10 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateStatusFalseCommand } from './update-url-status.command';
 import { Inject } from '@nestjs/common';
-import { UserUrlEventPublisher } from '../event';
-import {
-  USER_URL_EVENT_PUBLISHER,
-  USER_URL_SERVICE_TOKEN,
-} from '@infrastructure';
+import { UpdateUrlStatusEvent } from '../event';
+import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
 import { IUserUrlService } from '@interface';
+import { StatusUpdatedEvent } from '@domain';
 
 @CommandHandler(UpdateStatusFalseCommand)
 export class UpdateStatusFalseHandler
@@ -15,8 +13,7 @@ export class UpdateStatusFalseHandler
   constructor(
     @Inject(USER_URL_SERVICE_TOKEN)
     private userUrlService: IUserUrlService,
-    @Inject(USER_URL_EVENT_PUBLISHER)
-    private userUrlEventPublisher: UserUrlEventPublisher,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: UpdateStatusFalseCommand): Promise<void> {
@@ -24,6 +21,15 @@ export class UpdateStatusFalseHandler
 
     await this.userUrlService.updateStatusFalse(urlId);
 
-    this.userUrlEventPublisher.updateStatus({ urlId: urlId, status: true });
+    this.eventBus.publish(
+      new UpdateUrlStatusEvent(
+        'UpdateStatusFalseCommand',
+        'update',
+        urlId,
+        false,
+      ),
+    );
+
+    this.eventBus.publish(new StatusUpdatedEvent(urlId, true));
   }
 }

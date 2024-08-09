@@ -1,24 +1,22 @@
-import { StatusUpdatedEvent, UserCreateEvent } from '@domain';
+import { StatusUpdatedEvent, CreateUserEvent } from '@domain';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-@EventsHandler(UserCreateEvent, StatusUpdatedEvent)
+/**
+ * @memo
+ * 어디서 사용하는지 확인 필요
+ * 구조 개선 필요
+ */
+@EventsHandler(CreateUserEvent, StatusUpdatedEvent)
 export class UserEventHandler
-  implements IEventHandler<UserCreateEvent | StatusUpdatedEvent>
+  implements IEventHandler<CreateUserEvent | StatusUpdatedEvent>
 {
   constructor(private readonly eventEmitter: EventEmitter2) {}
   // 이벤트 핸들러는 커맨드 핸들러와는 다르게 여러 이벤트를 같은 이벤트 핸들러가 받도록 할 수 있음
-  async handle(event: UserCreateEvent | StatusUpdatedEvent) {
-    //switch문 event.name해도 된다. =>
-    /**
-     * 고민,, switch문 event.name 가능
-     *   get name(): string {
-          return this.constructor.name; // 이벤트 이름===클래스 이름
-        }
-     */
+  async handle(event: CreateUserEvent | StatusUpdatedEvent) {
     switch (event.constructor) {
-      case UserCreateEvent:
-        this.handleUserCreateEvent(event as UserCreateEvent);
+      case CreateUserEvent:
+        this.handleCreateUserEvent(event as CreateUserEvent);
         break;
       case StatusUpdatedEvent:
         this.handleStatusUpdatedEvent(event as StatusUpdatedEvent);
@@ -35,7 +33,7 @@ export class UserEventHandler
     });
   }
 
-  private handleUserCreateEvent(event: UserCreateEvent) {
+  private handleCreateUserEvent(event: CreateUserEvent) {
     this.eventEmitter.emit('userCreated', { urlId: event.urlId });
   }
 }
