@@ -1,16 +1,17 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class V2CUDTable1722255942432 implements MigrationInterface {
-    name = 'V2CUDTable1722255942432'
+export class V2Table1722919430060 implements MigrationInterface {
+    name = 'V2Table1722919430060'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "common_question" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "update_at" TIMESTAMP NOT NULL DEFAULT now(), "delete_at" TIMESTAMP, "url_id" integer NOT NULL, "question_1" boolean NOT NULL DEFAULT false, "question_2" boolean NOT NULL DEFAULT false, "question_3" boolean NOT NULL DEFAULT false, "question_4" boolean NOT NULL DEFAULT false, CONSTRAINT "PK_a7ae3f81a75c88e200c626a3683" PRIMARY KEY ("url_id"))`);
-        await queryRunner.query(`CREATE TABLE "user_url" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "update_at" TIMESTAMP NOT NULL DEFAULT now(), "delete_at" TIMESTAMP, "id" SERIAL NOT NULL, "url" character varying NOT NULL, "status" boolean NOT NULL DEFAULT true, CONSTRAINT "PK_8644584d3620c8fd95111270b75" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "event_log" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "eventType" character varying NOT NULL, "eventMethod" character varying NOT NULL, "event" json NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_d8ccd9b5b44828ea378dd37e691" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "common_question" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "url_id" integer NOT NULL, "question_1" boolean NOT NULL DEFAULT false, "question_2" boolean NOT NULL DEFAULT false, "question_3" boolean NOT NULL DEFAULT false, "question_4" boolean NOT NULL DEFAULT false, CONSTRAINT "PK_a7ae3f81a75c88e200c626a3683" PRIMARY KEY ("url_id"))`);
+        await queryRunner.query(`CREATE TABLE "user_url" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "id" SERIAL NOT NULL, "url" character varying NOT NULL, "status" boolean NOT NULL DEFAULT true, CONSTRAINT "PK_8644584d3620c8fd95111270b75" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "balance_list" ("id" SERIAL NOT NULL, "type_A" character varying NOT NULL, "type_B" character varying NOT NULL, CONSTRAINT "PK_c4eafbef66995e0f9e0b4f2cbe9" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "user_balance" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "update_at" TIMESTAMP NOT NULL DEFAULT now(), "delete_at" TIMESTAMP, "id" SERIAL NOT NULL, "user_id" integer NOT NULL, "balance_id" integer NOT NULL, "balance_type" character varying NOT NULL, CONSTRAINT "PK_f3edf5a1907e7b430421b9c2ddd" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "user_mbti" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "update_at" TIMESTAMP NOT NULL DEFAULT now(), "delete_at" TIMESTAMP, "id" SERIAL NOT NULL, "user_id" integer NOT NULL, "mbti" character varying, "to_user_id" integer NOT NULL, CONSTRAINT "PK_8a54e7df9e49d9092e6759c020a" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "user" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "update_at" TIMESTAMP NOT NULL DEFAULT now(), "delete_at" TIMESTAMP, "id" SERIAL NOT NULL, "img_id" integer NOT NULL, "nickname" character varying NOT NULL, "url_id" integer NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "user_adjective_expression" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "update_at" TIMESTAMP NOT NULL DEFAULT now(), "delete_at" TIMESTAMP, "id" SERIAL NOT NULL, "user_id" integer NOT NULL, "adjective_expression_id" integer NOT NULL, CONSTRAINT "PK_8ddee23da43308f9fe5fd50a5d6" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user_balance" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "id" SERIAL NOT NULL, "user_id" integer NOT NULL, "balance_id" integer NOT NULL, "balance_type" character varying NOT NULL, CONSTRAINT "PK_f3edf5a1907e7b430421b9c2ddd" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user_mbti" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "id" SERIAL NOT NULL, "user_id" integer NOT NULL, "mbti" character varying, "to_user_id" integer NOT NULL, CONSTRAINT "PK_8a54e7df9e49d9092e6759c020a" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "id" SERIAL NOT NULL, "img_id" integer NOT NULL, "nickname" character varying NOT NULL, "url_id" integer NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user_adjective_expression" ("created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "deleted_at" TIMESTAMP, "id" SERIAL NOT NULL, "user_id" integer NOT NULL, "adjective_expression_id" integer NOT NULL, CONSTRAINT "PK_8ddee23da43308f9fe5fd50a5d6" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "adjective_expression" ("id" SERIAL NOT NULL, "adjective" character varying NOT NULL, CONSTRAINT "PK_b676dfd7054a490a24b0bcbf539" PRIMARY KEY ("id"))`);
         await queryRunner.query(`ALTER TABLE "common_question" ADD CONSTRAINT "FK_a7ae3f81a75c88e200c626a3683" FOREIGN KEY ("url_id") REFERENCES "user_url"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "user_balance" ADD CONSTRAINT "FK_8fdba3bca96f8af1a318a6e25db" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
@@ -39,6 +40,7 @@ export class V2CUDTable1722255942432 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "balance_list"`);
         await queryRunner.query(`DROP TABLE "user_url"`);
         await queryRunner.query(`DROP TABLE "common_question"`);
+        await queryRunner.query(`DROP TABLE "event_log"`);
     }
 
 }
