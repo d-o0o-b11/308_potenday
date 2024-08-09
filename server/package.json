@@ -20,7 +20,11 @@
     "test:e2e": "NODE_ENV=test jest --config ./jest.e2e.js",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "seed:run": "source scripts/seed.run.sh ",
-    "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create"
+    "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create",
+    "migration-read:run": "sh ./scripts/migration-read.run.sh",
+    "migration:run": "sh ./scripts/migration.run.sh",
+    "migration-read:generate": "sh ./scripts/migration-read.generate.sh",
+    "migration:generate": "sh ./scripts/migration.generate.sh"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
