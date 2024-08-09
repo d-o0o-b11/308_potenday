@@ -6,6 +6,9 @@ export class UserUrl {
     private readonly url: string,
     private readonly status: boolean,
     private readonly user?: User[],
+    private readonly createdAt?: Date,
+    private readonly updatedAt?: Date,
+    private readonly deletedAt?: Date,
   ) {}
 
   getId(): Readonly<number> {
@@ -22,5 +25,17 @@ export class UserUrl {
 
   getUserList(): Readonly<User[] | undefined> {
     return this.user;
+  }
+
+  getCreatedAt(): Readonly<Date> {
+    return this.createdAt;
+  }
+
+  getUpdatedAt(): Readonly<Date> {
+    return this.updatedAt;
+  }
+
+  getDeletedAt(): Readonly<Date> {
+    return this.deletedAt;
   }
 }

@@ -1,8 +1,8 @@
 import { UrlRead } from '@domain';
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('url')
-export class UrlReadEntity extends BaseEntity {
+export class UrlReadEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
