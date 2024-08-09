@@ -11,6 +11,8 @@ export const ERROR_MESSAGES = {
   USER_BALANCE_SUBMIT: '이미 해당 라운드 밸런스 게임에 의견을 제출하였습니다.',
 
   USER_MBTI_SUBMIT: '이미 해당 mbti 값을 제출하였습니다.',
+
+  TYPEORM_UPDATE: '업데이트 과정에서 오류가 발생하였습니다.',
 } as const;
 export type ERROR_MESSAGE =
   (typeof ERROR_MESSAGES)[keyof typeof ERROR_MESSAGES];
