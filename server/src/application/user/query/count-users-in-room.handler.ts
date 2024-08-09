@@ -2,7 +2,11 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject, Injectable } from '@nestjs/common';
 import { CountUsersInRoomQuery } from './count-users-in-room.query';
 import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
-import { CountUsersInRoomResponseDto, IUserUrlService } from '@interface';
+import {
+  CountUsersInRoomResponseDto,
+  FindOneUserUrlDto,
+  IUserUrlService,
+} from '@interface';
 
 @Injectable()
 @QueryHandler(CountUsersInRoomQuery)
@@ -18,6 +22,8 @@ export class CountUsersInRoomQueryHandler
     query: CountUsersInRoomQuery,
   ): Promise<CountUsersInRoomResponseDto> {
     const { urlId } = query;
-    return await this.urlService.countUsersInRoom(urlId);
+    return await this.urlService.checkUserLimitForUrl(
+      new FindOneUserUrlDto(urlId),
+    );
   }
 }

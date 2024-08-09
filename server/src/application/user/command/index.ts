@@ -4,3 +4,5 @@ export * from './update-url-status.command';
 export * from './update-url-status.handler';
 export * from './next-step.command';
 export * from './next-step.handler';
+export * from './get-url.command';
+export * from './get-url.handler';
