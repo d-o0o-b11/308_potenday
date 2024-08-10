@@ -15,11 +15,11 @@ import { UserUrlMapper } from '../mapper';
 export class UrlReadRepository {
   constructor(private userUrlFactory: UserUrlFactory) {}
 
-  create(dto: CreateUserUrlReadDto, manager: EntityManager) {
+  async create(dto: CreateUserUrlReadDto, manager: EntityManager) {
     const urlRead = this.userUrlFactory.reconstituteRead(dto);
     const urlReadEntity = UserUrlMapper.toEntityRead(urlRead);
 
-    manager.save(urlReadEntity);
+    await manager.save(urlReadEntity);
   }
 
   async updateStatus(
@@ -104,5 +104,14 @@ export class UrlReadRepository {
     if (!result) return null;
 
     return true;
+  }
+
+  async delete(urlId: number, manager: EntityManager): Promise<void> {
+    await manager
+      .createQueryBuilder()
+      .delete()
+      .from(UrlReadEntity, 'url')
+      .where("url.data->>'urlId' = :urlId", { urlId })
+      .execute(); // execute를 사용해 실제 삭제 작업 실행
   }
 }

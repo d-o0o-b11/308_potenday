@@ -15,17 +15,10 @@ import {
   UpdateUserUrlStatusDto,
 } from '@interface';
 
-@EventsHandler(
-  CreateUrlEvent,
-  UpdateUrlStatusEvent,
-  NextStepEvent,
-  CreateUserEvent,
-)
+@EventsHandler(UpdateUrlStatusEvent, NextStepEvent, CreateUserEvent)
 export class EventSourcingHandler
   implements
-    IEventHandler<
-      CreateUrlEvent | UpdateUrlStatusEvent | NextStepEvent | CreateUserEvent
-    >
+    IEventHandler<UpdateUrlStatusEvent | NextStepEvent | CreateUserEvent>
 {
   constructor(
     private readonly urlReadRepository: UrlReadRepository,
@@ -35,11 +28,11 @@ export class EventSourcingHandler
     @InjectEntityManager('read') private readonly readManager: EntityManager,
   ) {}
 
-  async handle(event: CreateUrlEvent | UpdateUrlStatusEvent | CreateUserEvent) {
+  async handle(event: UpdateUrlStatusEvent | CreateUserEvent) {
     switch (event.constructor) {
-      case CreateUrlEvent:
-        await this.handleCreateUrlEvent(event as CreateUrlEvent);
-        break;
+      // case CreateUrlEvent:
+      //   await this.handleCreateUrlEvent(event as CreateUrlEvent);
+      //   break;
       case UpdateUrlStatusEvent:
         await this.handleUpdateUrlStatusEvent(event as UpdateUrlStatusEvent);
         break;
@@ -54,33 +47,33 @@ export class EventSourcingHandler
     }
   }
 
-  private async handleCreateUrlEvent(event: CreateUrlEvent) {
-    await this.readManager.transaction(async (readManager) => {
-      /**
-       * event로 넘어온 데이터로 Read DB에 저장하고 eventSourcing에 저장한다...
-       * 근데 eventSourcing 먼저하고 ReadDB에 저장하는게 순서적으로도 적합하다.
-       */
+  // private async handleCreateUrlEvent(event: CreateUrlEvent) {
+  //   await this.readManager.transaction(async (readManager) => {
+  //     /**
+  //      * event로 넘어온 데이터로 Read DB에 저장하고 eventSourcing에 저장한다...
+  //      * 근데 eventSourcing 먼저하고 ReadDB에 저장하는게 순서적으로도 적합하다.
+  //      */
 
-      //이벤트 소싱(Event Sourcing)에서는 상태를 변경하기 전에 이벤트를 저장하는 것이 일반적입니다.
-      await this.manager.transaction(async (manager) => {
-        this.eventStore.saveEvent(event, manager);
-      });
+  //     //이벤트 소싱(Event Sourcing)에서는 상태를 변경하기 전에 이벤트를 저장하는 것이 일반적입니다.
+  //     await this.manager.transaction(async (manager) => {
+  //       this.eventStore.saveEvent(event, manager);
+  //     });
 
-      // throw new Error('에러 발생');
+  //     // throw new Error('에러 발생');
 
-      this.urlReadRepository.create(
-        new CreateUserUrlReadDto(
-          event.urlId,
-          event.url,
-          event.status,
-          event.createdAt,
-          event.updatedAt,
-          event.deletedAt,
-        ),
-        readManager,
-      );
-    });
-  }
+  //     this.urlReadRepository.create(
+  //       new CreateUserUrlReadDto(
+  //         event.urlId,
+  //         event.url,
+  //         event.status,
+  //         event.createdAt,
+  //         event.updatedAt,
+  //         event.deletedAt,
+  //       ),
+  //       readManager,
+  //     );
+  //   });
+  // }
 
   private async handleUpdateUrlStatusEvent(event: UpdateUrlStatusEvent) {
     await this.readManager.transaction(async (readManager) => {

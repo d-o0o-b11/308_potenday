@@ -38,17 +38,24 @@
 
 import { Injectable } from '@nestjs/common';
 import { Saga, ofType } from '@nestjs/cqrs';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { EventBus } from '@nestjs/cqrs';
 import { CreateUrlEvent, DeleteUrlEvent } from '../event/event-sourcing.event';
 import { UrlReadRepository } from '@infrastructure';
+import { CreateUserUrlReadDto } from '@interface';
+import { EventStore } from '../event';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class UrlSaga {
   constructor(
     private readonly eventBus: EventBus,
     private readonly urlReadRepository: UrlReadRepository,
+    private readonly eventStore: EventStore,
+    @InjectEntityManager() private readonly manager: EntityManager,
+    @InjectEntityManager('read') private readonly readManager: EntityManager,
   ) {}
 
   @Saga()
@@ -59,7 +66,9 @@ export class UrlSaga {
       ofType(CreateUrlEvent),
       map(async (event: CreateUrlEvent) => {
         try {
+          await this.eventStore.saveEvent(event, this.manager);
           // 이벤트 소싱 저장 처리
+
           await this.urlReadRepository.create(
             new CreateUserUrlReadDto(
               event.urlId,
@@ -69,24 +78,19 @@ export class UrlSaga {
               event.updatedAt,
               event.deletedAt,
             ),
-            this.readManager, // Read DB 매니저
+            this.readManager,
           );
-          // 성공적인 처리 후 아무 작업도 하지 않음
+
+          throw new Error('에러');
         } catch (error) {
-          console.error('Error processing CreateUrlEvent:', error);
+          console.error('트랜잭션 오류 발생', error);
           // 오류 발생 시 보상 작업으로 DeleteUrlEvent 발행
           this.eventBus.publish(
-            new DeleteUrlEvent(
-              event.urlId, // 삭제할 URL ID
-              event.url,
-              event.status,
-              event.createdAt,
-              event.updatedAt,
-              event.deletedAt,
-            ),
+            new DeleteUrlEvent('DeleteUrlEvent', 'delete', event.urlId),
           );
         }
       }),
+      map(() => null), // 비동기 함수에서 반환된 Promise를 void로 처리
       catchError((error) => {
         console.error('Error handling CreateUrlEvent in Saga:', error);
         // 필요 시 추가적인 오류 처리
