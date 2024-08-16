@@ -2,11 +2,6 @@ import { StatusUpdatedEvent, CreateUserEvent } from '@domain';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-/**
- * @memo
- * 어디서 사용하는지 확인 필요
- * 구조 개선 필요
- */
 @EventsHandler(CreateUserEvent, StatusUpdatedEvent)
 export class UserEventHandler
   implements IEventHandler<CreateUserEvent | StatusUpdatedEvent>

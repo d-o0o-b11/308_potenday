@@ -23,8 +23,8 @@ export class UpdateStatusFalseHandler
 
     this.eventBus.publish(
       new UpdateUrlStatusEvent(
-        'UpdateStatusFalseCommand',
-        'update',
+        // 'UpdateStatusFalseCommand',
+        // 'update',
         urlId,
         false,
       ),

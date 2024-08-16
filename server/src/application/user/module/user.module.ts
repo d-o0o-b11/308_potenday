@@ -21,7 +21,8 @@ import {
 } from '../event';
 import {
   CreateUserHandler,
-  GetUrlCommandHandler,
+  CreateUrlReadCommandHandler,
+  CreateUrlCommandHandler,
   NextStepHandler,
   UpdateStatusFalseHandler,
 } from '../command';
@@ -48,7 +49,7 @@ import { UrlSaga } from '../saga';
   providers: [
     UserEventHandler,
     CreateUserHandler,
-    GetUrlCommandHandler,
+    CreateUrlCommandHandler,
     CountUsersInRoomQueryHandler,
     UpdateStatusFalseHandler,
     GetUrlStatusHandler,
@@ -67,6 +68,7 @@ import { UrlSaga } from '../saga';
     UserReadRepository,
     //수정 필요
     EventStore,
+    CreateUrlReadCommandHandler,
   ],
 })
 export class UserModule {}

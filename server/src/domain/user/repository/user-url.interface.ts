@@ -3,14 +3,14 @@ import {
   FindOneUserUrlWithUserDto,
   UpdateUserUrlDto,
 } from '@interface';
-import { UserUrl } from '../user-url';
+import { Url } from '../url';
 import { DeleteResult, EntityManager } from 'typeorm';
 
 export interface IUserUrlRepository {
-  save: (dto: CreateUserUrlDto, manager: EntityManager) => Promise<UserUrl>;
+  save: (dto: CreateUserUrlDto, manager: EntityManager) => Promise<Url>;
   update: (dto: UpdateUserUrlDto, manager: EntityManager) => Promise<void>;
   // findOne: (dto: FindOneUserUrlDto) => Promise<UserUrl>;
-  findOneWithUser: (dto: FindOneUserUrlWithUserDto) => Promise<UserUrl>;
+  findOneWithUser: (dto: FindOneUserUrlWithUserDto) => Promise<Url>;
   // findOneWithUrl(
   //   dto: FindOneUserWithUrlDto,
   //   manager: EntityManager,

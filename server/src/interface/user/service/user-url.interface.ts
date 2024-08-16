@@ -1,4 +1,4 @@
-import { UserUrl } from '@domain';
+import { Url } from '@domain';
 import { CountUsersInRoomResponseDto, FindOneUserUrlDto } from '../dto';
 import { EntityManager } from 'typeorm';
 
@@ -6,7 +6,7 @@ export interface IUserUrlService {
   /**
    * URL 발급
    */
-  setUrl: () => Promise<UserUrl>;
+  setUrl: () => Promise<Url>;
 
   /**
    * 해당 URL 인원 수 확인

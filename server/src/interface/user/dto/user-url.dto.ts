@@ -14,7 +14,10 @@ export class CreateUserUrlDto {
 }
 
 export class UpdateUserUrlDto {
-  constructor(public readonly urlId: number) {}
+  constructor(
+    public readonly urlId: number,
+    public readonly status: boolean,
+  ) {}
 }
 
 export class FindOneUserUrlDto {

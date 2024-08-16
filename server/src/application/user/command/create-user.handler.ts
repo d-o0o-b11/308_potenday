@@ -36,10 +36,11 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       new CreateUserDto(urlId, imgId, nickName),
     );
 
+    //saga 만들기
     this.eventBus.publish(
       new CreateUserEvent(
-        'CreateUserCommand',
-        'save',
+        // 'CreateUserCommand',
+        // 'save',
         result.getId(),
         result.getImgId(),
         result.getNickName(),

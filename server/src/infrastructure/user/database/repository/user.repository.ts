@@ -4,6 +4,7 @@ import { EntityManager } from 'typeorm';
 import { CreateUserDto } from '@interface';
 import { UserMapper } from '../mapper';
 import { InjectEntityManager } from '@nestjs/typeorm';
+import { UserEntity } from '../entity/cud/user.entity';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -29,5 +30,14 @@ export class UserRepository implements IUserRepository {
 
       return user;
     });
+  }
+
+  async delete(id: number, manager: EntityManager) {
+    const result = await manager.delete(UserEntity, id);
+
+    if (!result.affected)
+      throw new Error('유저 삭제 과정에서 오류가 발생하였습니다.');
+
+    return result;
   }
 }

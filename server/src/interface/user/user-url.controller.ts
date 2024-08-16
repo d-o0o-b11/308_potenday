@@ -19,7 +19,7 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   CountUsersInRoomQuery,
-  GetUrlCommand,
+  CreateUrlCommand,
   GetUrlStatusQuery,
   NextStepCommand,
   UpdateStatusFalseCommand,
@@ -63,7 +63,7 @@ export class UserUrlController {
   })
   @Post()
   async getUrl() {
-    return await this.commandBus.execute(new GetUrlCommand());
+    return await this.commandBus.execute(new CreateUrlCommand());
   }
 
   @ApiOperation({

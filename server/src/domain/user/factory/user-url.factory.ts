@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserUrl } from '../user-url';
+import { Url } from '../url';
 import {
   CreateUserUrlReadDto,
   ReconstituteFactoryDto,
@@ -10,8 +10,8 @@ import { UrlRead } from '../url-read';
 
 @Injectable()
 export class UserUrlFactory {
-  reconstitute(dto: ReconstituteFactoryDto): UserUrl {
-    return new UserUrl(
+  reconstitute(dto: ReconstituteFactoryDto): Url {
+    return new Url(
       dto.id,
       dto.url,
       dto.status,
@@ -22,8 +22,8 @@ export class UserUrlFactory {
     );
   }
 
-  reconstituteWithUser(dto: ReconstituteWithUserFactoryDto): UserUrl {
-    return new UserUrl(dto.id, dto.url, dto.status, dto.users);
+  reconstituteWithUser(dto: ReconstituteWithUserFactoryDto): Url {
+    return new Url(dto.id, dto.url, dto.status, dto.users);
   }
 
   reconstituteRead(dto: CreateUserUrlReadDto) {

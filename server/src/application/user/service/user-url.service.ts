@@ -54,33 +54,31 @@ export class UserUrlService implements IUserUrlService {
   }
 
   async checkUserLimitForUrl(dto: FindOneUserUrlDto) {
-    return await this.readManager.transaction(async (readManager) => {
-      const findOneResult = await this.urlReadRepository.findOneById(
-        new FindOneByUrlIdDto(dto.urlId),
-        readManager,
-      );
+    const findOneResult = await this.urlReadRepository.findOneById(
+      new FindOneByUrlIdDto(dto.urlId),
+      this.readManager,
+    );
 
-      if (!findOneResult) {
-        throw new UrlNotFoundException();
-      }
+    if (!findOneResult) {
+      throw new UrlNotFoundException();
+    }
 
-      if (!findOneResult.getStatus()) {
-        throw new UrlStatusFalseException();
-      }
+    if (!findOneResult.getStatus()) {
+      throw new UrlStatusFalseException();
+    }
 
-      if (!findOneResult.getUserIdList()) {
-        return { userCount: 0, userInfo: [] };
-      }
+    if (!findOneResult.getUserIdList()) {
+      return { userCount: 0, userInfo: [] };
+    }
 
-      const userList = await this.countUsersInRoom(
-        //@memo slice -> readonly 속성을 제거..다른 방법 생각하기
-        //slice 메서드를 사용하면, 배열을 복사하여 읽기 전용 속성을 제거 가능
-        findOneResult.getUserIdList().slice(),
-        readManager,
-      );
+    const userList = await this.countUsersInRoom(
+      //@memo slice -> readonly 속성을 제거..다른 방법 생각하기
+      //slice 메서드를 사용하면, 배열을 복사하여 읽기 전용 속성을 제거 가능
+      findOneResult.getUserIdList().slice(),
+      this.readManager,
+    );
 
-      return { userCount: userList.userCount, userInfo: userList.userInfo };
-    });
+    return { userCount: userList.userCount, userInfo: userList.userInfo };
   }
 
   async countUsersInRoom(userIdList: number[], manager: EntityManager) {
@@ -110,7 +108,7 @@ export class UserUrlService implements IUserUrlService {
 
     return await this.manager.transaction(async (manager) => {
       await this.urlRepository.update(
-        new UpdateUserUrlDto(findOneResult.getUrlId()),
+        new UpdateUserUrlDto(findOneResult.getUrlId(), false),
         manager,
       );
     });

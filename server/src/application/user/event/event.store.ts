@@ -3,7 +3,7 @@ import { BaseEvent } from './event-sourcing.event';
 import { EventEntity } from '@common/evnt.entity';
 
 export class EventStore {
-  saveEvent(event: BaseEvent, manager: EntityManager) {
+  async saveEvent(event: BaseEvent, manager: EntityManager) {
     const { eventType, eventMethod, ...rest } = event;
 
     const eventEntity = new EventEntity({
@@ -12,6 +12,6 @@ export class EventStore {
       event: rest,
     });
 
-    manager.save(eventEntity);
+    await manager.save(eventEntity);
   }
 }

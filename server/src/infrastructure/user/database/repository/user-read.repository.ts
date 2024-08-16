@@ -45,4 +45,13 @@ export class UserReadRepository {
     const findResult = await Promise.all(findPromises);
     return findResult;
   }
+
+  async delete(id: number, manager: EntityManager): Promise<void> {
+    await manager
+      .createQueryBuilder()
+      .delete()
+      .from(UserReadEntity, 'user')
+      .where("user.data->>'userId' = :userId", { userId: id })
+      .execute();
+  }
 }

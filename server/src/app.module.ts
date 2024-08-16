@@ -7,7 +7,7 @@ import { TransactionModule } from 'nestjs-transaction';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from '@common';
 import { DataBaseModule } from '@database';
-import { GameModule, UserModule } from '@application';
+import { EventModule, GameModule, UserModule } from '@application';
 
 @Module({
   imports: [
@@ -34,6 +34,7 @@ import { GameModule, UserModule } from '@application';
     SseModule,
     UserModule,
     GameModule,
+    EventModule,
   ],
   controllers: [],
   providers: [

@@ -36,7 +36,7 @@ export class UserUrlRepository implements IUserUrlRepository {
 
   async update(dto: UpdateUserUrlDto, manager: EntityManager) {
     const result = await manager.update(UserUrlEntity, dto.urlId, {
-      status: false,
+      status: dto.status,
     });
 
     if (!result.affected) {

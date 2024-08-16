@@ -1,6 +1,6 @@
 import { User } from './user';
 
-export class UserUrl {
+export class Url {
   constructor(
     private readonly id: number,
     private readonly url: string,

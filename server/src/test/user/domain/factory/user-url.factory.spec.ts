@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserUrl, UserUrlFactory } from '@domain';
+import { Url, UserUrlFactory } from '@domain';
 import {
   ReconstituteFactoryDto,
   ReconstituteWithUserFactoryDto,
@@ -26,7 +26,7 @@ describe('UserUrlFactory', () => {
 
       const userUrl = factory.reconstitute(dto);
 
-      expect(userUrl).toBeInstanceOf(UserUrl);
+      expect(userUrl).toBeInstanceOf(Url);
       expect(userUrl.getId()).toBe(dto.id);
       expect(userUrl.getUrl()).toBe(dto.url);
       expect(userUrl.getStatus()).toBe(dto.status);
@@ -48,7 +48,7 @@ describe('UserUrlFactory', () => {
 
       const userUrl = factory.reconstituteWithUser(dto);
 
-      expect(userUrl).toBeInstanceOf(UserUrl);
+      expect(userUrl).toBeInstanceOf(Url);
       expect(userUrl.getId()).toBe(dto.id);
       expect(userUrl.getUrl()).toBe(dto.url);
       expect(userUrl.getStatus()).toBe(dto.status);

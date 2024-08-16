@@ -106,12 +106,34 @@ export class UrlReadRepository {
     return true;
   }
 
-  async delete(urlId: number, manager: EntityManager): Promise<void> {
+  async delete(urlId: number, manager: EntityManager) {
     await manager
       .createQueryBuilder()
       .delete()
       .from(UrlReadEntity, 'url')
       .where("url.data->>'urlId' = :urlId", { urlId })
       .execute(); // execute를 사용해 실제 삭제 작업 실행
+  }
+
+  async deleteUserId(urlId: number, userId: number, manager: EntityManager) {
+    const result = await manager
+      .createQueryBuilder()
+      .update(UrlReadEntity)
+      .set({
+        data: () => `
+          jsonb_set(
+            data,
+            '{userIdList}',
+            (data->'userIdList') - '${userId}',
+            true
+          )
+        `,
+      })
+      .where("data->>'urlId' = :urlId", { urlId })
+      .execute();
+
+    if (!result.affected) {
+      throw new Error('userId 삭제 과정에서 오류가 발생하였습니다.');
+    }
   }
 }
