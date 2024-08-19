@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserCommand, CreateUserHandler } from '@application';
 import { IUserRepository } from '@domain';
-import { IUserUrlService, UserResponseDto } from '@interface';
+import { IUrlService, UserResponseDto } from '@interface';
 import { USER_REPOSITORY_TOKEN, USER_URL_SERVICE_TOKEN } from '@infrastructure';
 
 describe('CreateUserHandler', () => {
   let handler: CreateUserHandler;
   let userRepository: IUserRepository;
-  let urlService: IUserUrlService;
+  let urlService: IUrlService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -30,7 +30,7 @@ describe('CreateUserHandler', () => {
 
     handler = module.get<CreateUserHandler>(CreateUserHandler);
     userRepository = module.get<IUserRepository>(USER_REPOSITORY_TOKEN);
-    urlService = module.get<IUserUrlService>(USER_URL_SERVICE_TOKEN);
+    urlService = module.get<IUrlService>(USER_URL_SERVICE_TOKEN);
   });
 
   describe('execute', () => {

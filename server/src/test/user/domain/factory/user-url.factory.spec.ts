@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Url, UserUrlFactory } from '@domain';
+import { Url, UrlFactory } from '@domain';
 import {
   ReconstituteFactoryDto,
   ReconstituteWithUserFactoryDto,
 } from '@interface';
 
-describe('UserUrlFactory', () => {
-  let factory: UserUrlFactory;
+describe('UrlFactory', () => {
+  let factory: UrlFactory;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserUrlFactory],
+      providers: [UrlFactory],
     }).compile();
 
-    factory = module.get<UserUrlFactory>(UserUrlFactory);
+    factory = module.get<UrlFactory>(UrlFactory);
   });
 
   describe('reconstitute', () => {

@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GetUsersInRoomQuery, GetUsersInRoomQueryHandler } from '@application';
-import { IUserUrlRepository, User } from '@domain';
+import { IUrlRepository, User } from '@domain';
 import { USER_URL_REPOSITORY_TOKEN } from '@infrastructure';
 
 describe('GetUsersInRoomQueryHandler', () => {
   let handler: GetUsersInRoomQueryHandler;
-  let userUrlRepository: IUserUrlRepository;
+  let userUrlRepository: IUrlRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,9 +23,7 @@ describe('GetUsersInRoomQueryHandler', () => {
     handler = module.get<GetUsersInRoomQueryHandler>(
       GetUsersInRoomQueryHandler,
     );
-    userUrlRepository = module.get<IUserUrlRepository>(
-      USER_URL_REPOSITORY_TOKEN,
-    );
+    userUrlRepository = module.get<IUrlRepository>(USER_URL_REPOSITORY_TOKEN);
   });
 
   describe('execute', () => {

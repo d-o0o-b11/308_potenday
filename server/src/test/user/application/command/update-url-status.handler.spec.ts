@@ -4,7 +4,7 @@ import {
   UpdateStatusFalseHandler,
   UserUrlEventPublisher,
 } from '@application';
-import { IUserUrlService } from '@interface';
+import { IUrlService } from '@interface';
 import {
   USER_URL_EVENT_PUBLISHER,
   USER_URL_SERVICE_TOKEN,
@@ -12,7 +12,7 @@ import {
 
 describe('UpdateStatusFalseHandler', () => {
   let handler: UpdateStatusFalseHandler;
-  let userUrlService: IUserUrlService;
+  let userUrlService: IUrlService;
   let userUrlEventPublisher: UserUrlEventPublisher;
 
   beforeEach(async () => {
@@ -35,7 +35,7 @@ describe('UpdateStatusFalseHandler', () => {
     }).compile();
 
     handler = module.get<UpdateStatusFalseHandler>(UpdateStatusFalseHandler);
-    userUrlService = module.get<IUserUrlService>(USER_URL_SERVICE_TOKEN);
+    userUrlService = module.get<IUrlService>(USER_URL_SERVICE_TOKEN);
     userUrlEventPublisher = module.get<UserUrlEventPublisher>(
       USER_URL_EVENT_PUBLISHER,
     );

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EntityManager, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserUrlRepository } from '@infrastructure';
-import { UserFactory, UserUrlFactory } from '@domain';
+import { UserFactory, UrlFactory } from '@domain';
 import {
   CreateUserUrlDto,
   FindOneUserUrlDto,
@@ -16,7 +16,7 @@ describe('UserUrlRepository', () => {
   let repository: UserUrlRepository;
   let manager: EntityManager;
   let userUrlRepository: Repository<UserUrlEntity>;
-  let userUrlFactory: UserUrlFactory;
+  let urlFactory: UrlFactory;
   let userFactory: UserFactory;
 
   const mockManager = {
@@ -41,7 +41,7 @@ describe('UserUrlRepository', () => {
           },
         },
         {
-          provide: UserUrlFactory,
+          provide: UrlFactory,
           useValue: {
             reconstitute: jest.fn(),
             reconstituteWithUser: jest.fn(),
@@ -61,7 +61,7 @@ describe('UserUrlRepository', () => {
     userUrlRepository = module.get<Repository<UserUrlEntity>>(
       getRepositoryToken(UserUrlEntity),
     );
-    userUrlFactory = module.get(UserUrlFactory);
+    urlFactory = module.get(UrlFactory);
     userFactory = module.get(UserFactory);
   });
 

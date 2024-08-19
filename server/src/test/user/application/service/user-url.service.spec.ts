@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserUrlService } from '@application';
-import { IUserUrlRepository } from '@domain';
+import { IUrlRepository } from '@domain';
 import { USER_URL_REPOSITORY_TOKEN } from '@infrastructure';
 import * as crypto from 'crypto';
 import { FindOneUserUrlDto } from '@interface';
@@ -13,7 +13,7 @@ import {
 
 describe('UserUrlService', () => {
   let service: UserUrlService;
-  let urlRepository: IUserUrlRepository;
+  let urlRepository: IUrlRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,7 +33,7 @@ describe('UserUrlService', () => {
     }).compile();
 
     service = module.get<UserUrlService>(UserUrlService);
-    urlRepository = module.get<IUserUrlRepository>(USER_URL_REPOSITORY_TOKEN);
+    urlRepository = module.get<IUrlRepository>(USER_URL_REPOSITORY_TOKEN);
   });
 
   describe('setUrl', () => {

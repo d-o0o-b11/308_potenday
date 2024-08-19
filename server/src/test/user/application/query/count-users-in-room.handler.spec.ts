@@ -3,12 +3,12 @@ import {
   CountUsersInRoomQuery,
   CountUsersInRoomQueryHandler,
 } from '@application';
-import { IUserUrlService, CountUsersInRoomResponseDto } from '@interface';
+import { IUrlService, CountUsersInRoomResponseDto } from '@interface';
 import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
 
 describe('CountUsersInRoomQueryHandler', () => {
   let handler: CountUsersInRoomQueryHandler;
-  let urlService: IUserUrlService;
+  let urlService: IUrlService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,7 +26,7 @@ describe('CountUsersInRoomQueryHandler', () => {
     handler = module.get<CountUsersInRoomQueryHandler>(
       CountUsersInRoomQueryHandler,
     );
-    urlService = module.get<IUserUrlService>(USER_URL_SERVICE_TOKEN);
+    urlService = module.get<IUrlService>(USER_URL_SERVICE_TOKEN);
   });
 
   describe('execute', () => {

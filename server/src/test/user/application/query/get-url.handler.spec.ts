@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GetUrlQueryHandler } from '@application';
-import { IUserUrlService, SetUrlResponseDto } from '@interface';
+import { IUrlService, SetUrlResponseDto } from '@interface';
 import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
 
 describe('GetUrlQueryHandler', () => {
   let handler: GetUrlQueryHandler;
-  let urlService: IUserUrlService;
+  let urlService: IUrlService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,7 +21,7 @@ describe('GetUrlQueryHandler', () => {
     }).compile();
 
     handler = module.get<GetUrlQueryHandler>(GetUrlQueryHandler);
-    urlService = module.get<IUserUrlService>(USER_URL_SERVICE_TOKEN);
+    urlService = module.get<IUrlService>(USER_URL_SERVICE_TOKEN);
   });
 
   it('생성한 url 데이터를 반환해야 합니다.', async () => {
