@@ -40,7 +40,7 @@ export class UrlRead {
     return this.deletedAt;
   }
 
-  getUserIdList(): Readonly<number[]> {
+  getUserIdList(): number[] {
     return this.userIdList;
   }
 }

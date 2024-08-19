@@ -1,3 +1,4 @@
+import { AdjectiveExpressionRead } from '@domain';
 import { IsArray, IsNumber } from 'class-validator';
 
 export class CreateUserAdjectiveExpressionDto {
@@ -20,23 +21,22 @@ export class CreateUserAdjectiveExpressionDto {
    * @example [1,3,11]
    */
   @IsArray()
-  expressionIds: number[];
+  expressionIdList: number[];
 }
 
 export class SaveUserAdjectiveExpressionDto {
-  /**
-   * USER ID
-   * @example 12
-   */
-  @IsNumber()
-  userId: number;
+  constructor(
+    public readonly userId: number,
+    public readonly expressionIdList: number[],
+  ) {}
+}
 
-  /**
-   * 형용사 ID
-   * @example [1,3,11]
-   */
-  @IsArray()
-  expressionIds: number[];
+export class CreateUserAdjectiveExpressionReadDto {
+  constructor(
+    public readonly userId: number,
+    public readonly expressionIdList: number[],
+    public readonly createdAt: Date,
+  ) {}
 }
 
 export class FindUserAdjectiveExpressionDto {
@@ -46,4 +46,14 @@ export class FindUserAdjectiveExpressionDto {
    */
   @IsNumber()
   urlId: number;
+}
+
+export class FindUserAdjectiveExpressionReadDto {
+  constructor(
+    public readonly userId: number,
+    public readonly imgId: number,
+    public readonly nickname: string,
+    public readonly urlId: number,
+    public readonly adjectiveExpression?: AdjectiveExpressionRead,
+  ) {}
 }

@@ -1,5 +1,5 @@
 import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
-import { AdjectiveExpression } from '@domain';
+import { AdjectiveExpression, UserAdjectiveExpression } from '@domain';
 import { Type } from 'class-transformer';
 
 export class GroupByUserAdjectiveExpressionDto {
@@ -30,10 +30,11 @@ export class GroupByUserAdjectiveExpressionDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => AdjectiveExpression)
-  adjectiveExpressions: AdjectiveExpression[];
+  adjectiveExpressionList: AdjectiveExpression[];
 }
 
 export class UserAdjectiveExpressionSubmitCountDto {
+  saveResult: UserAdjectiveExpression[];
   /**
    * 형용사 표현 제출한 유저 수
    * @example 2

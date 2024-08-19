@@ -47,7 +47,7 @@ export class AdjectiveExpressionController {
       new CreateUserAdjectiveExpressionCommand(
         dto.urlId,
         dto.userId,
-        dto.expressionIds,
+        dto.expressionIdList,
       ),
     );
   }

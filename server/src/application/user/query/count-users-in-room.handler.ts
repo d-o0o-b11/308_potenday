@@ -5,7 +5,7 @@ import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
 import {
   CountUsersInRoomResponseDto,
   FindOneUserUrlDto,
-  IUserUrlService,
+  IUrlService,
 } from '@interface';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class CountUsersInRoomQueryHandler
 {
   constructor(
     @Inject(USER_URL_SERVICE_TOKEN)
-    private urlService: IUserUrlService,
+    private urlService: IUrlService,
   ) {}
 
   async execute(

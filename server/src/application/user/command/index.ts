@@ -10,3 +10,5 @@ export * from './create-url-read.command';
 export * from './create-url-read.handler';
 export * from './update-url-read-status.command';
 export * from './create-user-read.command';
+export * from './create-user-read.handler';
+export * from './update-url-read-status.handler';

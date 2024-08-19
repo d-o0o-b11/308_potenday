@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { CreateUserReadDto } from '@interface';
-import { UserFactory } from '@domain';
+import { IUserReadRepository, UserFactory } from '@domain';
 import { UserMapper } from '../mapper';
 import { UserReadEntity } from '../entity/read/user-read.entity';
 
 @Injectable()
-export class UserReadRepository {
-  constructor(private userFactory: UserFactory) {}
+export class UserReadRepository implements IUserReadRepository {
+  constructor(private readonly userFactory: UserFactory) {}
 
-  create(dto: CreateUserReadDto, manager: EntityManager) {
+  async create(dto: CreateUserReadDto, manager: EntityManager) {
     const userRead = this.userFactory.reconstituteRead(dto);
     const userReadEntity = UserMapper.toEntityRead(userRead);
 
-    manager.save(userReadEntity);
+    await manager.save(userReadEntity);
   }
 
   async findList(userIdList: number[], manager: EntityManager) {
@@ -46,12 +46,18 @@ export class UserReadRepository {
     return findResult;
   }
 
-  async delete(id: number, manager: EntityManager): Promise<void> {
-    await manager
+  async delete(id: number, manager: EntityManager) {
+    const result = await manager
       .createQueryBuilder()
       .delete()
       .from(UserReadEntity, 'user')
       .where("user.data->>'userId' = :userId", { userId: id })
       .execute();
+
+    if (!result.affected) {
+      throw new Error('user 삭제 과정에서 에러 발생');
+    }
+
+    return result;
   }
 }

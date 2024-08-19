@@ -5,6 +5,7 @@ import { CreateUserEvent } from '../user-create.event';
 import {
   CreateFactoryUserDto,
   CreateUserReadDto,
+  FindUserAdjectiveExpressionReadDto,
   ReconstituteArrayUserFactoryDto,
 } from '@interface';
 import { UserRead } from '../user-read';
@@ -48,7 +49,22 @@ export class UserFactory {
       dto.deletedAt,
       dto.balance,
       dto.mbti,
-      dto.adjectiveExpressionList,
+      dto.adjectiveExpression,
+    );
+  }
+
+  reconstituteAdjectiveExpressionRead(dto: FindUserAdjectiveExpressionReadDto) {
+    return new UserRead(
+      dto.userId,
+      dto.imgId,
+      dto.nickname,
+      dto.urlId,
+      new Date(Date.now()),
+      new Date(Date.now()),
+      null,
+      undefined,
+      undefined,
+      dto.adjectiveExpression,
     );
   }
 }

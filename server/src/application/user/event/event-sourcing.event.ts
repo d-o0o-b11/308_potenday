@@ -1,7 +1,4 @@
-export interface BaseEvent {
-  eventType: string;
-  eventMethod: string;
-}
+import { BaseEvent } from '@interface';
 
 export class CreateUrlEvent {
   constructor(

@@ -1,4 +1,4 @@
-import { AdjectiveExpressionList, Balance, Mbti } from '@domain';
+import { AdjectiveExpressionRead, Balance, Mbti } from '@domain';
 import { IsDate, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
@@ -59,8 +59,6 @@ export class ReconstituteArrayUserFactoryDto extends CreateUserDto {
   id: number;
 }
 
-//--
-
 export class CreateUserReadDto {
   constructor(
     public readonly userId: number,
@@ -72,6 +70,6 @@ export class CreateUserReadDto {
     public readonly deletedAt: Date | null,
     public readonly balance?: Balance[],
     public readonly mbti?: Mbti[],
-    public readonly adjectiveExpressionList?: AdjectiveExpressionList,
+    public readonly adjectiveExpression?: AdjectiveExpressionRead,
   ) {}
 }

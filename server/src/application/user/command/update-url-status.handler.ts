@@ -3,7 +3,7 @@ import { UpdateStatusFalseCommand } from './update-url-status.command';
 import { Inject } from '@nestjs/common';
 import { UpdateUrlStatusEvent } from '../event';
 import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
-import { IUserUrlService } from '@interface';
+import { IUrlService } from '@interface';
 import { StatusUpdatedEvent } from '@domain';
 
 @CommandHandler(UpdateStatusFalseCommand)
@@ -12,7 +12,7 @@ export class UpdateStatusFalseHandler
 {
   constructor(
     @Inject(USER_URL_SERVICE_TOKEN)
-    private userUrlService: IUserUrlService,
+    private userUrlService: IUrlService,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -21,15 +21,7 @@ export class UpdateStatusFalseHandler
 
     await this.userUrlService.updateStatusFalse(urlId);
 
-    this.eventBus.publish(
-      new UpdateUrlStatusEvent(
-        // 'UpdateStatusFalseCommand',
-        // 'update',
-        urlId,
-        false,
-      ),
-    );
-
+    this.eventBus.publish(new UpdateUrlStatusEvent(urlId, false));
     this.eventBus.publish(new StatusUpdatedEvent(urlId, true));
   }
 }

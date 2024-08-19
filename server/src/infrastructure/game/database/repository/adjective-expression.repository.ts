@@ -1,36 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
+import { UserAdjectiveExpressionMapper } from '../mapper';
 import {
   AdjectiveExpressionFactory,
   IAdjectiveExpressionRepository,
 } from '@domain';
-import { AdjectiveExpressionEntity } from '../entity/cud/adjective-expression.entity';
+import { SaveUserAdjectiveExpressionDto } from '@interface';
+import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
 
 @Injectable()
 export class AdjectiveExpressionRepository
   implements IAdjectiveExpressionRepository
 {
   constructor(
-    @InjectRepository(AdjectiveExpressionEntity)
-    private adjectiveExpressionRepository: Repository<AdjectiveExpressionEntity>,
+    private manager: EntityManager,
     private adjectiveExpressionFactory: AdjectiveExpressionFactory,
   ) {}
 
-  async find() {
-    const findResult = await this.adjectiveExpressionRepository.find({
-      order: {
-        id: 'ASC',
-      },
+  async create(dto: SaveUserAdjectiveExpressionDto) {
+    return await this.manager.transaction(async (manager) => {
+      const entitiesToSave = UserAdjectiveExpressionMapper.toEntities(
+        dto.userId,
+        dto.expressionIdList,
+      );
+      const result = await manager.save(
+        UserAdjectiveExpressionEntity,
+        entitiesToSave,
+      );
+
+      const transformedResult = result.map((result) =>
+        this.adjectiveExpressionFactory.reconstituteUserArray(
+          result.id,
+          result.userId,
+          result.adjectiveExpressionId,
+          result.createdAt,
+        ),
+      );
+
+      return transformedResult;
+    });
+  }
+
+  async delete(userId: number, manager: EntityManager) {
+    const result = await manager.delete(UserAdjectiveExpressionEntity, {
+      userId,
     });
 
-    const result = findResult.map((adjective) =>
-      this.adjectiveExpressionFactory.reconstituteArray(
-        adjective.id,
-        adjective.adjective,
-      ),
-    );
-
-    return result;
+    if (!result.affected) {
+      throw new Error('형용사 표현 삭제과정에서 오류가 발생하였습니다.');
+    }
   }
 }

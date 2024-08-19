@@ -1,8 +1,9 @@
 import {
-  UrlReadRepository,
+  URL_READ_REPOSITORY_TOKEN,
   USER_REPOSITORY_TOKEN,
-  USER_URL_REPOSITORY_TOKEN,
-  UserReadRepository,
+  URL_REPOSITORY_TOKEN,
+  USER_READ_REPOSITORY_TOKEN,
+  EVENT_REPOSITORY_TOKEN,
 } from '@infrastructure';
 import {
   DeleteUpdateUrlStatusEvent,
@@ -10,12 +11,21 @@ import {
   DeleteUserEvent,
 } from './event-sourcing.event';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { EventStore } from './event.store';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { Inject } from '@nestjs/common';
-import { IUserRepository, IUserUrlRepository } from '@domain';
-import { UpdateUserUrlDto, UpdateUserUrlStatusDto } from '@interface';
+import {
+  IUrlReadRepository,
+  IUserRepository,
+  IUrlRepository,
+  IUserReadRepository,
+  IEventRepository,
+} from '@domain';
+import {
+  DeleteUserIdDto,
+  UpdateUserUrlDto,
+  UpdateUserUrlStatusDto,
+} from '@interface';
 
 @EventsHandler(DeleteUrlEvent, DeleteUpdateUrlStatusEvent, DeleteUserEvent)
 export class EventRollbackHandler
@@ -25,14 +35,18 @@ export class EventRollbackHandler
     >
 {
   constructor(
-    private readonly eventStore: EventStore,
+    @Inject(URL_REPOSITORY_TOKEN)
+    private urlRepository: IUrlRepository,
+    @Inject(URL_READ_REPOSITORY_TOKEN)
+    private readonly urlReadRepository: IUrlReadRepository,
+    @Inject(USER_READ_REPOSITORY_TOKEN)
+    private readonly userReadRepository: IUserReadRepository,
+    @Inject(USER_REPOSITORY_TOKEN) private userRepository: IUserRepository,
+    @Inject(EVENT_REPOSITORY_TOKEN)
+    private readonly eventRepository: IEventRepository,
+
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
-    @Inject(USER_URL_REPOSITORY_TOKEN)
-    private urlRepository: IUserUrlRepository,
-    private readonly urlReadRepository: UrlReadRepository,
-    private readonly userReadRepository: UserReadRepository,
-    @Inject(USER_REPOSITORY_TOKEN) private userRepository: IUserRepository,
   ) {}
 
   async handle(
@@ -57,7 +71,7 @@ export class EventRollbackHandler
 
   private async handleDeleteUrlEvent(event: DeleteUrlEvent) {
     try {
-      await this.eventStore.saveEvent(event, this.manager);
+      await this.eventRepository.create(event, this.manager);
       await this.urlRepository.delete(event.urlId, this.manager);
       await this.urlReadRepository.delete(event.urlId, this.readManager);
     } catch (error) {
@@ -70,9 +84,10 @@ export class EventRollbackHandler
     event: DeleteUpdateUrlStatusEvent,
   ) {
     try {
-      await this.eventStore.saveEvent(event, this.manager);
+      await this.eventRepository.create(event, this.manager);
       await this.urlRepository.update(
-        new UpdateUserUrlDto(event.urlId, true),
+        event.urlId,
+        new UpdateUserUrlDto(true),
         this.manager,
       );
       await this.urlReadRepository.updateStatus(
@@ -88,12 +103,12 @@ export class EventRollbackHandler
 
   private async handleDeleteUserEvent(event: DeleteUserEvent) {
     try {
-      await this.eventStore.saveEvent(event, this.manager);
+      await this.eventRepository.create(event, this.manager);
       await this.userRepository.delete(event.userId, this.manager);
       await this.userReadRepository.delete(event.userId, this.readManager);
       await this.urlReadRepository.deleteUserId(
         event.urlId,
-        event.userId,
+        new DeleteUserIdDto(event.userId),
         this.readManager,
       );
     } catch (error) {

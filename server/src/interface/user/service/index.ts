@@ -1,1 +1,1 @@
-export * from './user-url.interface';
+export * from './url.interface';

@@ -1,26 +1,34 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUrlReadCommand } from './create-url-read.command';
-import { UrlReadRepository } from '@infrastructure';
+import {
+  EVENT_REPOSITORY_TOKEN,
+  URL_READ_REPOSITORY_TOKEN,
+} from '@infrastructure';
 import { CreateUserUrlReadDto } from '@interface';
-import { CreateUrlReadEvent, DeleteUrlEvent, EventStore } from '../event';
+import { CreateUrlReadEvent, DeleteUrlEvent } from '../event';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
+import { Inject } from '@nestjs/common';
+import { IEventRepository, IUrlReadRepository } from '@domain';
 
 @CommandHandler(CreateUrlReadCommand)
 export class CreateUrlReadCommandHandler
   implements ICommandHandler<CreateUrlReadCommand>
 {
   constructor(
-    private readonly urlReadRepository: UrlReadRepository,
-    private readonly eventStore: EventStore,
+    @Inject(URL_READ_REPOSITORY_TOKEN)
+    private readonly urlReadRepository: IUrlReadRepository,
+    @Inject(EVENT_REPOSITORY_TOKEN)
+    private readonly eventRepository: IEventRepository,
     private readonly eventBus: EventBus,
+
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
   ) {}
 
   async execute(command: CreateUrlReadCommand) {
     try {
-      await this.eventStore.saveEvent(
+      await this.eventRepository.create(
         new CreateUrlReadEvent(
           'CreateUrlReadCommand',
           'save',

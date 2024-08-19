@@ -30,6 +30,11 @@ export class CountUsersInRoomResponseDto {
    */
   userInfo: UserRead[];
 }
+export class CountUsersInRoomDto {
+  userCount: number;
+  userInfo: UserRead[];
+  status: boolean;
+}
 
 export class GetUrlStatusResponseDto {
   /**

@@ -1,17 +1,18 @@
 import { Module } from '@nestjs/common';
-import { UserFactory, UserUrlFactory } from '@domain';
+import { UserFactory, UrlFactory } from '@domain';
 import { UserController, UserUrlController } from '@interface';
 import { CqrsModule } from '@nestjs/cqrs';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {
+  URL_READ_REPOSITORY_TOKEN,
   UrlReadRepository,
   USER_REPOSITORY_TOKEN,
   USER_URL_EVENT_PUBLISHER,
-  USER_URL_REPOSITORY_TOKEN,
+  URL_REPOSITORY_TOKEN,
   USER_URL_SERVICE_TOKEN,
   UserReadRepository,
   UserRepository,
   UserUrlRepository,
+  USER_READ_REPOSITORY_TOKEN,
 } from '@infrastructure';
 import {
   EventRollbackHandler,
@@ -25,6 +26,8 @@ import {
   CreateUrlCommandHandler,
   NextStepHandler,
   UpdateStatusFalseHandler,
+  CreateUserReadCommandHandler,
+  UpdateUrlReadStatusCommandHandler,
 } from '../command';
 import {
   CountUsersInRoomQueryHandler,
@@ -32,19 +35,11 @@ import {
   GetUsersInRoomQueryHandler,
 } from '../query';
 import { UserUrlService } from '../service';
-import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
-import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
-import { UrlReadEntity } from '@infrastructure/user/database/entity/read/url-read.entity';
-import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
-import { EventStore } from '../event/event.store';
-import { UrlSaga } from '../saga';
+import { UrlSaga, UserSaga } from '../saga';
+import { EventModule } from '../../event';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserEntity, UserUrlEntity]),
-    TypeOrmModule.forFeature([UrlReadEntity, UserReadEntity], 'read'),
-    CqrsModule,
-  ],
+  imports: [CqrsModule, EventModule],
   controllers: [UserController, UserUrlController],
   providers: [
     UserEventHandler,
@@ -57,18 +52,25 @@ import { UrlSaga } from '../saga';
     EventSourcingHandler,
     NextStepHandler,
     UrlSaga,
+    UserSaga,
     EventRollbackHandler,
+    CreateUserReadCommandHandler,
+    UpdateUrlReadStatusCommandHandler,
+    CreateUrlReadCommandHandler,
     UserFactory,
-    UserUrlFactory,
+    UrlFactory,
     { provide: USER_REPOSITORY_TOKEN, useClass: UserRepository },
-    { provide: USER_URL_REPOSITORY_TOKEN, useClass: UserUrlRepository },
+    { provide: URL_REPOSITORY_TOKEN, useClass: UserUrlRepository },
     { provide: USER_URL_SERVICE_TOKEN, useClass: UserUrlService },
     { provide: USER_URL_EVENT_PUBLISHER, useClass: UserUrlEventPublisher },
-    UrlReadRepository,
-    UserReadRepository,
-    //수정 필요
-    EventStore,
-    CreateUrlReadCommandHandler,
+    {
+      provide: URL_READ_REPOSITORY_TOKEN,
+      useClass: UrlReadRepository,
+    },
+    {
+      provide: USER_READ_REPOSITORY_TOKEN,
+      useClass: UserReadRepository,
+    },
   ],
 })
 export class UserModule {}

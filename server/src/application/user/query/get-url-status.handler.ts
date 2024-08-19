@@ -1,16 +1,18 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { GetUrlStatusQuery } from './get-url-status.query';
-import { UrlReadRepository } from '@infrastructure';
+import { URL_READ_REPOSITORY_TOKEN } from '@infrastructure';
 import { FindOneByUrlIdDto, GetUrlStatusResponseDto } from '@interface';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
+import { IUrlReadRepository } from '@domain';
 
 @Injectable()
 @QueryHandler(GetUrlStatusQuery)
 export class GetUrlStatusHandler implements IQueryHandler<GetUrlStatusQuery> {
   constructor(
-    private urlReadRepository: UrlReadRepository,
+    @Inject(URL_READ_REPOSITORY_TOKEN)
+    private readonly urlReadRepository: IUrlReadRepository,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
   ) {}
 

@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { UserUrlFactory } from '@domain';
+import { IUrlReadRepository, UrlFactory } from '@domain';
 import {
   CreateUserUrlReadDto,
+  DeleteUserIdDto,
   FindOneByUrlIdDto,
   FindOneUserWithUrlDto,
   ReconstituteFindFactoryDto,
+  UpdateUserIdDto,
   UpdateUserUrlStatusDto,
 } from '@interface';
 import { UrlReadEntity } from '../entity/read/url-read.entity';
 import { UserUrlMapper } from '../mapper';
 
 @Injectable()
-export class UrlReadRepository {
-  constructor(private userUrlFactory: UserUrlFactory) {}
+export class UrlReadRepository implements IUrlReadRepository {
+  constructor(private readonly urlFactory: UrlFactory) {}
 
   async create(dto: CreateUserUrlReadDto, manager: EntityManager) {
-    const urlRead = this.userUrlFactory.reconstituteRead(dto);
+    const urlRead = this.urlFactory.reconstituteRead(dto);
     const urlReadEntity = UserUrlMapper.toEntityRead(urlRead);
 
     await manager.save(urlReadEntity);
@@ -40,24 +42,21 @@ export class UrlReadRepository {
     if (!result.affected) {
       throw new Error('url 상태 변경 실패');
     }
+
+    return result;
   }
 
-  async updateUserList(urlId: number, userId: number, manager: EntityManager) {
-    // const result = await manager
-    //   .createQueryBuilder()
-    //   .update(UrlReadEntity)
-    //   .set({
-    //     data: () =>
-    //       `jsonb_set(data, '{userIdList}', '${userId}'::jsonb, false)`,
-    //   })
-    //   .where("data->>'urlId' = :urlId", { urlId })
-    //   .execute();
+  async updateUserList(
+    urlId: number,
+    dto: UpdateUserIdDto,
+    manager: EntityManager,
+  ) {
     const result = await manager
       .createQueryBuilder()
       .update(UrlReadEntity)
       .set({
         data: () =>
-          `jsonb_set(data, '{userIdList}', (CASE WHEN data->'userIdList' IS NULL THEN '[]' ELSE data->'userIdList' END) || '[${userId}]', true)`,
+          `jsonb_set(data, '{userIdList}', (CASE WHEN data->'userIdList' IS NULL THEN '[]' ELSE data->'userIdList' END) || '[${dto.userId}]', true)`,
       })
       .where("data->>'urlId' = :urlId", { urlId })
       .execute();
@@ -65,6 +64,8 @@ export class UrlReadRepository {
     if (!result.affected) {
       throw new Error('url 상태 변경 실패');
     }
+
+    return result;
   }
 
   /**
@@ -83,7 +84,7 @@ export class UrlReadRepository {
 
     if (!result) return null;
 
-    return this.userUrlFactory.reconstituteFind(
+    return this.urlFactory.reconstituteFind(
       new ReconstituteFindFactoryDto(
         result.data.urlId,
         result.data.url,
@@ -101,21 +102,29 @@ export class UrlReadRepository {
       .where("url.data->>'url' = :url", { url: dto.url })
       .getRawOne();
 
-    if (!result) return null;
-
-    return true;
+    return !!result;
   }
 
   async delete(urlId: number, manager: EntityManager) {
-    await manager
+    const result = await manager
       .createQueryBuilder()
       .delete()
       .from(UrlReadEntity, 'url')
       .where("url.data->>'urlId' = :urlId", { urlId })
       .execute(); // execute를 사용해 실제 삭제 작업 실행
+
+    if (!result.affected) {
+      throw new Error('url 삭제 실패');
+    }
+
+    return result;
   }
 
-  async deleteUserId(urlId: number, userId: number, manager: EntityManager) {
+  async deleteUserId(
+    urlId: number,
+    dto: DeleteUserIdDto,
+    manager: EntityManager,
+  ) {
     const result = await manager
       .createQueryBuilder()
       .update(UrlReadEntity)
@@ -124,7 +133,7 @@ export class UrlReadRepository {
           jsonb_set(
             data,
             '{userIdList}',
-            (data->'userIdList') - '${userId}',
+            (data->'userIdList') - '${dto.userId}',
             true
           )
         `,
@@ -135,5 +144,7 @@ export class UrlReadRepository {
     if (!result.affected) {
       throw new Error('userId 삭제 과정에서 오류가 발생하였습니다.');
     }
+
+    return result;
   }
 }

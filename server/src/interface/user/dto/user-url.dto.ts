@@ -14,10 +14,7 @@ export class CreateUserUrlDto {
 }
 
 export class UpdateUserUrlDto {
-  constructor(
-    public readonly urlId: number,
-    public readonly status: boolean,
-  ) {}
+  constructor(public readonly status: boolean) {}
 }
 
 export class FindOneUserUrlDto {
@@ -29,12 +26,7 @@ export class FindOneUserWithUrlDto {
 }
 
 export class FindOneUserUrlWithUserDto {
-  /**
-   * URL
-   * @example 11
-   */
-  @IsNumber()
-  readonly urlId: number;
+  constructor(public readonly urlId: number) {}
 }
 
 export class UpdateUserUrlFactoryDto {
@@ -123,4 +115,12 @@ export class UpdateUserUrlStatusDto {
 
 export class FindOneByUrlIdDto {
   constructor(public readonly urlId: number) {}
+}
+
+export class UpdateUserIdDto {
+  constructor(public readonly userId: number) {}
+}
+
+export class DeleteUserIdDto {
+  constructor(public readonly userId: number) {}
 }

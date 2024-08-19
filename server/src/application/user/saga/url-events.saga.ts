@@ -13,16 +13,17 @@ export class UrlSaga {
   ): Observable<ICommand> => {
     return events$.pipe(
       ofType(CreateUrlEvent),
-      map((event: CreateUrlEvent) => {
-        return new CreateUrlReadCommand(
-          event.urlId,
-          event.url,
-          event.status,
-          event.createdAt,
-          event.updatedAt,
-          event.deletedAt,
-        );
-      }),
+      map(
+        (event: CreateUrlEvent) =>
+          new CreateUrlReadCommand(
+            event.urlId,
+            event.url,
+            event.status,
+            event.createdAt,
+            event.updatedAt,
+            event.deletedAt,
+          ),
+      ),
     );
   };
 

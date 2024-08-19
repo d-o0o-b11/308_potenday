@@ -1,8 +1,18 @@
-import { AdjectiveExpression } from '../adjective-expression';
+import { CreateUserAdjectiveExpressionDto } from '@interface';
+import { UserAdjectiveExpression } from '../user-adjective-expression';
+import { EntityManager } from 'typeorm';
 
 export interface IAdjectiveExpressionRepository {
   /**
-   * 형용사 표현 리스트 출력
+   * 유저 형용사 표현 저장
    */
-  find: () => Promise<AdjectiveExpression[]>;
+  create: (
+    dto: CreateUserAdjectiveExpressionDto,
+  ) => Promise<UserAdjectiveExpression[]>;
+
+  /**
+   * 유저 형용사 표현 삭제
+   * @returns
+   */
+  delete: (userId: number, manager: EntityManager) => Promise<void>;
 }

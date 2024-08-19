@@ -1,31 +1,44 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { UrlReadRepository, UserReadRepository } from '@infrastructure';
-import { CreateUserReadDto } from '@interface';
+import {
+  EVENT_REPOSITORY_TOKEN,
+  URL_READ_REPOSITORY_TOKEN,
+  USER_READ_REPOSITORY_TOKEN,
+} from '@infrastructure';
+import { CreateUserReadDto, UpdateUserIdDto } from '@interface';
 import {
   CreateUserReadEvent,
   DeleteUserEvent,
 } from '../event/event-sourcing.event';
 import { CreateUserReadCommand } from './create-user-read.command';
-import { EventStore } from '../event';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
+import { Inject } from '@nestjs/common';
+import {
+  IEventRepository,
+  IUrlReadRepository,
+  IUserReadRepository,
+} from '@domain';
 
 @CommandHandler(CreateUserReadCommand)
 export class CreateUserReadCommandHandler
   implements ICommandHandler<CreateUserReadCommand>
 {
   constructor(
-    private readonly eventStore: EventStore,
-    private readonly userReadRepository: UserReadRepository,
-    private readonly urlReadRepository: UrlReadRepository,
+    @Inject(USER_READ_REPOSITORY_TOKEN)
+    private readonly userReadRepository: IUserReadRepository,
+    @Inject(URL_READ_REPOSITORY_TOKEN)
+    private readonly urlReadRepository: IUrlReadRepository,
+    @Inject(EVENT_REPOSITORY_TOKEN)
+    private readonly eventRepository: IEventRepository,
     private readonly eventBus: EventBus,
+
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
   ) {}
 
   async execute(command: CreateUserReadCommand) {
     try {
-      await this.eventStore.saveEvent(
+      await this.eventRepository.create(
         new CreateUserReadEvent(
           'CreateUserReadCommand',
           'save',
@@ -55,7 +68,7 @@ export class CreateUserReadCommandHandler
 
       await this.urlReadRepository.updateUserList(
         command.urlId,
-        command.userId,
+        new UpdateUserIdDto(command.userId),
         this.readManager,
       );
     } catch (error) {

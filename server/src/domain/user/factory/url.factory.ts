@@ -9,7 +9,7 @@ import {
 import { UrlRead } from '../url-read';
 
 @Injectable()
-export class UserUrlFactory {
+export class UrlFactory {
   reconstitute(dto: ReconstituteFactoryDto): Url {
     return new Url(
       dto.id,

@@ -1,36 +1,39 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
-import {
-  UrlAlreadyClickButtonException,
-  UrlNotFoundException,
-  UrlStatusFalseException,
-} from '@common';
+import { UrlAlreadyClickButtonException, UrlNotFoundException } from '@common';
 import {
   CreateUserUrlDto,
   FindOneByUrlIdDto,
   FindOneUserUrlDto,
   FindOneUserWithUrlDto,
-  IUserUrlService,
+  IUrlService,
   UpdateUserUrlDto,
 } from '@interface';
 import {
-  UrlReadRepository,
-  USER_URL_REPOSITORY_TOKEN,
-  UserReadRepository,
+  URL_READ_REPOSITORY_TOKEN,
+  URL_REPOSITORY_TOKEN,
+  USER_READ_REPOSITORY_TOKEN,
 } from '@infrastructure';
-import { IUserUrlRepository } from '@domain';
+import {
+  IUrlReadRepository,
+  IUrlRepository,
+  IUserReadRepository,
+} from '@domain';
 import { EntityManager } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
 
 @Injectable()
-export class UserUrlService implements IUserUrlService {
+export class UserUrlService implements IUrlService {
   constructor(
-    @Inject(USER_URL_REPOSITORY_TOKEN)
-    private urlRepository: IUserUrlRepository,
+    @Inject(URL_REPOSITORY_TOKEN)
+    private readonly urlRepository: IUrlRepository,
+    @Inject(URL_READ_REPOSITORY_TOKEN)
+    private readonly urlReadRepository: IUrlReadRepository,
+    @Inject(USER_READ_REPOSITORY_TOKEN)
+    private readonly userReadRepository: IUserReadRepository,
+
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
-    private urlReadRepository: UrlReadRepository,
-    private userReadRepository: UserReadRepository,
   ) {}
 
   async setUrl() {
@@ -63,22 +66,22 @@ export class UserUrlService implements IUserUrlService {
       throw new UrlNotFoundException();
     }
 
-    if (!findOneResult.getStatus()) {
-      throw new UrlStatusFalseException();
-    }
-
     if (!findOneResult.getUserIdList()) {
-      return { userCount: 0, userInfo: [] };
+      return { userCount: 0, userInfo: [], status: findOneResult.getStatus() };
     }
 
     const userList = await this.countUsersInRoom(
-      //@memo slice -> readonly 속성을 제거..다른 방법 생각하기
+      //@memo slice -> readonly 속성을 제거..다른 방법 생각하기 -> 여기서만 getUserIdList를 사용해서 readonly 제거하는 방안으로 갔다.
       //slice 메서드를 사용하면, 배열을 복사하여 읽기 전용 속성을 제거 가능
-      findOneResult.getUserIdList().slice(),
+      findOneResult.getUserIdList(),
       this.readManager,
     );
 
-    return { userCount: userList.userCount, userInfo: userList.userInfo };
+    return {
+      userCount: userList.userCount,
+      userInfo: userList.userInfo,
+      status: findOneResult.getStatus(),
+    };
   }
 
   async countUsersInRoom(userIdList: number[], manager: EntityManager) {
@@ -108,7 +111,8 @@ export class UserUrlService implements IUserUrlService {
 
     return await this.manager.transaction(async (manager) => {
       await this.urlRepository.update(
-        new UpdateUserUrlDto(findOneResult.getUrlId(), false),
+        findOneResult.getUrlId(),
+        new UpdateUserUrlDto(false),
         manager,
       );
     });

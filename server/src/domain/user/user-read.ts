@@ -16,11 +16,9 @@ export class Mbti {
   deletedAt: string | null;
 }
 
-export class AdjectiveExpressionList {
-  adjectiveExpressionId: number[];
+export class AdjectiveExpressionRead {
+  adjectiveExpressionIdList: number[];
   createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
 }
 
 export class UserRead {
@@ -34,7 +32,7 @@ export class UserRead {
     private readonly deletedAt: Date | null,
     private readonly balance?: Balance[],
     private readonly mbti?: Mbti[],
-    private readonly adjectiveExpressionList?: AdjectiveExpressionList,
+    private readonly adjectiveExpression?: AdjectiveExpressionRead,
   ) {}
 
   getUserId(): Readonly<number> {
@@ -73,7 +71,12 @@ export class UserRead {
     return this.mbti;
   }
 
-  getAdjectiveExpressions(): Readonly<AdjectiveExpressionList> {
-    return this.adjectiveExpressionList;
+  getAdjectiveExpressions(): Readonly<AdjectiveExpressionRead> {
+    return this.adjectiveExpression;
+  }
+
+  //형용사 표현이 존재하면 true, 존재하지 않으면 false
+  hasAdjectiveExpressionList(): boolean {
+    return !!this.adjectiveExpression;
   }
 }

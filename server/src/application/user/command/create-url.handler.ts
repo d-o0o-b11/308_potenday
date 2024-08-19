@@ -2,7 +2,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUrlCommand } from './create-url.command';
 import { Inject } from '@nestjs/common';
 import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
-import { IUserUrlService, SetUrlResponseDto } from '@interface';
+import { IUrlService, SetUrlResponseDto } from '@interface';
 import { CreateUrlEvent } from '../event/event-sourcing.event';
 
 /**
@@ -16,7 +16,7 @@ export class CreateUrlCommandHandler
 {
   constructor(
     @Inject(USER_URL_SERVICE_TOKEN)
-    private urlService: IUserUrlService,
+    private readonly urlService: IUrlService,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -25,8 +25,6 @@ export class CreateUrlCommandHandler
 
     this.eventBus.publish(
       new CreateUrlEvent(
-        // 'CreateUrlCommand',
-        // 'save',
         result.getId(),
         result.getUrl(),
         result.getStatus(),

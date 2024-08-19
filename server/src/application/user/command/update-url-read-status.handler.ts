@@ -1,22 +1,25 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUrlReadStatusCommand } from './update-url-read-status.command';
+import { DeleteUpdateUrlStatusEvent, UpdateUrlReadStatusEvent } from '../event';
 import {
-  DeleteUpdateUrlStatusEvent,
-  EventStore,
-  UpdateUrlReadStatusEvent,
-} from '../event';
-import { UrlReadRepository } from '@infrastructure';
+  EVENT_REPOSITORY_TOKEN,
+  URL_READ_REPOSITORY_TOKEN,
+} from '@infrastructure';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { UpdateUserUrlStatusDto } from '@interface';
+import { Inject } from '@nestjs/common';
+import { IEventRepository, IUrlReadRepository } from '@domain';
 
 @CommandHandler(UpdateUrlReadStatusCommand)
 export class UpdateUrlReadStatusCommandHandler
   implements ICommandHandler<UpdateUrlReadStatusCommand>
 {
   constructor(
-    private readonly eventStore: EventStore,
-    private readonly urlReadRepository: UrlReadRepository,
+    @Inject(EVENT_REPOSITORY_TOKEN)
+    private readonly eventRepository: IEventRepository,
+    @Inject(URL_READ_REPOSITORY_TOKEN)
+    private readonly urlReadRepository: IUrlReadRepository,
     private readonly eventBus: EventBus,
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
@@ -24,10 +27,10 @@ export class UpdateUrlReadStatusCommandHandler
 
   async execute(command: UpdateUrlReadStatusCommand) {
     try {
-      await this.eventStore.saveEvent(
+      await this.eventRepository.create(
         new UpdateUrlReadStatusEvent(
           'UpdateUrlReadStatusCommand',
-          'save',
+          'update',
           command.urlId,
           command.status,
         ),
@@ -43,7 +46,7 @@ export class UpdateUrlReadStatusCommandHandler
       this.eventBus.publish(
         new DeleteUpdateUrlStatusEvent(
           'DeleteUpdateUrlStatusEvent',
-          'delete',
+          'update',
           command.urlId,
           command.status,
         ),

@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { UserUrlMapper } from '../mapper';
-import { IUserUrlRepository, UserFactory, UserUrlFactory } from '@domain';
+import { IUrlRepository, UserFactory, UrlFactory } from '@domain';
 import {
   CreateUserUrlDto,
   FindOneUserUrlWithUserDto,
@@ -12,19 +11,17 @@ import { UserUrlEntity } from '../entity/cud/user-url.entity';
 import { UpdateException } from '@common';
 
 @Injectable()
-export class UserUrlRepository implements IUserUrlRepository {
+export class UserUrlRepository implements IUrlRepository {
   constructor(
-    @InjectRepository(UserUrlEntity)
-    private userUrlRepository: Repository<UserUrlEntity>,
-    private userUrlFactory: UserUrlFactory,
-    private userFactory: UserFactory,
+    private readonly urlFactory: UrlFactory,
+    private readonly userFactory: UserFactory,
   ) {}
 
   async save(dto: CreateUserUrlDto, manager: EntityManager) {
     const userUrlEntity = UserUrlMapper.toEntity(dto.url);
     const result = await manager.save(userUrlEntity);
 
-    return this.userUrlFactory.reconstitute({
+    return this.urlFactory.reconstitute({
       id: result.id,
       url: result.url,
       status: result.status,
@@ -34,19 +31,34 @@ export class UserUrlRepository implements IUserUrlRepository {
     });
   }
 
-  async update(dto: UpdateUserUrlDto, manager: EntityManager) {
-    const result = await manager.update(UserUrlEntity, dto.urlId, {
+  async update(urlId: number, dto: UpdateUserUrlDto, manager: EntityManager) {
+    const result = await manager.update(UserUrlEntity, urlId, {
       status: dto.status,
     });
 
     if (!result.affected) {
       throw new UpdateException();
     }
+
+    return result;
   }
 
-  //manager받도록 수정
-  async findOneWithUser(dto: FindOneUserUrlWithUserDto) {
-    const result = await this.userUrlRepository.findOneOrFail({
+  async delete(id: number, manager: EntityManager) {
+    const result = await manager.delete(UserUrlEntity, id);
+
+    if (!result.affected) {
+      throw new Error('url 삭제과정에서 에러 발생');
+    }
+
+    return result;
+  }
+
+  //mbti 컨트롤러 수정 시 제거해야함 -> find는 read DB로 가야함
+  async findOneWithUser(
+    dto: FindOneUserUrlWithUserDto,
+    manager: EntityManager,
+  ) {
+    const result = await manager.findOneOrFail(UserUrlEntity, {
       where: {
         id: dto.urlId,
       },
@@ -69,15 +81,11 @@ export class UserUrlRepository implements IUserUrlRepository {
       }),
     );
 
-    return this.userUrlFactory.reconstituteWithUser({
+    return this.urlFactory.reconstituteWithUser({
       id: result.id,
       url: result.url,
       status: result.status,
       users: users,
     });
-  }
-
-  delete(id: number, manager: EntityManager) {
-    return manager.delete(UserUrlEntity, id);
   }
 }
