@@ -8,3 +8,5 @@ export * from './create-user-balance.command';
 export * from './create-user-balance.handler';
 export * from './create-user-mbti.command';
 export * from './create-user-mbti.handler';
+export * from './create-user-adjective-expression-read.command';
+export * from './create-user-adjective-expression-read.handler';

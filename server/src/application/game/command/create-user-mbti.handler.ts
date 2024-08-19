@@ -1,7 +1,12 @@
-import { CommandHandler, ICommandHandler, QueryBus } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+  QueryBus,
+} from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { CreateUserMbtiCommand } from './create-user-mbti.command';
-import { GameNextFactory } from '@domain';
+import { GameNextEvent } from '@domain';
 import { USER_MBTI_SERVICE_TOKEN } from '@infrastructure';
 import { IUserMbtiService } from '@interface';
 import { CountUsersInRoomQuery } from '@application';
@@ -11,8 +16,8 @@ export class CreateUserMbtiCommandHandler
   implements ICommandHandler<CreateUserMbtiCommand>
 {
   constructor(
-    private queryBus: QueryBus,
-    private readonly gameNextFactory: GameNextFactory,
+    private readonly queryBus: QueryBus,
+    private readonly eventBus: EventBus,
     @Inject(USER_MBTI_SERVICE_TOKEN)
     private userMbtiService: IUserMbtiService,
   ) {}
@@ -32,7 +37,7 @@ export class CreateUserMbtiCommandHandler
     );
 
     if (submitCount === userCount) {
-      this.gameNextFactory.create(urlId);
+      this.eventBus.publish(new GameNextEvent(urlId));
     }
   }
 }

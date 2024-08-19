@@ -1,33 +1,39 @@
-import { CommandHandler, ICommandHandler, QueryBus } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+  QueryBus,
+} from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { CreateUserAdjectiveExpressionCommand } from './create-user-adjective-expression.command';
-import { USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN } from '@infrastructure';
-import { GameNextFactory } from '@domain';
-import { IUserAdjectiveExpressionService } from '@interface';
-import { CountUsersInRoomQuery } from '@application';
+import { ADJECTIVE_EXPRESSION_SERVICE_TOKEN } from '@infrastructure';
+import { GameNextEvent } from '@domain';
+import { IAdjectiveExpressionService } from '@interface';
+import { CountUsersInRoomQuery } from '../../user';
+import { CreateUserExpressionEvent } from '../event';
 
 @CommandHandler(CreateUserAdjectiveExpressionCommand)
 export class CreateUserAdjectiveExpressionHandler
   implements ICommandHandler<CreateUserAdjectiveExpressionCommand>
 {
   constructor(
-    private gameNextFactory: GameNextFactory,
-    @Inject(USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN)
-    private userAdjectiveExpressionService: IUserAdjectiveExpressionService,
-    private queryBus: QueryBus,
+    @Inject(ADJECTIVE_EXPRESSION_SERVICE_TOKEN)
+    private readonly adjectiveExpressionService: IAdjectiveExpressionService,
+    private readonly queryBus: QueryBus,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: CreateUserAdjectiveExpressionCommand): Promise<{
     next: boolean;
   }> {
-    const { urlId, userId, expressionIds } = command;
+    const { urlId, userId, expressionIdList } = command;
 
-    const { submitCount } =
-      await this.userAdjectiveExpressionService.saveUserExpressionAndGetSubmitCount(
+    const { saveResult, submitCount } =
+      await this.adjectiveExpressionService.saveUserExpressionAndGetSubmitCount(
         {
           urlId,
           userId,
-          expressionIds,
+          expressionIdList,
         },
       );
 
@@ -35,9 +41,20 @@ export class CreateUserAdjectiveExpressionHandler
       new CountUsersInRoomQuery(urlId),
     );
 
-    this.gameNextFactory.create(urlId);
+    this.eventBus.publish(
+      new CreateUserExpressionEvent(
+        saveResult[0].getUserId(),
+        saveResult.map((list) => list.getAdjectiveExpressionId()),
+        saveResult[0].getCreatedAt(),
+      ),
+    );
 
-    if (submitCount === userCount) return { next: true };
+    this.eventBus.publish(new GameNextEvent(urlId));
+
+    //submitCount이 무조건 userCount보다 1 작게 나온다
+    //이유 : cud DB 저장 후 바로 read DB에 저장하는게 아니여서 데이터 불일치가 발생한다.
+    //이를 막기 위해선 cud create, read create가 한 세트로 움직여야한다.
+    if (submitCount + 1 === userCount) return { next: true };
     else return { next: false };
   }
 }

@@ -1,7 +1,12 @@
-import { CommandHandler, ICommandHandler, QueryBus } from '@nestjs/cqrs';
+import {
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+  QueryBus,
+} from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { CreateUserBalanceCommand } from './create-user-balance.command';
-import { GameNextFactory } from '@domain';
+import { GameNextEvent } from '@domain';
 import { USER_BALANCE_SERVICE_TOKEN } from '@infrastructure';
 import { IUserBalanceService } from '@interface';
 import { CountUsersInRoomQuery } from '@application';
@@ -11,8 +16,8 @@ export class CreateUserBalanceCommandHandler
   implements ICommandHandler<CreateUserBalanceCommand>
 {
   constructor(
-    private queryBus: QueryBus,
-    private readonly gameNextFactory: GameNextFactory,
+    private readonly queryBus: QueryBus,
+    private readonly eventBus: EventBus,
     @Inject(USER_BALANCE_SERVICE_TOKEN)
     private readonly userBalanceService: IUserBalanceService,
   ) {}
@@ -33,7 +38,7 @@ export class CreateUserBalanceCommandHandler
     );
 
     if (submitCount === userCount) {
-      this.gameNextFactory.create(urlId);
+      this.eventBus.publish(new GameNextEvent(urlId));
     }
   }
 }
