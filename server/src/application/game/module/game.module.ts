@@ -1,27 +1,25 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
-  AdjectiveExpressionRepository,
   BALANCE_LIST_REPOSITORY_TOKEN,
   BalanceListRepository,
   COMMON_QUESTION_REPOSITORY_TOKEN,
   CommonQuestionRepository,
-  USER_ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
+  ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
   USER_BALANCE_REPOSITORY_TOKEN,
-  UserAdjectiveExpressionRepository,
+  AdjectiveExpressionRepository,
   UserBalanceRepository,
   UserMbtiRepository,
   USER_MBTI_REPOSITORY_TOKEN,
-  USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
+  ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
   USER_BALANCE_SERVICE_TOKEN,
   USER_MBTI_SERVICE_TOKEN,
+  AdjectiveExpressionReadRepository,
+  ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
 } from '@infrastructure';
 import {
   AdjectiveExpressionFactory,
   BalanceListFactory,
-  GameNextFactory,
-  UserAdjectiveExpressionFactory,
   UserBalanceFactory,
   UserMbtiFactory,
 } from '@domain';
@@ -38,7 +36,7 @@ import { CommonQuestionEntity } from '@infrastructure/game/database/entity/cud/c
 import { UserMbtiEntity } from '@infrastructure/game/database/entity/cud/user-mbti.entity';
 import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
 import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
-import { GameEventHandler } from '../event';
+import { EventGameRollbackHandler, GameEventHandler } from '../event';
 import {
   GetAdjectiveExpressionQueryHandler,
   GetBalanceListQueryHandler,
@@ -51,14 +49,17 @@ import {
   CreateCommonQuestionCommandHandler,
   CreateUserAdjectiveExpressionHandler,
   CreateUserBalanceCommandHandler,
+  CreateUserExpressionReadCommandHandler,
   CreateUserMbtiCommandHandler,
   UpdateCommonQuestionCommandHandler,
 } from '../command';
 import {
-  UserAdjectiveExpressionService,
+  AdjectiveExpressionService,
   UserBalanceService,
   UserMbtiService,
 } from '../service';
+import { EventModule } from '../../event';
+import { GameSaga } from '../saga';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import {
       UserBalanceEntity,
     ]),
     CqrsModule,
+    EventModule,
   ],
   controllers: [
     AdjectiveExpressionController,
@@ -92,18 +94,15 @@ import {
     GetUserMbtiQueryHandler,
     GetUsersMbtiInUrlQueryHandler,
     AdjectiveExpressionFactory,
-    UserAdjectiveExpressionFactory,
-    GameNextFactory,
     BalanceListFactory,
     UserBalanceFactory,
     UserMbtiFactory,
+    GameSaga,
+    EventGameRollbackHandler,
+    CreateUserExpressionReadCommandHandler,
     {
       provide: ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
       useClass: AdjectiveExpressionRepository,
-    },
-    {
-      provide: USER_ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
-      useClass: UserAdjectiveExpressionRepository,
     },
     {
       provide: COMMON_QUESTION_REPOSITORY_TOKEN,
@@ -122,8 +121,8 @@ import {
       useClass: UserMbtiRepository,
     },
     {
-      provide: USER_ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
-      useClass: UserAdjectiveExpressionService,
+      provide: ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
+      useClass: AdjectiveExpressionService,
     },
     {
       provide: USER_BALANCE_SERVICE_TOKEN,
@@ -132,6 +131,10 @@ import {
     {
       provide: USER_MBTI_SERVICE_TOKEN,
       useClass: UserMbtiService,
+    },
+    {
+      provide: ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
+      useClass: AdjectiveExpressionReadRepository,
     },
   ],
   exports: [],

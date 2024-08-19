@@ -1,9 +1,15 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject, Injectable } from '@nestjs/common';
 import { GetUsersAdjectiveExpressionQuery } from './get-users-adjective-expression.query';
-import { USER_ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN } from '@infrastructure';
-import { IUserAdjectiveExpressionRepository } from '@domain';
+import { ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN } from '@infrastructure';
+import {
+  AdjectiveExpression,
+  IAdjectiveExpressionRepositoryRead,
+} from '@domain';
 import { GroupByUserAdjectiveExpressionDto } from '@interface';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
+import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 
 @Injectable()
 @QueryHandler(GetUsersAdjectiveExpressionQuery)
@@ -11,15 +17,44 @@ export class GetUsersAdjectiveExpressionQueryHandler
   implements IQueryHandler<GetUsersAdjectiveExpressionQuery>
 {
   constructor(
-    @Inject(USER_ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN)
-    private userAdjectiveExpressionRepository: IUserAdjectiveExpressionRepository,
+    @Inject(ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN)
+    private readonly adjectiveExpressionReadRepository: IAdjectiveExpressionRepositoryRead,
+    @InjectEntityManager('read')
+    private readonly readManager: EntityManager,
   ) {}
 
   async execute(
     query: GetUsersAdjectiveExpressionQuery,
   ): Promise<GroupByUserAdjectiveExpressionDto[]> {
-    return await this.userAdjectiveExpressionRepository.find({
-      urlId: query.urlId,
-    });
+    const userList =
+      await this.adjectiveExpressionReadRepository.findUsersByUrlId(
+        query.urlId,
+        this.readManager,
+      );
+
+    return await Promise.all(
+      userList.map(async (user) => {
+        let adjectiveExpressionList: AdjectiveExpression[] = [];
+
+        const adjectives = await this.readManager
+          .createQueryBuilder(AdjectiveExpressionReadEntity, 'adjective')
+          .select('adjective.adjective')
+          .where('adjective.id IN (:...ids)', {
+            ids: user.getAdjectiveExpressions().adjectiveExpressionIdList,
+          })
+          .getRawMany();
+
+        adjectiveExpressionList = adjectives.map(
+          (adj) => adj.adjective_adjective,
+        );
+
+        return {
+          userId: user.getUserId(),
+          imgId: user.getImgId(),
+          nickName: user.getNickname(),
+          adjectiveExpressionList,
+        };
+      }),
+    );
   }
 }
