@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { BasicException } from './base.error';
 import { ERROR_CODES, ERROR_MESSAGES } from '../constant';
 
-export class UserBalanceException extends BasicException {
+export class UserSubmitBalanceException extends BasicException {
   constructor() {
     super(
       ERROR_MESSAGES.USER_BALANCE_SUBMIT,

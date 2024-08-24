@@ -1,7 +1,7 @@
 import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
 
 @Entity('balance_list')
-export class BalanceListEntity {
+export class BalanceListReadEntity {
   @Generated()
   @PrimaryColumn('int4')
   id: number;

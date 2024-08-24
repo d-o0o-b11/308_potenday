@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  IUserBalanceRepository,
-  UserBalance,
-  UserBalanceFactory,
-} from '@domain';
+import { IBalanceRepository, UserBalance, BalanceFactory } from '@domain';
 import { UserBalanceMapper } from '../mapper';
 import {
   CalculatePercentagesResponseDto,
+  DeleteUserBalanceDto,
   FindSubmitUserDto,
   FindUserBalanceDto,
   FindUserBalanceResponseDto,
@@ -18,23 +15,44 @@ import {
 import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
 
 @Injectable()
-export class UserBalanceRepository implements IUserBalanceRepository {
+export class BalanceRepository implements IBalanceRepository {
   constructor(
     @InjectRepository(UserBalanceEntity)
     private readonly userBalanceRepository: Repository<UserBalanceEntity>,
-    private readonly userBalanceFactory: UserBalanceFactory,
+    private readonly balanceFactory: BalanceFactory,
     private manager: EntityManager,
   ) {}
 
-  async save(dto: SaveUserBalanceDto) {
+  async create(dto: SaveUserBalanceDto) {
     return await this.manager.transaction(async (manager) => {
-      const entity = UserBalanceMapper.toEntity(
-        dto.userId,
-        dto.balanceId,
-        dto.balanceType,
+      const result = await manager.save(
+        UserBalanceEntity,
+        UserBalanceMapper.toEntity(dto.userId, dto.balanceId, dto.balanceType),
       );
-      manager.save(UserBalanceEntity, entity);
+
+      return this.balanceFactory.reconstitute(
+        result.id,
+        result.userId,
+        result.balanceId,
+        result.balanceType,
+        result.createdAt,
+      );
     });
+  }
+
+  async delete(dto: DeleteUserBalanceDto, manager: EntityManager) {
+    const { userId, balanceId } = dto;
+
+    const result = await manager.softDelete(UserBalanceEntity, {
+      userId,
+      balanceId,
+    });
+
+    if (!result.affected) {
+      throw new Error('형용사 표현 삭제 과정에서 오류 발생');
+    }
+
+    return result;
   }
 
   async isSubmitUser(dto: FindSubmitUserDto) {
@@ -97,7 +115,7 @@ export class UserBalanceRepository implements IUserBalanceRepository {
     });
 
     const userBalances = findResult.map((balance) =>
-      this.userBalanceFactory.reconstituteArray(
+      this.balanceFactory.reconstituteArray(
         balance.id,
         balance.user.id,
         balance.user.nickName,

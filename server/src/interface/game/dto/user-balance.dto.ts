@@ -1,4 +1,4 @@
-import { BALANCE_TYPES, BalanceType } from '@domain';
+import { BALANCE_TYPES, BalanceType, UserBalance } from '@domain';
 import { IsIn, IsNumber, IsNumberString } from 'class-validator';
 
 export class SaveUserBalanceDto {
@@ -23,6 +23,15 @@ export class SaveUserBalanceDto {
   // @IsString()
   @IsIn(Object.values(BALANCE_TYPES))
   balanceType: BalanceType;
+}
+
+export class CreateBalanceReadDto {
+  constructor(
+    public readonly userId: number,
+    public readonly balanceId: number,
+    public readonly balanceType: BalanceType,
+    public readonly createdAt: Date,
+  ) {}
 }
 
 export class CreateBalanceDto extends SaveUserBalanceDto {
@@ -73,12 +82,7 @@ export class FindUserBalanceDto {
 }
 
 export class FindBalanceListDto {
-  /**
-   * 밸런스 ID
-   * @example 1
-   */
-  @IsNumber()
-  balanceId: number;
+  constructor(public readonly balanceId: number) {}
 }
 
 export class UserBalanceSubmitCountDto {
@@ -88,4 +92,23 @@ export class UserBalanceSubmitCountDto {
    */
   @IsNumber()
   submitCount: number;
+
+  /**
+   * 형용사 표현 저장 반환값
+   */
+  saveResult: UserBalance;
+}
+
+export class DeleteUserBalanceReadDto {
+  constructor(
+    public readonly userId: number,
+    public readonly balanceId: number,
+  ) {}
+}
+
+export class DeleteUserBalanceDto {
+  constructor(
+    public readonly userId: number,
+    public readonly balanceId: number,
+  ) {}
 }

@@ -4,8 +4,6 @@ export class Balance {
   balanceId: number;
   balanceType: BalanceType;
   createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
 }
 
 export class Mbti {

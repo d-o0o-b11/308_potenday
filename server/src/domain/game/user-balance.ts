@@ -1,12 +1,15 @@
+import { BalanceType } from './enums';
+
 export class UserBalance {
   constructor(
     private readonly id: number,
     private readonly userId: number,
-    private readonly balanceType: string,
+    private readonly balanceType: BalanceType,
     private readonly balanceId: number,
     private readonly nickName?: string,
     private readonly imgId?: number,
     private readonly balanceGame?: { typeA: string; typeB: string },
+    private readonly createdAt?: Date,
   ) {}
 
   getId(): Readonly<number> {
@@ -17,7 +20,7 @@ export class UserBalance {
     return this.userId;
   }
 
-  getBalanceType(): Readonly<string> {
+  getBalanceType(): Readonly<BalanceType> {
     return this.balanceType;
   }
 
@@ -40,5 +43,9 @@ export class UserBalance {
 
   getBalanceGame(): Readonly<{ typeA: string; typeB: string }> {
     return this.balanceGame;
+  }
+
+  getCreatedAt(): Readonly<Date> {
+    return this.createdAt;
   }
 }

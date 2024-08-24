@@ -1,39 +1,54 @@
-import { IUserBalanceRepository } from '@domain';
-import { USER_BALANCE_REPOSITORY_TOKEN } from '@infrastructure';
+import { IBalanceReadRepository, IBalanceRepository } from '@domain';
+import {
+  BALANCE_READ_REPOSITORY_TOKEN,
+  BALANCE_REPOSITORY_TOKEN,
+} from '@infrastructure';
 import { Inject, Injectable } from '@nestjs/common';
-import { UserBalanceException } from '@common';
+import { UserSubmitBalanceException } from '@common';
 import { CreateBalanceDto, IUserBalanceService } from '@interface';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class UserBalanceService implements IUserBalanceService {
   constructor(
-    @Inject(USER_BALANCE_REPOSITORY_TOKEN)
-    private readonly userBalanceRepository: IUserBalanceRepository,
+    @Inject(BALANCE_REPOSITORY_TOKEN)
+    private readonly balanceRepository: IBalanceRepository,
+    @Inject(BALANCE_READ_REPOSITORY_TOKEN)
+    private readonly balanceReadRepository: IBalanceReadRepository,
+    @InjectEntityManager('read')
+    private readonly readManager: EntityManager,
   ) {}
 
   async saveUserExpressionAndGetSubmitCount(dto: CreateBalanceDto) {
     if (
-      await this.userBalanceRepository.isSubmitUser({
-        userId: dto.userId,
-        balanceId: dto.balanceId,
-      })
+      await this.balanceReadRepository.isSubmitUser(
+        {
+          userId: dto.userId,
+          balanceId: dto.balanceId,
+        },
+        this.readManager,
+      )
     ) {
-      throw new UserBalanceException();
+      throw new UserSubmitBalanceException();
     }
 
-    await this.userBalanceRepository.save({
+    const saveResult = await this.balanceRepository.create({
       userId: dto.userId,
       balanceId: dto.balanceId,
       balanceType: dto.balanceType,
     });
 
     const submitCount = (
-      await this.userBalanceRepository.findUserCount({
-        urlId: dto.urlId,
-        balanceId: dto.balanceId,
-      })
+      await this.balanceReadRepository.findUserCount(
+        {
+          urlId: dto.urlId,
+          balanceId: dto.balanceId,
+        },
+        this.readManager,
+      )
     ).count;
 
-    return { submitCount: submitCount };
+    return { submitCount: submitCount, saveResult };
   }
 }

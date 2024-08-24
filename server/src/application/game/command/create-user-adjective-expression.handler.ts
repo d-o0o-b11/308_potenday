@@ -54,6 +54,11 @@ export class CreateUserAdjectiveExpressionHandler
     //submitCount이 무조건 userCount보다 1 작게 나온다
     //이유 : cud DB 저장 후 바로 read DB에 저장하는게 아니여서 데이터 불일치가 발생한다.
     //이를 막기 위해선 cud create, read create가 한 세트로 움직여야한다.
+    //saveUserExpressionAndGetSubmitCount 이걸 풀어버린다고 생각하면,,?
+    //->adjectiveExpressionRepository.create 다음에 또는 내부에 같이 넣을 것 같은데 이벤트는 비동기 적으로 일어나서
+    //이벤트 사용을 못한다 그러면
+    //이벤트 사용하지 않기 vs 무조건 성공했다고 생각하고 +1
+    //데이터 정합성이 떨어진다..ACID 일관성이 떨어진다
     if (submitCount + 1 === userCount) return { next: true };
     else return { next: false };
   }

@@ -1,16 +1,24 @@
 import {
   CalculatePercentagesResponseDto,
+  DeleteUserBalanceDto,
   FindSubmitUserDto,
   FindUserBalanceDto,
   FindUserCountResponseDto,
   SaveUserBalanceDto,
 } from '@interface';
+import { UserBalance } from '../user-balance';
+import { EntityManager, UpdateResult } from 'typeorm';
 
-export interface IUserBalanceRepository {
+export interface IBalanceRepository {
   /**
    * 밸런스 게임 종류 저장
    */
-  save: (dto: SaveUserBalanceDto) => Promise<void>;
+  create: (dto: SaveUserBalanceDto) => Promise<UserBalance>;
+
+  delete(
+    dto: DeleteUserBalanceDto,
+    manager: EntityManager,
+  ): Promise<UpdateResult>;
 
   /**
    * 유저가 밸런스 게임 의견을 제출했는지 여부 조회

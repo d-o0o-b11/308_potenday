@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ICommand, Saga, ofType } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CreateUserExpressionEvent } from '../event';
-import { CreateUserExpressionReadCommand } from '../command';
+import { CreateUserBalanceEvent, CreateUserExpressionEvent } from '../event';
+import {
+  CreateUserBalanceReadCommand,
+  CreateUserExpressionReadCommand,
+} from '../command';
 
 @Injectable()
 export class GameSaga {
@@ -18,6 +21,24 @@ export class GameSaga {
           new CreateUserExpressionReadCommand(
             event.userId,
             event.adjectiveExpressionList,
+            event.createdAt,
+          ),
+      ),
+    );
+  };
+
+  @Saga()
+  handleCreateUserBalanceEvent = (
+    events$: Observable<CreateUserBalanceEvent>,
+  ): Observable<ICommand> => {
+    return events$.pipe(
+      ofType(CreateUserBalanceEvent),
+      map(
+        (event: CreateUserBalanceEvent) =>
+          new CreateUserBalanceReadCommand(
+            event.userId,
+            event.balanceId,
+            event.balanceType,
             event.createdAt,
           ),
       ),

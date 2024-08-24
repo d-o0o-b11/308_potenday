@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  BALANCE_LIST_REPOSITORY_TOKEN,
-  BalanceListRepository,
   COMMON_QUESTION_REPOSITORY_TOKEN,
   CommonQuestionRepository,
   ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
-  USER_BALANCE_REPOSITORY_TOKEN,
+  BALANCE_REPOSITORY_TOKEN,
   AdjectiveExpressionRepository,
-  UserBalanceRepository,
+  BalanceRepository,
   UserMbtiRepository,
   USER_MBTI_REPOSITORY_TOKEN,
   ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
@@ -16,11 +14,12 @@ import {
   USER_MBTI_SERVICE_TOKEN,
   AdjectiveExpressionReadRepository,
   ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
+  BALANCE_READ_REPOSITORY_TOKEN,
 } from '@infrastructure';
 import {
   AdjectiveExpressionFactory,
   BalanceListFactory,
-  UserBalanceFactory,
+  BalanceFactory,
   UserMbtiFactory,
 } from '@domain';
 import {
@@ -49,6 +48,7 @@ import {
   CreateCommonQuestionCommandHandler,
   CreateUserAdjectiveExpressionHandler,
   CreateUserBalanceCommandHandler,
+  CreateUserBalanceReadCommandHandler,
   CreateUserExpressionReadCommandHandler,
   CreateUserMbtiCommandHandler,
   UpdateCommonQuestionCommandHandler,
@@ -60,6 +60,7 @@ import {
 } from '../service';
 import { EventModule } from '../../event';
 import { GameSaga } from '../saga';
+import { BalanceReadRepository } from '@infrastructure/game/database/repository/balance.repository-read';
 
 @Module({
   imports: [
@@ -95,11 +96,12 @@ import { GameSaga } from '../saga';
     GetUsersMbtiInUrlQueryHandler,
     AdjectiveExpressionFactory,
     BalanceListFactory,
-    UserBalanceFactory,
+    BalanceFactory,
     UserMbtiFactory,
     GameSaga,
     EventGameRollbackHandler,
     CreateUserExpressionReadCommandHandler,
+    CreateUserBalanceReadCommandHandler,
     {
       provide: ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
       useClass: AdjectiveExpressionRepository,
@@ -109,12 +111,8 @@ import { GameSaga } from '../saga';
       useClass: CommonQuestionRepository,
     },
     {
-      provide: BALANCE_LIST_REPOSITORY_TOKEN,
-      useClass: BalanceListRepository,
-    },
-    {
-      provide: USER_BALANCE_REPOSITORY_TOKEN,
-      useClass: UserBalanceRepository,
+      provide: BALANCE_REPOSITORY_TOKEN,
+      useClass: BalanceRepository,
     },
     {
       provide: USER_MBTI_REPOSITORY_TOKEN,
@@ -135,6 +133,10 @@ import { GameSaga } from '../saga';
     {
       provide: ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
       useClass: AdjectiveExpressionReadRepository,
+    },
+    {
+      provide: BALANCE_READ_REPOSITORY_TOKEN,
+      useClass: BalanceReadRepository,
     },
   ],
   exports: [],

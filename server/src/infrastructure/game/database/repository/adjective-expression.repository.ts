@@ -19,13 +19,12 @@ export class AdjectiveExpressionRepository
 
   async create(dto: SaveUserAdjectiveExpressionDto) {
     return await this.manager.transaction(async (manager) => {
-      const entitiesToSave = UserAdjectiveExpressionMapper.toEntities(
-        dto.userId,
-        dto.expressionIdList,
-      );
       const result = await manager.save(
         UserAdjectiveExpressionEntity,
-        entitiesToSave,
+        UserAdjectiveExpressionMapper.toEntities(
+          dto.userId,
+          dto.expressionIdList,
+        ),
       );
 
       const transformedResult = result.map((result) =>

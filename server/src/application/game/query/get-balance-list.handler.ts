@@ -1,8 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { GetBalanceListQuery } from './get-balance-list.query';
-import { BALANCE_LIST_REPOSITORY_TOKEN } from '@infrastructure';
-import { BalanceList, IBalanceListRepository } from '@domain';
+import { BalanceList, BalanceListFactory } from '@domain';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
+import { BalanceListReadEntity } from '@infrastructure/game/database/entity/read/balance-list.entity';
 
 @Injectable()
 @QueryHandler(GetBalanceListQuery)
@@ -10,13 +12,21 @@ export class GetBalanceListQueryHandler
   implements IQueryHandler<GetBalanceListQuery>
 {
   constructor(
-    @Inject(BALANCE_LIST_REPOSITORY_TOKEN)
-    private balanceListRepository: IBalanceListRepository,
+    private readonly balanceListFactory: BalanceListFactory,
+    @InjectEntityManager('read') private readonly readManager: EntityManager,
   ) {}
 
   async execute(query: GetBalanceListQuery): Promise<BalanceList> {
-    return await this.balanceListRepository.find({
-      balanceId: query.balanceId,
+    const result = await this.readManager.findOne(BalanceListReadEntity, {
+      where: {
+        id: query.balanceId,
+      },
     });
+
+    return this.balanceListFactory.reconstitute(
+      result.id,
+      result.typeA,
+      result.typeB,
+    );
   }
 }
