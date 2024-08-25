@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  COMMON_QUESTION_REPOSITORY_TOKEN,
-  CommonQuestionRepository,
   ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
   BALANCE_REPOSITORY_TOKEN,
   AdjectiveExpressionRepository,
@@ -51,7 +49,7 @@ import {
   CreateUserBalanceReadCommandHandler,
   CreateUserExpressionReadCommandHandler,
   CreateUserMbtiCommandHandler,
-  UpdateCommonQuestionCommandHandler,
+  NextCommonQuestionCommandHandler,
 } from '../command';
 import {
   AdjectiveExpressionService,
@@ -85,7 +83,7 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
     GameEventHandler,
     GetAdjectiveExpressionQueryHandler,
     CreateUserAdjectiveExpressionHandler,
-    UpdateCommonQuestionCommandHandler,
+    NextCommonQuestionCommandHandler,
     GetUsersAdjectiveExpressionQueryHandler,
     GetBalanceListQueryHandler,
     CreateCommonQuestionCommandHandler,
@@ -105,10 +103,6 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
     {
       provide: ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
       useClass: AdjectiveExpressionRepository,
-    },
-    {
-      provide: COMMON_QUESTION_REPOSITORY_TOKEN,
-      useClass: CommonQuestionRepository,
     },
     {
       provide: BALANCE_REPOSITORY_TOKEN,

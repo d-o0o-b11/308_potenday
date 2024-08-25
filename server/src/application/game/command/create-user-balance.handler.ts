@@ -51,7 +51,9 @@ export class CreateUserBalanceCommandHandler
     //이를 막기 위해선 cud create, read create가 한 세트로 움직여야한다.
     //+1 지우는게 목표
     if (submitCount + 1 === userCount) {
-      this.eventBus.publish(new GameNextEvent(urlId));
+      this.eventBus.publish(
+        new GameNextEvent('BalanceGameNextEvent', 'event', urlId),
+      );
     }
   }
 }

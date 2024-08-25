@@ -7,6 +7,7 @@ export class UrlRead {
     private readonly updatedAt: Date | null,
     private readonly deletedAt: Date | null,
     private readonly userIdList?: number[],
+    private readonly commonQuestionList?: boolean[],
   ) {}
 
   /**
@@ -42,5 +43,9 @@ export class UrlRead {
 
   getUserIdList(): number[] {
     return this.userIdList;
+  }
+
+  getCommonQuestionList(): boolean[] {
+    return this.commonQuestionList;
   }
 }

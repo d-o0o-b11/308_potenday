@@ -1,22 +1,36 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Inject } from '@nestjs/common';
 import { CreateCommonQuestionCommand } from './create-common-question.command';
-// import { COMMON_QUESTION_REPOSITORY_TOKEN } from '../../../infrastructure';
-import { ICommonQuestionRepository } from '@domain';
-import { COMMON_QUESTION_REPOSITORY_TOKEN } from '@infrastructure';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { EntityManager } from 'typeorm';
+import { CommonQuestionMapper, EVENT_REPOSITORY_TOKEN } from '@infrastructure';
+import { CommonQuestionEntity } from '@infrastructure/game/database/entity/cud/common-question.entity';
+import { Inject } from '@nestjs/common';
+import { IEventRepository } from '@domain';
 
 @CommandHandler(CreateCommonQuestionCommand)
 export class CreateCommonQuestionCommandHandler
   implements ICommandHandler<CreateCommonQuestionCommand>
 {
   constructor(
-    @Inject(COMMON_QUESTION_REPOSITORY_TOKEN)
-    private commonQuestionRepository: ICommonQuestionRepository,
+    @InjectEntityManager() private readonly manager: EntityManager,
+    @Inject(EVENT_REPOSITORY_TOKEN)
+    private readonly eventRepository: IEventRepository,
   ) {}
 
   async execute(command: CreateCommonQuestionCommand): Promise<void> {
     const { urlId } = command;
 
-    await this.commonQuestionRepository.save({ urlId });
+    return await this.manager.transaction(async (manager) => {
+      const entity = CommonQuestionMapper.toEntity(urlId);
+      this.eventRepository.create(
+        {
+          eventType: 'CreateCommonQuestionCommand',
+          eventMethod: 'save',
+        },
+        this.manager,
+      );
+
+      await manager.save(CommonQuestionEntity, entity);
+    });
   }
 }

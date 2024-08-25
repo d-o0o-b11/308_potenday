@@ -49,7 +49,9 @@ export class CreateUserAdjectiveExpressionHandler
       ),
     );
 
-    this.eventBus.publish(new GameNextEvent(urlId));
+    this.eventBus.publish(
+      new GameNextEvent('AdjectiveExpressionGameNextEvent', 'event', urlId),
+    );
 
     //submitCount이 무조건 userCount보다 1 작게 나온다
     //이유 : cud DB 저장 후 바로 read DB에 저장하는게 아니여서 데이터 불일치가 발생한다.

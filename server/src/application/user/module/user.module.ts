@@ -16,7 +16,6 @@ import {
 } from '@infrastructure';
 import {
   EventRollbackHandler,
-  EventSourcingHandler,
   UserEventHandler,
   UserUrlEventPublisher,
 } from '../event';
@@ -49,7 +48,6 @@ import { EventModule } from '../../event';
     UpdateStatusFalseHandler,
     GetUrlStatusHandler,
     GetUsersInRoomQueryHandler,
-    EventSourcingHandler,
     NextStepHandler,
     UrlSaga,
     UserSaga,

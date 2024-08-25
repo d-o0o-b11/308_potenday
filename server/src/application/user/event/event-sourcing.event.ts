@@ -61,14 +61,6 @@ export class DeleteUpdateUrlStatusEvent implements BaseEvent {
   ) {}
 }
 
-export class NextStepEvent implements BaseEvent {
-  constructor(
-    public readonly eventType: string,
-    public readonly eventMethod: string,
-    public readonly urlId: number,
-  ) {}
-}
-
 export class CreateUserEvent {
   constructor(
     // public readonly eventType: string,

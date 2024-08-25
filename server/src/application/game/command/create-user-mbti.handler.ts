@@ -37,7 +37,9 @@ export class CreateUserMbtiCommandHandler
     );
 
     if (submitCount === userCount) {
-      this.eventBus.publish(new GameNextEvent(urlId));
+      this.eventBus.publish(
+        new GameNextEvent('MbtiGameNextEvent', 'event', urlId),
+      );
     }
   }
 }

@@ -34,6 +34,8 @@ export class UrlFactory {
       dto.createdAt,
       dto.updatedAt,
       dto.deletedAt,
+      null,
+      [false, false, false, false],
     );
   }
 

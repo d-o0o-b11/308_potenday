@@ -7,13 +7,6 @@ export class PatchCommonQuestionDto {
    */
   @IsNumber()
   urlId: number;
-
-  /**
-   * 질문 ID
-   * @example 1
-   */
-  @IsNumber()
-  questionId: number;
 }
 
 export class SaveCommonQuestionDto {
