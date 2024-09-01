@@ -21,7 +21,6 @@ import {
   CountUsersInRoomQuery,
   CreateUrlCommand,
   GetUrlStatusQuery,
-  NextStepCommand,
   UpdateStatusFalseCommand,
 } from '@application';
 import {
@@ -30,10 +29,10 @@ import {
   SetUrlResponseDto,
 } from './dto';
 import {
-  UpdateException,
-  UrlAlreadyClickButtonException,
-  UrlNotFoundException,
-  UrlStatusFalseException,
+  MaximumUrlException,
+  NotFoundUrlException,
+  StatusFalseUrlException,
+  UpdateUrlException,
 } from '@common';
 
 /**
@@ -79,11 +78,11 @@ export class UserUrlController {
   })
   @ApiNotFoundResponse({
     status: HttpStatus.NOT_FOUND,
-    type: UrlNotFoundException,
+    type: NotFoundUrlException,
   })
   @ApiConflictResponse({
     status: HttpStatus.CONFLICT,
-    type: UrlStatusFalseException,
+    type: StatusFalseUrlException,
   })
   @ApiQuery({
     name: 'urlId',
@@ -101,15 +100,15 @@ export class UserUrlController {
   })
   @ApiInternalServerErrorResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
-    type: UpdateException,
+    type: UpdateUrlException,
   })
   @ApiNotFoundResponse({
     status: HttpStatus.NOT_FOUND,
-    type: UrlNotFoundException,
+    type: NotFoundUrlException,
   })
   @ApiConflictResponse({
     status: HttpStatus.CONFLICT,
-    type: UrlAlreadyClickButtonException,
+    type: MaximumUrlException,
   })
   @ApiOperation({
     summary: '[모두 모였어요] 버튼 클릭 시 상태 변경',
@@ -144,21 +143,5 @@ export class UserUrlController {
   })
   async checkUrlToStart(@Query('urlId', ParseIntPipe) urlId: number) {
     return await this.queryBus.execute(new GetUrlStatusQuery(urlId));
-  }
-
-  @Post('next')
-  @ApiOperation({
-    summary: '다음 게임으로 넘어가기',
-  })
-  @ApiInternalServerErrorResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: '서버 에러 발생',
-  })
-  @ApiQuery({
-    name: 'urlId',
-    example: 11,
-  })
-  async nextToGame(@Query('urlId', ParseIntPipe) urlId: number) {
-    return await this.commandBus.execute(new NextStepCommand(urlId));
   }
 }

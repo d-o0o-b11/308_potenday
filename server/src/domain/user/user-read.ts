@@ -7,11 +7,10 @@ export class Balance {
 }
 
 export class Mbti {
+  mbtiId: number;
   mbti: string;
   toUserId: number;
   createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
 }
 
 export class AdjectiveExpressionRead {

@@ -25,7 +25,7 @@ import {
   DeleteUserIdDto,
   UpdateUserUrlDto,
   UpdateUserUrlStatusDto,
-} from '@interface';
+} from '../dto';
 
 @EventsHandler(DeleteUrlEvent, DeleteUpdateUrlStatusEvent, DeleteUserEvent)
 export class EventRollbackHandler

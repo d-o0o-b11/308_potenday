@@ -8,15 +8,23 @@ import {
 } from '@domain';
 import {
   CalculatePercentagesResponseDto,
-  CreateBalanceReadDto,
-  DeleteUserBalanceReadDto,
-  FindSubmitUserDto,
   FindUserBalanceDto,
   FindUserBalanceResponseDto,
   GroupedByBalanceTypeDto,
 } from '@interface';
 import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
 import { BalanceListReadEntity } from '../entity/read/balance-list.entity';
+import {
+  CreateBalanceReadDto,
+  DeleteUserBalanceReadDto,
+  FindSubmitUserDto,
+} from '@application';
+import {
+  DeleteBalanceException,
+  NotFoundBalanceException,
+  NotFoundBalanceListException,
+  UpdateBalanceException,
+} from '@common';
 
 @Injectable()
 export class BalanceReadRepository implements IBalanceReadRepository {
@@ -51,7 +59,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       .execute();
 
     if (!result.affected) {
-      throw new Error('balance 업데이트 과정에서 오류가 발생하였습니다.');
+      throw new UpdateBalanceException();
     }
   }
 
@@ -120,7 +128,6 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       `,
         { balanceId: dto.balanceId },
       )
-
       .getRawMany();
 
     const balanceGame = await manager
@@ -130,7 +137,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       .getOne();
 
     if (!balanceGame) {
-      throw new Error('Balance game not found');
+      throw new NotFoundBalanceListException();
     }
 
     const test = usersWithMatchingBalance.map((user) => {
@@ -220,7 +227,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       .getRawOne();
 
     if (!user || !user.balance) {
-      throw new Error('User not found or user has no balances');
+      throw new NotFoundBalanceException();
     }
 
     const balances: Balance[] = JSON.parse(user.balance);
@@ -242,7 +249,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       .execute();
 
     if (!result.affected) {
-      throw new Error('Balance deletion failed');
+      throw new DeleteBalanceException();
     }
 
     return result;

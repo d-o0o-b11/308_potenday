@@ -1,14 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { EventBus } from '@nestjs/cqrs';
 import { User } from '../user';
-import { CreateUserEvent } from '../user-create.event';
-import {
-  CreateFactoryUserDto,
-  CreateUserReadDto,
-  FindUserAdjectiveExpressionReadDto,
-  ReconstituteArrayUserFactoryDto,
-} from '@interface';
+import { CreateUserInfoEvent } from '../user-create.event';
 import { UserRead } from '../user-read';
+import { CreateFactoryUserDto, CreateUserReadDto } from '@application';
 
 @Injectable()
 export class UserFactory {
@@ -30,12 +25,8 @@ export class UserFactory {
       dto.updatedAt,
       dto.deletedAt,
     );
-    this.eventBus.publish(new CreateUserEvent(user.getUrlId()));
+    this.eventBus.publish(new CreateUserInfoEvent(user.getUrlId()));
     return user;
-  }
-
-  reconstituteArray(dto: ReconstituteArrayUserFactoryDto): User {
-    return new User(dto.id, dto.imgId, dto.nickName, dto.urlId);
   }
 
   reconstituteRead(dto: CreateUserReadDto): UserRead {
@@ -49,21 +40,6 @@ export class UserFactory {
       dto.deletedAt,
       dto.balance,
       dto.mbti,
-      dto.adjectiveExpression,
-    );
-  }
-
-  reconstituteAdjectiveExpressionRead(dto: FindUserAdjectiveExpressionReadDto) {
-    return new UserRead(
-      dto.userId,
-      dto.imgId,
-      dto.nickname,
-      dto.urlId,
-      new Date(Date.now()),
-      new Date(Date.now()),
-      null,
-      undefined,
-      undefined,
       dto.adjectiveExpression,
     );
   }

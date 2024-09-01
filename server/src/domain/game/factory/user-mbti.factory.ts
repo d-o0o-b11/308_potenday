@@ -1,28 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { UserMbti } from '../user-mbti';
-import { UserMbtiRawDto } from '@interface';
+import { UserMbtiRawDto } from '@application';
 
 @Injectable()
 export class UserMbtiFactory {
-  reconstituteArray(
-    userId: number,
-    mbti: string,
-    nickName: string,
-    imgId: number,
-    toUserId: number,
-  ): UserMbti {
-    return new UserMbti(undefined, userId, mbti, toUserId, nickName, imgId);
-  }
-
-  reconstituteArrayFromRaw(rawMbtis: UserMbtiRawDto[]): UserMbti[] {
-    return rawMbtis.map((mbti) =>
-      this.reconstituteArray(
-        mbti.userId,
-        mbti.mbti,
-        mbti.nickName,
-        mbti.imgId,
-        mbti.toUserId,
-      ),
+  reconstitute(raw: UserMbtiRawDto): UserMbti {
+    return new UserMbti(
+      raw.id,
+      raw.userId,
+      raw.mbti,
+      raw.toUserId,
+      raw.nickName,
+      raw.imgId,
     );
   }
 }

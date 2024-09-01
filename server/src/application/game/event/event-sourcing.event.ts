@@ -9,21 +9,25 @@ export class CreateUserExpressionEvent {
   ) {}
 }
 
-export class CreateUserExpressionReadEvent implements BaseEvent {
+export class CreateUserExpressionReadEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly userId: number,
     public readonly adjectiveExpressionList: number[],
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
-export class DeleteUserExpressionEvent implements BaseEvent {
+export class DeleteUserExpressionEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly urlId: number,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
 export class CreateUserBalanceEvent {
@@ -35,7 +39,7 @@ export class CreateUserBalanceEvent {
   ) {}
 }
 
-export class CreateUserBalanceReadEvent implements BaseEvent {
+export class CreateUserBalanceReadEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
@@ -43,14 +47,52 @@ export class CreateUserBalanceReadEvent implements BaseEvent {
     public readonly balanceId: number,
     public readonly balanceType: BalanceType,
     public readonly createdAt: Date,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
-export class DeleteUserBalanceEvent implements BaseEvent {
+export class DeleteUserBalanceEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly userId: number,
     public readonly balanceId: number,
+  ) {
+    super(eventType, eventMethod);
+  }
+}
+
+export class CreateUserMbtiEvent {
+  constructor(
+    public readonly userId: number,
+    public readonly mbti: string,
+    public readonly toUserId: number,
+    public readonly mbtiId: number,
+    public readonly createdAt: Date,
   ) {}
+}
+
+export class CreateUserMbtiReadEvent extends BaseEvent {
+  constructor(
+    public readonly eventType: string,
+    public readonly eventMethod: string,
+    public readonly userId: number,
+    public readonly mbti: string,
+    public readonly toUserId: number,
+    public readonly createdAt: Date,
+  ) {
+    super(eventType, eventMethod);
+  }
+}
+
+export class DeleteUserMbtiEvent extends BaseEvent {
+  constructor(
+    public readonly eventType: string,
+    public readonly eventMethod: string,
+    public readonly userId: number,
+    public readonly mbtiId: number,
+  ) {
+    super(eventType, eventMethod);
+  }
 }

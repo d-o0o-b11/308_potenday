@@ -1,8 +1,8 @@
-import { CreateUserAdjectiveExpressionReadDto } from '@interface';
 import { EntityManager, UpdateResult } from 'typeorm';
-import { UserRead } from '@domain/user';
+import { UserRead } from '@domain';
+import { CreateUserAdjectiveExpressionReadDto } from '@application';
 
-export interface IAdjectiveExpressionRepositoryRead {
+export interface IAdjectiveExpressionRepositoryReadRepository {
   /**
    * 형용사 표현 저장
    * @param dto CreateUserAdjectiveExpressionReadDto

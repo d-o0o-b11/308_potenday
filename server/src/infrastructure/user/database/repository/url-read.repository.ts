@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { IUrlReadRepository, UrlFactory } from '@domain';
+import { UrlReadEntity } from '../entity/read/url-read.entity';
+import { UserUrlMapper } from '../mapper';
 import {
   CreateUserUrlReadDto,
   DeleteUserIdDto,
@@ -9,16 +11,29 @@ import {
   ReconstituteFindFactoryDto,
   UpdateUserIdDto,
   UpdateUserUrlStatusDto,
-} from '@interface';
-import { UrlReadEntity } from '../entity/read/url-read.entity';
-import { UserUrlMapper } from '../mapper';
+} from '@application';
+import {
+  DeleteUrlException,
+  DeleteUrlUserIdException,
+  UpdateUrlException,
+  UpdateUrlUserIdListException,
+} from '@common';
 
 @Injectable()
 export class UrlReadRepository implements IUrlReadRepository {
   constructor(private readonly urlFactory: UrlFactory) {}
 
   async create(dto: CreateUserUrlReadDto, manager: EntityManager) {
-    const urlRead = this.urlFactory.reconstituteRead(dto);
+    const urlRead = this.urlFactory.reconstituteRead(
+      new CreateUserUrlReadDto(
+        dto.urlId,
+        dto.url,
+        dto.status,
+        dto.createdAt,
+        dto.updatedAt,
+        dto.deletedAt,
+      ),
+    );
     const urlReadEntity = UserUrlMapper.toEntityRead(urlRead);
 
     await manager.save(urlReadEntity);
@@ -40,7 +55,7 @@ export class UrlReadRepository implements IUrlReadRepository {
       .execute();
 
     if (!result.affected) {
-      throw new Error('url 상태 변경 실패');
+      throw new UpdateUrlException();
     }
 
     return result;
@@ -62,7 +77,7 @@ export class UrlReadRepository implements IUrlReadRepository {
       .execute();
 
     if (!result.affected) {
-      throw new Error('url 상태 변경 실패');
+      throw new UpdateUrlUserIdListException();
     }
 
     return result;
@@ -114,7 +129,7 @@ export class UrlReadRepository implements IUrlReadRepository {
       .execute(); // execute를 사용해 실제 삭제 작업 실행
 
     if (!result.affected) {
-      throw new Error('url 삭제 실패');
+      throw new DeleteUrlException();
     }
 
     return result;
@@ -142,7 +157,7 @@ export class UrlReadRepository implements IUrlReadRepository {
       .execute();
 
     if (!result.affected) {
-      throw new Error('userId 삭제 과정에서 오류가 발생하였습니다.');
+      throw new DeleteUrlUserIdException();
     }
 
     return result;

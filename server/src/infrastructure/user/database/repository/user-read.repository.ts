@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { CreateUserReadDto } from '@interface';
 import { IUserReadRepository, UserFactory } from '@domain';
 import { UserMapper } from '../mapper';
 import { UserReadEntity } from '../entity/read/user-read.entity';
+import { CreateUserReadDto } from '@application';
+import { DeleteUserException } from '@common';
 
 @Injectable()
 export class UserReadRepository implements IUserReadRepository {
@@ -55,7 +56,7 @@ export class UserReadRepository implements IUserReadRepository {
       .execute();
 
     if (!result.affected) {
-      throw new Error('user 삭제 과정에서 에러 발생');
+      throw new DeleteUserException();
     }
 
     return result;

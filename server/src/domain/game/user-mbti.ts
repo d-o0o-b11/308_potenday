@@ -6,6 +6,7 @@ export class UserMbti {
     private readonly toUserId: number,
     private readonly nickName: string,
     private readonly imgId: number,
+    private readonly createdAt?: Date,
   ) {}
 
   getId(): Readonly<number> {
@@ -30,5 +31,9 @@ export class UserMbti {
 
   getImgId(): Readonly<number> {
     return this.imgId;
+  }
+
+  getCreatedAt(): Readonly<Date> {
+    return this.createdAt;
   }
 }

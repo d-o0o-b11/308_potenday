@@ -1,30 +1,23 @@
-import { AdjectiveExpressionRead, Balance, Mbti } from '@domain';
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
-export class CreateUserDto {
-  constructor(
-    public readonly urlId: number,
-    public readonly imgId: number,
-    public readonly nickName: string,
-  ) {}
-}
-
-export class CreateFactoryUserDto extends CreateUserDto {
+export class FindOneUserInfoDto {
   /**
-   * USER ID
-   * @example 11
+   * userId
+   * @example 111
    */
-  @IsNumber()
   readonly userId: number;
 
-  @IsDate()
-  readonly createdAt: Date;
+  /**
+   * imgId
+   * @example 1
+   */
+  readonly imgId: number;
 
-  @IsDate()
-  readonly updatedAt: Date;
-
-  @IsDate()
-  readonly deletedAt: Date | null;
+  /**
+   * nickName
+   * @example d_o0o_b
+   */
+  readonly nickName: string;
 }
 
 export class CreateUserCommandDto {
@@ -48,28 +41,4 @@ export class CreateUserCommandDto {
    */
   @IsString()
   readonly nickName: string;
-}
-
-export class ReconstituteArrayUserFactoryDto extends CreateUserDto {
-  /**
-   * URL ID
-   * @example 1
-   */
-  @IsNumber()
-  id: number;
-}
-
-export class CreateUserReadDto {
-  constructor(
-    public readonly userId: number,
-    public readonly imgId: number,
-    public readonly nickname: string,
-    public readonly urlId: number,
-    public readonly createdAt: Date,
-    public readonly updatedAt: Date,
-    public readonly deletedAt: Date | null,
-    public readonly balance?: Balance[],
-    public readonly mbti?: Mbti[],
-    public readonly adjectiveExpression?: AdjectiveExpressionRead,
-  ) {}
 }

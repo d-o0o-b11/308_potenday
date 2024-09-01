@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { AdjectiveExpression } from '../adjective-expression';
 import { Adjective } from '../enums';
 import { UserAdjectiveExpression } from '../user-adjective-expression';
-import { FindUserAdjectiveExpressionReadDto } from '@interface';
 import { UserRead } from '../../user';
+import { FindUserAdjectiveExpressionReadDto } from '@application';
 
 @Injectable()
 export class AdjectiveExpressionFactory {
-  reconstituteArray(id: number, adjective: Adjective): AdjectiveExpression {
+  reconstitute(id: number, adjective: Adjective): AdjectiveExpression {
     return new AdjectiveExpression(id, adjective);
   }
 
@@ -25,7 +25,9 @@ export class AdjectiveExpressionFactory {
     );
   }
 
-  reconstituteAdjectiveExpressionRead(dto: FindUserAdjectiveExpressionReadDto) {
+  reconstituteAdjectiveExpressionRead(
+    dto: FindUserAdjectiveExpressionReadDto,
+  ): UserRead {
     return new UserRead(
       dto.userId,
       dto.imgId,

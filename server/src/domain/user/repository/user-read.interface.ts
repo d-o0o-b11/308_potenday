@@ -1,6 +1,6 @@
-import { CreateUserReadDto } from '@interface';
 import { DeleteResult, EntityManager } from 'typeorm';
 import { UserRead } from '../user-read';
+import { CreateUserReadDto } from '@application';
 
 export interface IUserReadRepository {
   /**

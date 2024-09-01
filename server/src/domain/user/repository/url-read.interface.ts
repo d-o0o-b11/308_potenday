@@ -1,3 +1,5 @@
+import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
+import { UrlRead } from '../url-read';
 import {
   CreateUserUrlReadDto,
   DeleteUserIdDto,
@@ -5,9 +7,7 @@ import {
   FindOneUserWithUrlDto,
   UpdateUserIdDto,
   UpdateUserUrlStatusDto,
-} from '@interface';
-import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
-import { UrlRead } from '../url-read';
+} from '@application';
 
 export interface IUrlReadRepository {
   /**

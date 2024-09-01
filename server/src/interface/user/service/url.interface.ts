@@ -1,10 +1,7 @@
-import { Url } from '@domain';
-import {
-  CountUsersInRoomDto,
-  CountUsersInRoomResponseDto,
-  FindOneUserUrlDto,
-} from '../dto';
+import { Url, UserRead } from '@domain';
+import { CountUsersInRoomDto, CountUsersInRoomResponseDto } from '../dto';
 import { EntityManager } from 'typeorm';
+import { FindOneUserUrlDto } from '@application';
 
 export interface IUrlService {
   /**
@@ -41,4 +38,11 @@ export interface IUrlService {
    * @returns Promise<void>
    */
   updateStatusFalse: (urlId: number) => Promise<void>;
+
+  /**
+   * url에 속한 유저 정보 조회
+   * @param urlId number
+   * @returns Promise<UserRead[]>
+   */
+  getUserInfoInUrl: (urlId: number) => Promise<UserRead[]>;
 }

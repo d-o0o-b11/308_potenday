@@ -17,6 +17,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CreateUserAdjectiveExpressionDto,
   GroupByUserAdjectiveExpressionDto,
+  UserAdjectiveExpressionSubmitCountDto,
 } from './dto';
 
 @ApiTags('[GAME] 형용사 표현 API')
@@ -38,6 +39,9 @@ export class AdjectiveExpressionController {
   @Post()
   @ApiOperation({
     summary: '[게임] 개인이 형용사 표현 선택하는 과정',
+  })
+  @ApiResponse({
+    type: UserAdjectiveExpressionSubmitCountDto,
   })
   async saveExpressionUser(
     @Body(new ValidationPipe({ whitelist: true, transform: true }))

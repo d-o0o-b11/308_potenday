@@ -6,7 +6,6 @@ import {
   URL_READ_REPOSITORY_TOKEN,
   UrlReadRepository,
   USER_REPOSITORY_TOKEN,
-  USER_URL_EVENT_PUBLISHER,
   URL_REPOSITORY_TOKEN,
   USER_URL_SERVICE_TOKEN,
   UserReadRepository,
@@ -14,16 +13,11 @@ import {
   UserUrlRepository,
   USER_READ_REPOSITORY_TOKEN,
 } from '@infrastructure';
-import {
-  EventRollbackHandler,
-  UserEventHandler,
-  UserUrlEventPublisher,
-} from '../event';
+import { EventRollbackHandler, UserEventHandler } from '../event';
 import {
   CreateUserHandler,
   CreateUrlReadCommandHandler,
   CreateUrlCommandHandler,
-  NextStepHandler,
   UpdateStatusFalseHandler,
   CreateUserReadCommandHandler,
   UpdateUrlReadStatusCommandHandler,
@@ -48,7 +42,6 @@ import { EventModule } from '../../event';
     UpdateStatusFalseHandler,
     GetUrlStatusHandler,
     GetUsersInRoomQueryHandler,
-    NextStepHandler,
     UrlSaga,
     UserSaga,
     EventRollbackHandler,
@@ -60,7 +53,6 @@ import { EventModule } from '../../event';
     { provide: USER_REPOSITORY_TOKEN, useClass: UserRepository },
     { provide: URL_REPOSITORY_TOKEN, useClass: UserUrlRepository },
     { provide: USER_URL_SERVICE_TOKEN, useClass: UserUrlService },
-    { provide: USER_URL_EVENT_PUBLISHER, useClass: UserUrlEventPublisher },
     {
       provide: URL_READ_REPOSITORY_TOKEN,
       useClass: UrlReadRepository,

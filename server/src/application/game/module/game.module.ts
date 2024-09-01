@@ -5,14 +5,17 @@ import {
   BALANCE_REPOSITORY_TOKEN,
   AdjectiveExpressionRepository,
   BalanceRepository,
-  UserMbtiRepository,
-  USER_MBTI_REPOSITORY_TOKEN,
+  MbtiRepository,
+  MBTI_REPOSITORY_TOKEN,
   ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
-  USER_BALANCE_SERVICE_TOKEN,
-  USER_MBTI_SERVICE_TOKEN,
+  BALANCE_SERVICE_TOKEN,
+  MBTI_SERVICE_TOKEN,
   AdjectiveExpressionReadRepository,
   ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
   BALANCE_READ_REPOSITORY_TOKEN,
+  MbtiReadRepository,
+  MBTI_REPOSITORY_READ_TOKEN,
+  BalanceReadRepository,
 } from '@infrastructure';
 import {
   AdjectiveExpressionFactory,
@@ -24,12 +27,11 @@ import {
   AdjectiveExpressionController,
   BalanceController,
   CommonQuestionController,
-  UserMbtiController,
+  MbtiController,
 } from '@interface';
 import { CqrsModule } from '@nestjs/cqrs';
 import { AdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/adjective-expression.entity';
 import { BalanceListEntity } from '@infrastructure/game/database/entity/cud/balance-list.entity';
-import { CommonQuestionEntity } from '@infrastructure/game/database/entity/cud/common-question.entity';
 import { UserMbtiEntity } from '@infrastructure/game/database/entity/cud/user-mbti.entity';
 import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
 import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
@@ -43,29 +45,27 @@ import {
   GetUsersMbtiInUrlQueryHandler,
 } from '../query';
 import {
-  CreateCommonQuestionCommandHandler,
   CreateUserAdjectiveExpressionHandler,
   CreateUserBalanceCommandHandler,
   CreateUserBalanceReadCommandHandler,
   CreateUserExpressionReadCommandHandler,
   CreateUserMbtiCommandHandler,
+  CreateUserMbtiReadCommandHandler,
   NextCommonQuestionCommandHandler,
 } from '../command';
 import {
   AdjectiveExpressionService,
-  UserBalanceService,
-  UserMbtiService,
+  BalanceService,
+  MbtiService,
 } from '../service';
 import { EventModule } from '../../event';
 import { GameSaga } from '../saga';
-import { BalanceReadRepository } from '@infrastructure/game/database/repository/balance.repository-read';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       AdjectiveExpressionEntity,
       BalanceListEntity,
-      CommonQuestionEntity,
       UserMbtiEntity,
       UserAdjectiveExpressionEntity,
       UserBalanceEntity,
@@ -77,7 +77,7 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
     AdjectiveExpressionController,
     CommonQuestionController,
     BalanceController,
-    UserMbtiController,
+    MbtiController,
   ],
   providers: [
     GameEventHandler,
@@ -86,7 +86,6 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
     NextCommonQuestionCommandHandler,
     GetUsersAdjectiveExpressionQueryHandler,
     GetBalanceListQueryHandler,
-    CreateCommonQuestionCommandHandler,
     CreateUserBalanceCommandHandler,
     GetBalanceResultQueryHandler,
     CreateUserMbtiCommandHandler,
@@ -100,6 +99,7 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
     EventGameRollbackHandler,
     CreateUserExpressionReadCommandHandler,
     CreateUserBalanceReadCommandHandler,
+    CreateUserMbtiReadCommandHandler,
     {
       provide: ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
       useClass: AdjectiveExpressionRepository,
@@ -109,20 +109,20 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
       useClass: BalanceRepository,
     },
     {
-      provide: USER_MBTI_REPOSITORY_TOKEN,
-      useClass: UserMbtiRepository,
+      provide: MBTI_REPOSITORY_TOKEN,
+      useClass: MbtiRepository,
     },
     {
       provide: ADJECTIVE_EXPRESSION_SERVICE_TOKEN,
       useClass: AdjectiveExpressionService,
     },
     {
-      provide: USER_BALANCE_SERVICE_TOKEN,
-      useClass: UserBalanceService,
+      provide: BALANCE_SERVICE_TOKEN,
+      useClass: BalanceService,
     },
     {
-      provide: USER_MBTI_SERVICE_TOKEN,
-      useClass: UserMbtiService,
+      provide: MBTI_SERVICE_TOKEN,
+      useClass: MbtiService,
     },
     {
       provide: ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
@@ -131,6 +131,10 @@ import { BalanceReadRepository } from '@infrastructure/game/database/repository/
     {
       provide: BALANCE_READ_REPOSITORY_TOKEN,
       useClass: BalanceReadRepository,
+    },
+    {
+      provide: MBTI_REPOSITORY_READ_TOKEN,
+      useClass: MbtiReadRepository,
     },
   ],
   exports: [],

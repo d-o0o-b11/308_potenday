@@ -2,8 +2,6 @@ import { BaseEvent } from '@interface';
 
 export class CreateUrlEvent {
   constructor(
-    // public readonly eventType: string,
-    // public readonly eventMethod: string,
     public readonly urlId: number,
     public readonly url: string,
     public readonly status: boolean,
@@ -13,7 +11,7 @@ export class CreateUrlEvent {
   ) {}
 }
 
-export class CreateUrlReadEvent implements BaseEvent {
+export class CreateUrlReadEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
@@ -23,48 +21,52 @@ export class CreateUrlReadEvent implements BaseEvent {
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly deletedAt: Date | null,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
-export class DeleteUrlEvent implements BaseEvent {
+export class DeleteUrlEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly urlId: number,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
 export class UpdateUrlStatusEvent {
   constructor(
-    // public readonly eventType: string,
-    // public readonly eventMethod: string,
     public readonly urlId: number,
     public readonly status: boolean,
   ) {}
 }
 
-export class UpdateUrlReadStatusEvent implements BaseEvent {
+export class UpdateUrlReadStatusEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly urlId: number,
     public readonly status: boolean,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
-export class DeleteUpdateUrlStatusEvent implements BaseEvent {
+export class DeleteUpdateUrlStatusEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly urlId: number,
     public readonly status: boolean,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
 export class CreateUserEvent {
   constructor(
-    // public readonly eventType: string,
-    // public readonly eventMethod: string,
     public readonly userId: number,
     public readonly imgId: number,
     public readonly nickname: string,
@@ -75,7 +77,7 @@ export class CreateUserEvent {
   ) {}
 }
 
-export class CreateUserReadEvent implements BaseEvent {
+export class CreateUserReadEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
@@ -86,14 +88,18 @@ export class CreateUserReadEvent implements BaseEvent {
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly deletedAt: Date | null,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }
 
-export class DeleteUserEvent implements BaseEvent {
+export class DeleteUserEvent extends BaseEvent {
   constructor(
     public readonly eventType: string,
     public readonly eventMethod: string,
     public readonly urlId: number,
     public readonly userId: number,
-  ) {}
+  ) {
+    super(eventType, eventMethod);
+  }
 }

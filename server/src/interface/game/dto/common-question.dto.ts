@@ -8,12 +8,3 @@ export class PatchCommonQuestionDto {
   @IsNumber()
   urlId: number;
 }
-
-export class SaveCommonQuestionDto {
-  /**
-   * URL ID
-   * @example 37
-   */
-  @IsNumber()
-  urlId: number;
-}

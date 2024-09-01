@@ -11,17 +11,17 @@ async function bootstrap() {
   await configService.setUp();
   await configService.setListen(3000);
 
-  Logger.log(
-    `
-        __________  ________   __
-        / /  _/  |/  /  _/ | / /
-   __  / // // /|_/ // //  |/ /
-  / /_/ // // /  / // // /|  /
-  \____/___/_/  /_/___/_/ |_/
+  //   Logger.log(
+  //     `
+  //         __________  ________   __
+  //         / /  _/  |/  /  _/ | / /
+  //    __  / // // /|_/ // //  |/ /
+  //   / /_/ // // /  / // // /|  /
+  //   \____/___/_/  /_/___/_/ |_/
 
-Nest.js is running on Port [${
-      process.env.SERVER_PORT || 3000
-    }], using ENV mode [${process.env.NODE_ENV}]`,
-  );
+  // Nest.js is running on Port [${
+  //       process.env.SERVER_PORT || 3000
+  //     }], using ENV mode [${process.env.NODE_ENV}]`,
+  //   );
 }
 bootstrap();

@@ -2,17 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import {
   AdjectiveExpressionFactory,
-  IAdjectiveExpressionRepositoryRead,
+  IAdjectiveExpressionRepositoryReadRepository,
 } from '@domain';
+import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
 import {
   CreateUserAdjectiveExpressionReadDto,
   FindUserAdjectiveExpressionReadDto,
-} from '@interface';
-import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
+} from '@application';
+import {
+  DeleteAdjectiveExpressionException,
+  UpdateAdjectiveExpressionException,
+} from '@common';
 
 @Injectable()
 export class AdjectiveExpressionReadRepository
-  implements IAdjectiveExpressionRepositoryRead
+  implements IAdjectiveExpressionRepositoryReadRepository
 {
   constructor(private adjectiveExpressionFactory: AdjectiveExpressionFactory) {}
 
@@ -49,9 +53,7 @@ export class AdjectiveExpressionReadRepository
       .execute();
 
     if (!result.affected) {
-      throw new Error(
-        'AdjectiveExpressionList 업데이트 과정에서 오류가 발생하였습니다.',
-      );
+      throw new UpdateAdjectiveExpressionException();
     }
   }
 
@@ -66,9 +68,7 @@ export class AdjectiveExpressionReadRepository
       .execute();
 
     if (!result.affected) {
-      throw new Error(
-        'AdjectiveExpressionList 삭제 과정에서 오류가 발생하였습니다.',
-      );
+      throw new DeleteAdjectiveExpressionException();
     }
 
     return result;

@@ -5,8 +5,9 @@ import {
   AdjectiveExpressionFactory,
   IAdjectiveExpressionRepository,
 } from '@domain';
-import { SaveUserAdjectiveExpressionDto } from '@interface';
 import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
+import { SaveUserAdjectiveExpressionDto } from '@application';
+import { DeleteAdjectiveExpressionListException } from '@common';
 
 @Injectable()
 export class AdjectiveExpressionRepository
@@ -46,7 +47,7 @@ export class AdjectiveExpressionRepository
     });
 
     if (!result.affected) {
-      throw new Error('형용사 표현 삭제과정에서 오류가 발생하였습니다.');
+      throw new DeleteAdjectiveExpressionListException();
     }
   }
 }

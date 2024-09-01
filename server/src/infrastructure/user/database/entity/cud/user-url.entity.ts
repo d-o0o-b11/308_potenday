@@ -1,15 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  Entity,
-  Generated,
-  OneToMany,
-  OneToOne,
-  PrimaryColumn,
-} from 'typeorm';
+import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { BaseEntity } from '@common';
-import { CommonQuestionEntity } from '@infrastructure/game/database/entity/cud/common-question.entity';
 
 @Entity('user_url')
 export class UserUrlEntity extends BaseEntity {
@@ -34,9 +26,4 @@ export class UserUrlEntity extends BaseEntity {
     nullable: true,
   })
   user: UserEntity[];
-
-  @OneToOne(() => CommonQuestionEntity, (question) => question.url, {
-    onDelete: 'CASCADE',
-  })
-  question: CommonQuestionEntity;
 }

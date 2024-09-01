@@ -1,10 +1,6 @@
-import {
-  CreateUserUrlDto,
-  FindOneUserUrlWithUserDto,
-  UpdateUserUrlDto,
-} from '@interface';
 import { Url } from '../url';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
+import { CreateUserUrlDto, UpdateUserUrlDto } from '@application';
 
 export interface IUrlRepository {
   /**
@@ -27,12 +23,6 @@ export interface IUrlRepository {
     dto: UpdateUserUrlDto,
     manager: EntityManager,
   ) => Promise<UpdateResult>;
-
-  //제거될 예정
-  findOneWithUser: (
-    dto: FindOneUserUrlWithUserDto,
-    manager: EntityManager,
-  ) => Promise<Url>;
 
   /**
    * url 삭제

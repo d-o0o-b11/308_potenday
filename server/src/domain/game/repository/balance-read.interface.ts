@@ -1,10 +1,12 @@
 import {
-  CalculatePercentagesResponseDto,
   CreateBalanceReadDto,
   DeleteUserBalanceReadDto,
   FindSubmitUserDto,
-  FindUserBalanceDto,
   FindUserCountResponseDto,
+} from '@application';
+import {
+  CalculatePercentagesResponseDto,
+  FindUserBalanceDto,
 } from '@interface';
 import { EntityManager, UpdateResult } from 'typeorm';
 

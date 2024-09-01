@@ -1,14 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as crypto from 'crypto';
-import { UrlAlreadyClickButtonException, UrlNotFoundException } from '@common';
-import {
-  CreateUserUrlDto,
-  FindOneByUrlIdDto,
-  FindOneUserUrlDto,
-  FindOneUserWithUrlDto,
-  IUrlService,
-  UpdateUserUrlDto,
-} from '@interface';
+import { AlreadyClickButtonUrlException, NotFoundUrlException } from '@common';
+import { IUrlService } from '@interface';
 import {
   URL_READ_REPOSITORY_TOKEN,
   URL_REPOSITORY_TOKEN,
@@ -21,6 +14,13 @@ import {
 } from '@domain';
 import { EntityManager } from 'typeorm';
 import { InjectEntityManager } from '@nestjs/typeorm';
+import {
+  CreateUserUrlDto,
+  FindOneByUrlIdDto,
+  FindOneUserUrlDto,
+  FindOneUserWithUrlDto,
+  UpdateUserUrlDto,
+} from '../dto';
 
 @Injectable()
 export class UserUrlService implements IUrlService {
@@ -63,7 +63,7 @@ export class UserUrlService implements IUrlService {
     );
 
     if (!findOneResult) {
-      throw new UrlNotFoundException();
+      throw new NotFoundUrlException();
     }
 
     if (!findOneResult.getUserIdList()) {
@@ -102,11 +102,11 @@ export class UserUrlService implements IUrlService {
     );
 
     if (!findOneResult) {
-      throw new UrlNotFoundException();
+      throw new NotFoundUrlException();
     }
 
     if (!findOneResult.getStatus()) {
-      throw new UrlAlreadyClickButtonException();
+      throw new AlreadyClickButtonUrlException();
     }
 
     return await this.manager.transaction(async (manager) => {
@@ -116,6 +116,18 @@ export class UserUrlService implements IUrlService {
         manager,
       );
     });
+  }
+
+  async getUserInfoInUrl(urlId: number) {
+    const findOneResult = await this.urlReadRepository.findOneById(
+      new FindOneByUrlIdDto(urlId),
+      this.readManager,
+    );
+
+    return await this.userReadRepository.findList(
+      findOneResult.getUserIdList(),
+      this.readManager,
+    );
   }
 
   /**

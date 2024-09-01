@@ -7,4 +7,3 @@ export * from './user-balance';
 export * from './enums';
 export * from './factory';
 export * from './repository';
-export * from './game-next.event';

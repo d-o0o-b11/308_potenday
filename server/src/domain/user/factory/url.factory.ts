@@ -1,29 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { Url } from '../url';
+import { UrlRead } from '../url-read';
 import {
   CreateUserUrlReadDto,
   ReconstituteFactoryDto,
   ReconstituteFindFactoryDto,
-  ReconstituteWithUserFactoryDto,
-} from '@interface';
-import { UrlRead } from '../url-read';
+} from '@application';
 
 @Injectable()
 export class UrlFactory {
-  reconstitute(dto: ReconstituteFactoryDto): Url {
+  reconstitute(raw: ReconstituteFactoryDto): Url {
     return new Url(
-      dto.id,
-      dto.url,
-      dto.status,
+      raw.id,
+      raw.url,
+      raw.status,
       null,
-      dto?.createdAt,
-      dto?.updatedAt,
-      dto?.deletedAt,
+      raw?.createdAt,
+      raw?.updatedAt,
+      raw?.deletedAt,
     );
-  }
-
-  reconstituteWithUser(dto: ReconstituteWithUserFactoryDto): Url {
-    return new Url(dto.id, dto.url, dto.status, dto.users);
   }
 
   reconstituteRead(dto: CreateUserUrlReadDto) {
@@ -35,19 +30,18 @@ export class UrlFactory {
       dto.updatedAt,
       dto.deletedAt,
       null,
-      [false, false, false, false],
     );
   }
 
-  reconstituteFind(dto: ReconstituteFindFactoryDto): UrlRead {
+  reconstituteFind(raw: ReconstituteFindFactoryDto): UrlRead {
     return new UrlRead(
-      dto.urlId,
-      dto.url,
-      dto.status,
+      raw.urlId,
+      raw.url,
+      raw.status,
       null,
       null,
       null,
-      dto.userIdList,
+      raw.userIdList,
     );
   }
 }
