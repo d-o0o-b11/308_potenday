@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { ICommand, Saga, ofType } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CreateUrlReadCommand, UpdateUrlReadStatusCommand } from '../command';
 import { CreateUrlEvent, UpdateUrlStatusEvent } from '../event';
 
-@Injectable()
 export class UrlSaga {
   @Saga()
   handleCreateUrlEvent = (

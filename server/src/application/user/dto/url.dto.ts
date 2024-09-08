@@ -46,7 +46,10 @@ export class CreateUserUrlReadDto {
 }
 
 export class UpdateUserUrlStatusDto {
-  constructor(public readonly status: boolean) {}
+  constructor(
+    public readonly urlId: number,
+    public readonly status: boolean,
+  ) {}
 }
 
 export class FindOneByUrlIdDto {
@@ -54,7 +57,10 @@ export class FindOneByUrlIdDto {
 }
 
 export class UpdateUserIdDto {
-  constructor(public readonly userId: number) {}
+  constructor(
+    public readonly urlId: number,
+    public readonly userId: number,
+  ) {}
 }
 
 export class DeleteUserIdDto {

@@ -72,7 +72,7 @@ export class CreateUserEvent {
     public readonly nickname: string,
     public readonly urlId: number,
     public readonly createdAt: Date,
-    public readonly updatedAt: Date,
+    public readonly updatedAt: Date | null,
     public readonly deletedAt: Date | null,
   ) {}
 }

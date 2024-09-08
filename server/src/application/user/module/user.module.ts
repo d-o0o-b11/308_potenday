@@ -7,7 +7,7 @@ import {
   UrlReadRepository,
   USER_REPOSITORY_TOKEN,
   URL_REPOSITORY_TOKEN,
-  USER_URL_SERVICE_TOKEN,
+  URL_SERVICE_TOKEN,
   UserReadRepository,
   UserRepository,
   UserUrlRepository,
@@ -27,7 +27,7 @@ import {
   GetUrlStatusHandler,
   GetUsersInRoomQueryHandler,
 } from '../query';
-import { UserUrlService } from '../service';
+import { UrlService } from '../service';
 import { UrlSaga, UserSaga } from '../saga';
 import { EventModule } from '../../event';
 
@@ -52,7 +52,7 @@ import { EventModule } from '../../event';
     UrlFactory,
     { provide: USER_REPOSITORY_TOKEN, useClass: UserRepository },
     { provide: URL_REPOSITORY_TOKEN, useClass: UserUrlRepository },
-    { provide: USER_URL_SERVICE_TOKEN, useClass: UserUrlService },
+    { provide: URL_SERVICE_TOKEN, useClass: UrlService },
     {
       provide: URL_READ_REPOSITORY_TOKEN,
       useClass: UrlReadRepository,

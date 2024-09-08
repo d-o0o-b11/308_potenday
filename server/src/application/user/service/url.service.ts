@@ -23,7 +23,7 @@ import {
 } from '../dto';
 
 @Injectable()
-export class UserUrlService implements IUrlService {
+export class UrlService implements IUrlService {
   constructor(
     @Inject(URL_REPOSITORY_TOKEN)
     private readonly urlRepository: IUrlRepository,
@@ -37,23 +37,21 @@ export class UserUrlService implements IUrlService {
   ) {}
 
   async setUrl() {
-    return await this.manager.transaction(async (manager) => {
-      let url: string;
+    let url: string;
 
-      while (true) {
-        url = this._generateRandomUrl();
-        if (!(await this._isUrlDuplicate(url, this.readManager))) {
-          break;
-        }
+    while (true) {
+      url = this._generateRandomUrl();
+      if (!(await this._isUrlDuplicate(url, this.readManager))) {
+        break;
       }
+    }
 
-      const save = await this.urlRepository.save(
-        new CreateUserUrlDto(url),
-        manager,
-      );
+    const save = await this.urlRepository.save(
+      new CreateUserUrlDto(url),
+      this.manager,
+    );
 
-      return save;
-    });
+    return save;
   }
 
   async checkUserLimitForUrl(dto: FindOneUserUrlDto) {

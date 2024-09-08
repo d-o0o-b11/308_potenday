@@ -1,7 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { GetUsersInRoomQuery } from './get-users-in-room.query';
-import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
+import { URL_SERVICE_TOKEN } from '@infrastructure';
 import { FindOneUserInfoDto, IUrlService } from '@interface';
 
 @QueryHandler(GetUsersInRoomQuery)
@@ -9,7 +9,7 @@ export class GetUsersInRoomQueryHandler
   implements IQueryHandler<GetUsersInRoomQuery>
 {
   constructor(
-    @Inject(USER_URL_SERVICE_TOKEN) private urlService: IUrlService,
+    @Inject(URL_SERVICE_TOKEN) private readonly urlService: IUrlService,
   ) {}
 
   async execute(query: GetUsersInRoomQuery): Promise<FindOneUserInfoDto> {

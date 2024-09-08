@@ -21,14 +21,14 @@ export class UserEventHandler
     }
   }
 
+  private handleCreateUserEvent(event: CreateUserInfoEvent) {
+    this.eventEmitter.emit('userCreated', { urlId: event.urlId });
+  }
+
   private handleStatusUpdatedEvent(event: StatusUpdatedEvent) {
     this.eventEmitter.emit('statusUpdated', {
       urlId: event.urlId,
       status: event.status,
     });
-  }
-
-  private handleCreateUserEvent(event: CreateUserInfoEvent) {
-    this.eventEmitter.emit('userCreated', { urlId: event.urlId });
   }
 }

@@ -20,26 +20,22 @@ export interface IUrlReadRepository {
 
   /**
    * url status 수정
-   * @param urlId number
    * @param dto UpdateUserUrlStatusDto
    * @param manager EntityManager
    * @returns Promise<UpdateResult>
    */
   updateStatus: (
-    urlId: number,
     dto: UpdateUserUrlStatusDto,
     manager: EntityManager,
   ) => Promise<UpdateResult>;
 
   /**
    * userIdList에 userId 추가
-   * @param urlId number
    * @param dto UpdateUserIdDto
    * @param manager EntityManager
    * @returns Promise<UpdateResult>
    */
   updateUserList: (
-    urlId: number,
     dto: UpdateUserIdDto,
     manager: EntityManager,
   ) => Promise<UpdateResult>;

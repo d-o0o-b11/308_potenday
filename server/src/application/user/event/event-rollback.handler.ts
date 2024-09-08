@@ -41,7 +41,8 @@ export class EventRollbackHandler
     private readonly urlReadRepository: IUrlReadRepository,
     @Inject(USER_READ_REPOSITORY_TOKEN)
     private readonly userReadRepository: IUserReadRepository,
-    @Inject(USER_REPOSITORY_TOKEN) private userRepository: IUserRepository,
+    @Inject(USER_REPOSITORY_TOKEN)
+    private readonly userRepository: IUserRepository,
     @Inject(EVENT_REPOSITORY_TOKEN)
     private readonly eventRepository: IEventRepository,
 
@@ -91,8 +92,7 @@ export class EventRollbackHandler
         this.manager,
       );
       await this.urlReadRepository.updateStatus(
-        event.urlId,
-        new UpdateUserUrlStatusDto(true),
+        new UpdateUserUrlStatusDto(event.urlId, true),
         this.readManager,
       );
     } catch (error) {

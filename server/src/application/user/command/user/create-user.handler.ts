@@ -1,7 +1,7 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { CreateUserCommand } from './create-user.command';
-import { USER_REPOSITORY_TOKEN, USER_URL_SERVICE_TOKEN } from '@infrastructure';
+import { USER_REPOSITORY_TOKEN, URL_SERVICE_TOKEN } from '@infrastructure';
 import { IUserRepository } from '@domain';
 import { IUrlService, UserResponseDto } from '@interface';
 import { CreateUserEvent } from '../../event';
@@ -13,8 +13,9 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     // IUserRepository 는 클래스가 아니므로 의존선 클래스로 주입받을 수 없음
     // 따라서 @Inject 데커레이터와 UserRepository 토큰을 이용하여 주입받음
-    @Inject(USER_REPOSITORY_TOKEN) private userRepository: IUserRepository,
-    @Inject(USER_URL_SERVICE_TOKEN) private urlService: IUrlService,
+    @Inject(USER_REPOSITORY_TOKEN)
+    private readonly userRepository: IUserRepository,
+    @Inject(URL_SERVICE_TOKEN) private readonly urlService: IUrlService,
     private readonly eventBus: EventBus,
   ) {}
 
@@ -40,8 +41,6 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     //saga 만들기
     this.eventBus.publish(
       new CreateUserEvent(
-        // 'CreateUserCommand',
-        // 'save',
         result.getId(),
         result.getImgId(),
         result.getNickName(),

@@ -1,7 +1,7 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUrlCommand } from './create-url.command';
 import { Inject } from '@nestjs/common';
-import { USER_URL_SERVICE_TOKEN } from '@infrastructure';
+import { URL_SERVICE_TOKEN } from '@infrastructure';
 import { IUrlService, SetUrlResponseDto } from '@interface';
 import { CreateUrlEvent } from '../../event';
 
@@ -15,7 +15,7 @@ export class CreateUrlCommandHandler
   implements ICommandHandler<CreateUrlCommand>
 {
   constructor(
-    @Inject(USER_URL_SERVICE_TOKEN)
+    @Inject(URL_SERVICE_TOKEN)
     private readonly urlService: IUrlService,
     private readonly eventBus: EventBus,
   ) {}

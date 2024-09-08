@@ -1,8 +1,7 @@
-import { IMbtiRepository } from '@domain';
+import { IMbtiReadRepository, IMbtiRepository } from '@domain';
 import {
   MBTI_REPOSITORY_READ_TOKEN,
   MBTI_REPOSITORY_TOKEN,
-  MbtiReadRepository,
 } from '@infrastructure';
 import { Inject, Injectable } from '@nestjs/common';
 import { SubmitMbtiException } from '@common';
@@ -22,7 +21,7 @@ export class MbtiService implements IMbtiService {
     @Inject(MBTI_REPOSITORY_TOKEN)
     private readonly mbtiRepository: IMbtiRepository,
     @Inject(MBTI_REPOSITORY_READ_TOKEN)
-    private readonly mbtiReadRepository: MbtiReadRepository,
+    private readonly mbtiReadRepository: IMbtiReadRepository,
     @InjectEntityManager('read')
     private readonly readManager: EntityManager,
   ) {}

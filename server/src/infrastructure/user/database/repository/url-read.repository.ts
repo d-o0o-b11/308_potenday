@@ -39,11 +39,7 @@ export class UrlReadRepository implements IUrlReadRepository {
     await manager.save(urlReadEntity);
   }
 
-  async updateStatus(
-    urlId: number,
-    dto: UpdateUserUrlStatusDto,
-    manager: EntityManager,
-  ) {
+  async updateStatus(dto: UpdateUserUrlStatusDto, manager: EntityManager) {
     const result = await manager
       .createQueryBuilder()
       .update(UrlReadEntity)
@@ -51,7 +47,7 @@ export class UrlReadRepository implements IUrlReadRepository {
         data: () =>
           `jsonb_set(data, '{status}', '${dto.status}'::jsonb, false)`,
       })
-      .where("data->>'urlId' = :urlId", { urlId })
+      .where("data->>'urlId' = :urlId", { urlId: dto.urlId })
       .execute();
 
     if (!result.affected) {
@@ -61,11 +57,7 @@ export class UrlReadRepository implements IUrlReadRepository {
     return result;
   }
 
-  async updateUserList(
-    urlId: number,
-    dto: UpdateUserIdDto,
-    manager: EntityManager,
-  ) {
+  async updateUserList(dto: UpdateUserIdDto, manager: EntityManager) {
     const result = await manager
       .createQueryBuilder()
       .update(UrlReadEntity)
@@ -73,7 +65,7 @@ export class UrlReadRepository implements IUrlReadRepository {
         data: () =>
           `jsonb_set(data, '{userIdList}', (CASE WHEN data->'userIdList' IS NULL THEN '[]' ELSE data->'userIdList' END) || '[${dto.userId}]', true)`,
       })
-      .where("data->>'urlId' = :urlId", { urlId })
+      .where("data->>'urlId' = :urlId", { urlId: dto.urlId })
       .execute();
 
     if (!result.affected) {

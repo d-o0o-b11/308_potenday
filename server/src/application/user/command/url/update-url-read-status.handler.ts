@@ -41,8 +41,7 @@ export class UpdateUrlReadStatusCommandHandler
       );
 
       await this.urlReadRepository.updateStatus(
-        command.urlId,
-        new UpdateUserUrlStatusDto(command.status),
+        new UpdateUserUrlStatusDto(command.urlId, command.status),
         this.readManager,
       );
     } catch (error) {

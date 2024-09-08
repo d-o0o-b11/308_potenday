@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { ICommand, Saga, ofType } from '@nestjs/cqrs';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CreateUserReadCommand } from '../command';
 import { CreateUserEvent } from '../event';
 
-@Injectable()
 export class UserSaga {
   @Saga()
   handleCreateUserEvent = (

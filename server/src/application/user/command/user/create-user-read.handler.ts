@@ -64,8 +64,7 @@ export class CreateUserReadCommandHandler
       );
 
       await this.urlReadRepository.updateUserList(
-        command.urlId,
-        new UpdateUserIdDto(command.userId),
+        new UpdateUserIdDto(command.urlId, command.userId),
         this.readManager,
       );
     } catch (error) {
