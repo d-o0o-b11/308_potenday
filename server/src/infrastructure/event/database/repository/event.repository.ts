@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { EventEntity } from '@common/evnt.entity';
+import { EventEntity } from '@infrastructure/event/database/entity/evnt.entity';
 import { BaseEvent } from '@interface';
 import { IEventRepository } from '@domain';
 import { Injectable } from '@nestjs/common';
