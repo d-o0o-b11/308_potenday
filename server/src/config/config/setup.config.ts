@@ -13,7 +13,7 @@ export class SetUpConfig {
     this.setCORS();
   }
 
-  async setListen(port: number) {
+  async setListen() {
     await this.app.listen(process.env.SERVER_PORT || 3000, '0.0.0.0');
   }
 

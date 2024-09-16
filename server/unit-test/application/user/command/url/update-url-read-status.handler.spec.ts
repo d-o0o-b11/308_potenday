@@ -100,8 +100,7 @@ describe('UpdateUrlReadStatusCommandHandler', () => {
       );
       expect(updateStatus).toBeCalledTimes(1);
       expect(updateStatus).toBeCalledWith(
-        command.urlId,
-        new UpdateUserUrlStatusDto(command.status),
+        new UpdateUserUrlStatusDto(command.urlId, command.status),
         readManager,
       );
       expect(eventPublish).toBeCalledTimes(0);

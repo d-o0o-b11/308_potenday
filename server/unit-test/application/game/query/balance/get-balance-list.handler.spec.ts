@@ -1,4 +1,8 @@
-import { GetBalanceListQuery, GetBalanceListQueryHandler } from '@application';
+import {
+  GetBalanceListQuery,
+  GetBalanceListQueryHandler,
+  ReconstituteBalanceListDto,
+} from '@application';
 import { BalanceListFactory } from '@domain';
 import { BalanceListReadEntity } from '@infrastructure/game/database/entity/read/balance-list.entity';
 import { MockEntityManager } from '@mock';
@@ -65,9 +69,11 @@ describe('GetBalanceListQueryHandler', () => {
       });
       expect(reconstitute).toBeCalledTimes(1);
       expect(reconstitute).toBeCalledWith(
-        findResult.id,
-        findResult.typeA,
-        findResult.typeB,
+        new ReconstituteBalanceListDto(
+          findResult.id,
+          findResult.typeA,
+          findResult.typeB,
+        ),
       );
     });
   });

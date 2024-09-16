@@ -1,4 +1,7 @@
-import { GetAdjectiveExpressionQueryHandler } from '@application';
+import {
+  GetAdjectiveExpressionQueryHandler,
+  ReconstituteAdjectiveExpressionDto,
+} from '@application';
 import { AdjectiveExpressionFactory } from '@domain';
 import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 import { MockEntityManager } from '@mock';
@@ -78,8 +81,7 @@ describe('GetAdjectiveExpressionQueryHandler', () => {
       list.forEach((item, index) => {
         expect(reconstitute).toHaveBeenNthCalledWith(
           index + 1,
-          item.id,
-          item.adjective,
+          new ReconstituteAdjectiveExpressionDto(item.id, item.adjective),
         );
       });
     });

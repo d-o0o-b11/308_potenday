@@ -4,6 +4,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 import { GetAdjectiveExpressionQuery } from './get-adjective-expression.query';
+import { ReconstituteAdjectiveExpressionDto } from '@application';
 
 @QueryHandler(GetAdjectiveExpressionQuery)
 export class GetAdjectiveExpressionQueryHandler
@@ -27,8 +28,10 @@ export class GetAdjectiveExpressionQueryHandler
 
     const result = findResult.map((adjective) =>
       this.adjectiveExpressionFactory.reconstitute(
-        adjective.id,
-        adjective.adjective,
+        new ReconstituteAdjectiveExpressionDto(
+          adjective.id,
+          adjective.adjective,
+        ),
       ),
     );
 

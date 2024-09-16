@@ -3,7 +3,11 @@ import { EntityManager } from 'typeorm';
 import { IBalanceRepository, BalanceFactory } from '@domain';
 import { UserBalanceMapper } from '../mapper';
 import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
-import { CreateUserBalanceDto, DeleteUserBalanceDto } from '@application';
+import {
+  CreateUserBalanceDto,
+  DeleteUserBalanceDto,
+  ReconstituteBalanceDto,
+} from '@application';
 import { DeleteBalanceException } from '@common';
 
 @Injectable()
@@ -21,11 +25,13 @@ export class BalanceRepository implements IBalanceRepository {
       );
 
       return this.balanceFactory.reconstitute(
-        result.id,
-        result.userId,
-        result.balanceId,
-        result.balanceType,
-        result.createdAt,
+        new ReconstituteBalanceDto(
+          result.id,
+          result.userId,
+          result.balanceId,
+          result.balanceType,
+          result.createdAt,
+        ),
       );
     });
   }

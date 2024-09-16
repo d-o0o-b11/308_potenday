@@ -3,7 +3,7 @@ import { UserMbti } from '../user-mbti';
 import { UserMbtiRawDto } from '@application';
 
 @Injectable()
-export class UserMbtiFactory {
+export class MbtiFactory {
   reconstitute(raw: UserMbtiRawDto): UserMbti {
     return new UserMbti(
       raw.id,

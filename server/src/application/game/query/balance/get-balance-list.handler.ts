@@ -4,6 +4,7 @@ import { BalanceList, BalanceListFactory } from '@domain';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { BalanceListReadEntity } from '@infrastructure/game/database/entity/read/balance-list.entity';
+import { ReconstituteBalanceListDto } from '@application';
 
 @QueryHandler(GetBalanceListQuery)
 export class GetBalanceListQueryHandler
@@ -22,9 +23,7 @@ export class GetBalanceListQueryHandler
     });
 
     return this.balanceListFactory.reconstitute(
-      result.id,
-      result.typeA,
-      result.typeB,
+      new ReconstituteBalanceListDto(result.id, result.typeA, result.typeB),
     );
   }
 }

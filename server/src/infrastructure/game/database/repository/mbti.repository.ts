@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { UserMbtiMapper } from '../mapper';
-import { IMbtiRepository, UserMbtiFactory } from '@domain';
+import { IMbtiRepository, MbtiFactory } from '@domain';
 import { UserMbtiEntity } from '../entity/cud/user-mbti.entity';
 import { SaveUserMbtiDto, UserMbtiRawDto } from '@application';
 import { DeleteMbtiException } from '@common';
@@ -10,7 +10,7 @@ import { DeleteMbtiException } from '@common';
 export class MbtiRepository implements IMbtiRepository {
   constructor(
     private manager: EntityManager,
-    private readonly userMbtiFactory: UserMbtiFactory,
+    private readonly mbtiFactory: MbtiFactory,
   ) {}
 
   async create(dto: SaveUserMbtiDto) {
@@ -20,7 +20,7 @@ export class MbtiRepository implements IMbtiRepository {
         UserMbtiMapper.toEntity(dto.userId, dto.mbti, dto.toUserId),
       );
 
-      return this.userMbtiFactory.reconstitute(
+      return this.mbtiFactory.reconstitute(
         new UserMbtiRawDto(
           result.id,
           result.userId,

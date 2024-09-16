@@ -21,7 +21,7 @@ import {
   AdjectiveExpressionFactory,
   BalanceListFactory,
   BalanceFactory,
-  UserMbtiFactory,
+  MbtiFactory,
 } from '@domain';
 import {
   AdjectiveExpressionController,
@@ -94,7 +94,7 @@ import { GameSaga } from '../saga';
     AdjectiveExpressionFactory,
     BalanceListFactory,
     BalanceFactory,
-    UserMbtiFactory,
+    MbtiFactory,
     GameSaga,
     EventGameRollbackHandler,
     CreateUserExpressionReadCommandHandler,

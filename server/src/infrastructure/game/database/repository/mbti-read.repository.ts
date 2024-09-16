@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { IMbtiReadRepository, Mbti, UserMbtiFactory } from '@domain';
+import { IMbtiReadRepository, Mbti, MbtiFactory } from '@domain';
 import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
 import {
   CreateMbtiReadDto,
@@ -17,7 +17,7 @@ import {
 
 @Injectable()
 export class MbtiReadRepository implements IMbtiReadRepository {
-  constructor(private readonly userMbtiFactory: UserMbtiFactory) {}
+  constructor(private readonly mbtiFactory: MbtiFactory) {}
 
   async create(dto: CreateMbtiReadDto, manager: EntityManager) {
     const { mbtiId, userId, mbti, toUserId, createdAt } = dto;
@@ -111,7 +111,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
         (mbti) => mbti.toUserId === user.user_id,
       );
 
-      return this.userMbtiFactory.reconstitute(
+      return this.mbtiFactory.reconstitute(
         new UserMbtiRawDto(
           null,
           user.user_id,
@@ -153,7 +153,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
         (mbti: any) => mbti.toUserId === dto.toUserId,
       );
 
-      return this.userMbtiFactory.reconstitute(
+      return this.mbtiFactory.reconstitute(
         new UserMbtiRawDto(
           null,
           user.user_id,

@@ -18,6 +18,7 @@ import {
   CreateBalanceReadDto,
   DeleteUserBalanceReadDto,
   FindSubmitUserDto,
+  ReconstituteBalanceArrayDto,
 } from '@application';
 import {
   DeleteBalanceException,
@@ -158,16 +159,18 @@ export class BalanceReadRepository implements IBalanceReadRepository {
 
     const userBalances = usersWithMatchingBalance.map((balance, idx) =>
       this.balanceFactory.reconstituteArray(
-        dto.balanceId,
-        Number(balance.userid),
-        balance.nickname,
-        Number(balance.imgid),
-        test[idx].balances.balanceId,
-        test[idx].balances.balanceType,
-        {
-          typeA: balanceGame.typeA,
-          typeB: balanceGame.typeB,
-        },
+        new ReconstituteBalanceArrayDto(
+          dto.balanceId,
+          Number(balance.userid),
+          balance.nickname,
+          Number(balance.imgid),
+          test[idx].balances.balanceId,
+          test[idx].balances.balanceType,
+          {
+            typeA: balanceGame.typeA,
+            typeB: balanceGame.typeB,
+          },
+        ),
       ),
     );
 

@@ -6,7 +6,10 @@ import {
   IAdjectiveExpressionRepository,
 } from '@domain';
 import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
-import { SaveUserAdjectiveExpressionDto } from '@application';
+import {
+  ReconstituteAdjectiveExpressionArrayDto,
+  SaveUserAdjectiveExpressionDto,
+} from '@application';
 import { DeleteAdjectiveExpressionListException } from '@common';
 
 @Injectable()
@@ -30,10 +33,12 @@ export class AdjectiveExpressionRepository
 
       const transformedResult = result.map((result) =>
         this.adjectiveExpressionFactory.reconstituteUserArray(
-          result.id,
-          result.userId,
-          result.adjectiveExpressionId,
-          result.createdAt,
+          new ReconstituteAdjectiveExpressionArrayDto(
+            result.id,
+            result.userId,
+            result.adjectiveExpressionId,
+            result.createdAt,
+          ),
         ),
       );
 
