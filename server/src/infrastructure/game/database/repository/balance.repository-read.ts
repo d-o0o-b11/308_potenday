@@ -13,7 +13,6 @@ import {
   GroupedByBalanceTypeDto,
 } from '@interface';
 import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
-import { BalanceListReadEntity } from '../entity/read/balance-list.entity';
 import {
   CreateBalanceReadDto,
   DeleteUserBalanceReadDto,
@@ -26,6 +25,8 @@ import {
   NotFoundBalanceListException,
   UpdateBalanceException,
 } from '@common';
+import { BalanceListReadEntity } from '../entity';
+// import { BalanceListReadEntity } from '../entity/read/balance-list.entity';
 
 @Injectable()
 export class BalanceReadRepository implements IBalanceReadRepository {

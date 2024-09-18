@@ -5,12 +5,13 @@ import {
   AdjectiveExpressionFactory,
   IAdjectiveExpressionRepository,
 } from '@domain';
-import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
+// import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
 import {
   ReconstituteAdjectiveExpressionArrayDto,
   SaveUserAdjectiveExpressionDto,
 } from '@application';
 import { DeleteAdjectiveExpressionListException } from '@common';
+import { UserAdjectiveExpressionEntity } from '../entity';
 
 @Injectable()
 export class AdjectiveExpressionRepository

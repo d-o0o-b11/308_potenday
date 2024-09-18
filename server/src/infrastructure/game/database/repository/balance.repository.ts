@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { IBalanceRepository, BalanceFactory } from '@domain';
 import { UserBalanceMapper } from '../mapper';
-import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
+// import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
 import {
   CreateUserBalanceDto,
   DeleteUserBalanceDto,
   ReconstituteBalanceDto,
 } from '@application';
 import { DeleteBalanceException } from '@common';
+import { UserBalanceEntity } from '../entity';
 
 @Injectable()
 export class BalanceRepository implements IBalanceRepository {

@@ -9,9 +9,13 @@ import {
 } from 'typeorm';
 import { BaseEntity } from '@common';
 import { UserUrlEntity } from './user-url.entity';
-import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
-import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
+// import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
+// import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
 import { UserMbtiEntity } from '@infrastructure/game/database/entity/cud/user-mbti.entity';
+import {
+  UserAdjectiveExpressionEntity,
+  UserBalanceEntity,
+} from '@infrastructure';
 
 @Entity('user')
 export class UserEntity extends BaseEntity {

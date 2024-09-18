@@ -1,5 +1,6 @@
 import { BalanceType } from '@domain';
-import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
+import { UserBalanceEntity } from '../entity';
+// import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
 
 export class UserBalanceMapper {
   static toEntity(

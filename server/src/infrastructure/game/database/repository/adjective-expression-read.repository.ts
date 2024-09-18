@@ -18,7 +18,9 @@ import {
 export class AdjectiveExpressionReadRepository
   implements IAdjectiveExpressionRepositoryReadRepository
 {
-  constructor(private adjectiveExpressionFactory: AdjectiveExpressionFactory) {}
+  constructor(
+    private readonly adjectiveExpressionFactory: AdjectiveExpressionFactory,
+  ) {}
 
   async create(
     dto: CreateUserAdjectiveExpressionReadDto,
@@ -37,12 +39,6 @@ export class AdjectiveExpressionReadRepository
     const result = await manager
       .createQueryBuilder()
       .update(UserReadEntity)
-      // .set({
-      //   data: () =>
-      //     `jsonb_set(data, '{adjectiveExpression}', '${JSON.stringify(
-      //       expressionIdList,
-      //     )}'::jsonb, true)`,
-      // })
       .set({
         data: () =>
           `jsonb_set(data, '{adjectiveExpression}', '${JSON.stringify(

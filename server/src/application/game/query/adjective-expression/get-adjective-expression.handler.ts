@@ -2,9 +2,10 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { AdjectiveExpression, AdjectiveExpressionFactory } from '@domain';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
+// import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 import { GetAdjectiveExpressionQuery } from './get-adjective-expression.query';
 import { ReconstituteAdjectiveExpressionDto } from '@application';
+import { AdjectiveExpressionReadEntity } from '@infrastructure';
 
 @QueryHandler(GetAdjectiveExpressionQuery)
 export class GetAdjectiveExpressionQueryHandler

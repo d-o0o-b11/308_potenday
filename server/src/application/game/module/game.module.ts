@@ -30,11 +30,11 @@ import {
   MbtiController,
 } from '@interface';
 import { CqrsModule } from '@nestjs/cqrs';
-import { AdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/adjective-expression.entity';
-import { BalanceListEntity } from '@infrastructure/game/database/entity/cud/balance-list.entity';
+// import { AdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/adjective-expression.entity';
+// import { BalanceListEntity } from '@infrastructure/game/database/entity/cud/balance-list.entity';
 import { UserMbtiEntity } from '@infrastructure/game/database/entity/cud/user-mbti.entity';
-import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
-import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
+// import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
+// import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
 import { EventGameRollbackHandler, GameEventHandler } from '../event';
 import {
   GetAdjectiveExpressionQueryHandler,
@@ -64,11 +64,11 @@ import { GameSaga } from '../saga';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      AdjectiveExpressionEntity,
-      BalanceListEntity,
+      // AdjectiveExpressionEntity,
+      // BalanceListEntity,
       UserMbtiEntity,
-      UserAdjectiveExpressionEntity,
-      UserBalanceEntity,
+      // UserAdjectiveExpressionEntity,
+      // UserBalanceEntity,
     ]),
     CqrsModule,
     EventModule,

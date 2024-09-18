@@ -1,7 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { GetUsersAdjectiveExpressionQuery } from './get-users-adjective-expression.query';
-import { ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN } from '@infrastructure';
+import {
+  ADJECTIVE_EXPRESSION_REPOSITORY_READ_TOKEN,
+  AdjectiveExpressionReadEntity,
+} from '@infrastructure';
 import {
   AdjectiveExpression,
   IAdjectiveExpressionRepositoryReadRepository,
@@ -9,7 +12,7 @@ import {
 import { GroupByUserAdjectiveExpressionDto } from '@interface';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
+// import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 
 @QueryHandler(GetUsersAdjectiveExpressionQuery)
 export class GetUsersAdjectiveExpressionQueryHandler
