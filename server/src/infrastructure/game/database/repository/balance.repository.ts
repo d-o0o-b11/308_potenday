@@ -15,7 +15,7 @@ import { UserBalanceEntity } from '../entity';
 export class BalanceRepository implements IBalanceRepository {
   constructor(
     private readonly balanceFactory: BalanceFactory,
-    private manager: EntityManager,
+    private readonly manager: EntityManager,
   ) {}
 
   async create(dto: CreateUserBalanceDto) {

@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { UserMbtiMapper } from '../mapper';
 import { IMbtiRepository, MbtiFactory } from '@domain';
-import { UserMbtiEntity } from '../entity/cud/user-mbti.entity';
 import { SaveUserMbtiDto, UserMbtiRawDto } from '@application';
 import { DeleteMbtiException } from '@common';
+import { UserMbtiEntity } from '../entity';
 
 @Injectable()
 export class MbtiRepository implements IMbtiRepository {
   constructor(
-    private manager: EntityManager,
+    private readonly manager: EntityManager,
     private readonly mbtiFactory: MbtiFactory,
   ) {}
 

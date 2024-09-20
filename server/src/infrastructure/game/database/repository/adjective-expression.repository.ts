@@ -18,8 +18,8 @@ export class AdjectiveExpressionRepository
   implements IAdjectiveExpressionRepository
 {
   constructor(
-    private manager: EntityManager,
-    private adjectiveExpressionFactory: AdjectiveExpressionFactory,
+    private readonly manager: EntityManager,
+    private readonly adjectiveExpressionFactory: AdjectiveExpressionFactory,
   ) {}
 
   async create(dto: SaveUserAdjectiveExpressionDto) {

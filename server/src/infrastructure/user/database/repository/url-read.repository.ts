@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { IUrlReadRepository, UrlFactory } from '@domain';
-import { UrlReadEntity } from '../entity/read/url-read.entity';
+// import { UrlReadEntity } from '../entity/read/url-read.entity';
 import { UserUrlMapper } from '../mapper';
 import {
   CreateUserUrlReadDto,
@@ -18,6 +18,7 @@ import {
   UpdateUrlException,
   UpdateUrlUserIdListException,
 } from '@common';
+import { UrlReadEntity } from '../entity';
 
 @Injectable()
 export class UrlReadRepository implements IUrlReadRepository {

@@ -40,7 +40,7 @@ export class CreateUserUrlReadDto {
     public readonly url: string,
     public readonly status: boolean,
     public readonly createdAt: Date,
-    public readonly updatedAt: Date,
+    public readonly updatedAt: Date | null,
     public readonly deletedAt: Date | null,
   ) {}
 }

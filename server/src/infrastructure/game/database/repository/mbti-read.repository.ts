@@ -56,7 +56,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
   async isSubmitUser(dto: FindSubmitMbtiUserDto, manager: EntityManager) {
     const user = await manager
       .createQueryBuilder(UserReadEntity, 'user')
-      .select(["data->'mbti' AS mbti"])
+      .select("data->'mbti' AS mbti") //["data->'mbti' AS mbti"]
       .where("data->>'userId' = :userId", { userId: dto.userId })
       .getRawOne();
 
@@ -66,7 +66,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
     }
 
     // mbti 배열에서 toUserId가 일치하는 항목을 찾음
-    const mbtiList = user.mbti as Mbti[];
+    const mbtiList = JSON.parse(user.mbti) as Mbti[];
     const hasMbti = mbtiList.some((mbti) => mbti.toUserId === dto.toUserId);
 
     // toUserId가 존재하면 true, 그렇지 않으면 false 반환
@@ -103,7 +103,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
         "data->'imgId' AS img_id",
         "data->'mbtiList' AS mbti_list",
       ])
-      .where("data->>'urlId' = :urlId", { urlId: urlId })
+      .where("data->>'urlId' = :urlId", { urlId })
       .getRawMany();
 
     const result = mbtiList.map((user) => {

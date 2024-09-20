@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { IUserReadRepository, UserFactory } from '@domain';
 import { UserMapper } from '../mapper';
-import { UserReadEntity } from '../entity/read/user-read.entity';
+// import { UserReadEntity } from '../entity/read/user-read.entity';
 import { CreateUserReadDto } from '@application';
 import { DeleteUserException } from '@common';
+import { UserReadEntity } from '../entity';
 
 @Injectable()
 export class UserReadRepository implements IUserReadRepository {

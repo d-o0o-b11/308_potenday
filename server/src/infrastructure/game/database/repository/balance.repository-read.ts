@@ -68,7 +68,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
   async isSubmitUser(dto: FindSubmitUserDto, manager: EntityManager) {
     const user = await manager
       .createQueryBuilder(UserReadEntity, 'user')
-      .select(["data->'balance' AS balance"])
+      .select("data->'balance' AS balance") //["data->'balance' AS balance"]
       .where("data->>'userId' = :userId", { userId: dto.userId })
       .getRawOne();
 
