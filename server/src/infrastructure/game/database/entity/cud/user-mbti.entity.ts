@@ -1,5 +1,5 @@
 import { BaseEntity } from '@common';
-import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
+import { UserEntity } from '@infrastructure';
 import {
   Column,
   Entity,

@@ -12,7 +12,6 @@ import {
   FindUserBalanceResponseDto,
   GroupedByBalanceTypeDto,
 } from '@interface';
-import { UserReadEntity } from '@infrastructure/user/database/entity/read/user-read.entity';
 import {
   CreateBalanceReadDto,
   DeleteUserBalanceReadDto,
@@ -26,7 +25,7 @@ import {
   UpdateBalanceException,
 } from '@common';
 import { BalanceListReadEntity } from '../entity';
-// import { BalanceListReadEntity } from '../entity/read/balance-list.entity';
+import { UserReadEntity } from '@infrastructure';
 
 @Injectable()
 export class BalanceReadRepository implements IBalanceReadRepository {
@@ -142,7 +141,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       throw new NotFoundBalanceListException();
     }
 
-    const test = usersWithMatchingBalance.map((user) => {
+    const userMatchBalance = usersWithMatchingBalance.map((user) => {
       const balanceArray = JSON.parse(user.balance);
 
       // balanceArray에서 dto.balanceId와 일치하는 객체만 필터링
@@ -165,8 +164,8 @@ export class BalanceReadRepository implements IBalanceReadRepository {
           Number(balance.userid),
           balance.nickname,
           Number(balance.imgid),
-          test[idx].balances.balanceId,
-          test[idx].balances.balanceType,
+          userMatchBalance[idx].balances.balanceId,
+          userMatchBalance[idx].balances.balanceType,
           {
             typeA: balanceGame.typeA,
             typeB: balanceGame.typeB,

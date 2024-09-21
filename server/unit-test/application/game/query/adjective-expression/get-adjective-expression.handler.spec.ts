@@ -4,7 +4,6 @@ import {
 } from '@application';
 import { AdjectiveExpressionFactory } from '@domain';
 import { AdjectiveExpressionReadEntity } from '@infrastructure';
-// import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 import { MockEntityManager } from '@mock';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getEntityManagerToken } from '@nestjs/typeorm';

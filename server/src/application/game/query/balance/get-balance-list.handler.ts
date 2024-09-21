@@ -3,7 +3,6 @@ import { GetBalanceListQuery } from './get-balance-list.query';
 import { BalanceList, BalanceListFactory } from '@domain';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-// import { BalanceListReadEntity } from '@infrastructure/game/database/entity/read/balance-list.entity';
 import { ReconstituteBalanceListDto } from '@application';
 import { BalanceListReadEntity } from '@infrastructure';
 

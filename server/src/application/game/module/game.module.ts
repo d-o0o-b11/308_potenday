@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   ADJECTIVE_EXPRESSION_REPOSITORY_TOKEN,
   BALANCE_REPOSITORY_TOKEN,
@@ -30,11 +29,6 @@ import {
   MbtiController,
 } from '@interface';
 import { CqrsModule } from '@nestjs/cqrs';
-// import { AdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/adjective-expression.entity';
-// import { BalanceListEntity } from '@infrastructure/game/database/entity/cud/balance-list.entity';
-import { UserMbtiEntity } from '@infrastructure/game/database/entity/cud/user-mbti.entity';
-// import { UserAdjectiveExpressionEntity } from '@infrastructure/game/database/entity/cud/user-adjective-expression.entity';
-// import { UserBalanceEntity } from '@infrastructure/game/database/entity/cud/user-balance.entity';
 import { EventGameRollbackHandler, GameEventHandler } from '../event';
 import {
   GetAdjectiveExpressionQueryHandler,
@@ -62,17 +56,7 @@ import { EventModule } from '../../event';
 import { GameSaga } from '../saga';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      // AdjectiveExpressionEntity,
-      // BalanceListEntity,
-      UserMbtiEntity,
-      // UserAdjectiveExpressionEntity,
-      // UserBalanceEntity,
-    ]),
-    CqrsModule,
-    EventModule,
-  ],
+  imports: [CqrsModule, EventModule],
   controllers: [
     AdjectiveExpressionController,
     CommonQuestionController,

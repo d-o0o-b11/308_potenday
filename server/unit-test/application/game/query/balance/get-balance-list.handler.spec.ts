@@ -5,7 +5,6 @@ import {
 } from '@application';
 import { BalanceListFactory } from '@domain';
 import { BalanceListReadEntity } from '@infrastructure';
-// import { BalanceListReadEntity } from '@infrastructure/game/database/entity/read/balance-list.entity';
 import { MockEntityManager } from '@mock';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getEntityManagerToken } from '@nestjs/typeorm';

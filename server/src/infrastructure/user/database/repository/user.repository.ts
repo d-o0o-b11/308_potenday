@@ -3,7 +3,6 @@ import { IUserRepository, UserFactory } from '@domain';
 import { EntityManager } from 'typeorm';
 import { UserMapper } from '../mapper';
 import { InjectEntityManager } from '@nestjs/typeorm';
-// import { UserEntity } from '../entity/cud/user.entity';
 import { CreateUserDto } from '@application';
 import { DeleteUserException } from '@common';
 import { UserEntity } from '../entity';

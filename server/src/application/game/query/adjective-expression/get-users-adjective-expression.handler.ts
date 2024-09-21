@@ -12,7 +12,6 @@ import {
 import { GroupByUserAdjectiveExpressionDto } from '@interface';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-// import { AdjectiveExpressionReadEntity } from '@infrastructure/game/database/entity/read/adjective-expression.entity';
 
 @QueryHandler(GetUsersAdjectiveExpressionQuery)
 export class GetUsersAdjectiveExpressionQueryHandler

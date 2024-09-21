@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { IBalanceRepository, BalanceFactory } from '@domain';
 import { UserBalanceMapper } from '../mapper';
-// import { UserBalanceEntity } from '../entity/cud/user-balance.entity';
 import {
   CreateUserBalanceDto,
   DeleteUserBalanceDto,

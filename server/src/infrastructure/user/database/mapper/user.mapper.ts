@@ -1,6 +1,4 @@
-// import { UserEntity } from '../entity/cud/user.entity';
 import { UserRead } from '@domain';
-// import { UserReadEntity } from '../entity/read/user-read.entity';
 import { CreateUserDto } from '@application';
 import { UserEntity, UserReadEntity } from '../entity';
 

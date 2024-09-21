@@ -254,15 +254,31 @@ describe('BalanceReadRepository', () => {
       const getOne = jest
         .spyOn(queryBuilder, 'getOne')
         .mockResolvedValue(mockBalanceGame);
+      const reconstituteArray = jest
+        .spyOn(balanceFactory, 'reconstituteArray')
+        .mockReturnValue({
+          getBalanceType: () => 'A',
+          getBalanceGame: () => ({
+            typeA: 'typeA',
+            typeB: 'typeB',
+          }),
+          getUserId: () => 1,
+          getNickName: () => 'd_o0o_b',
+          getImgId: () => 1,
+        } as any);
 
       await repository.find(dto, manager);
 
-      expect(select).toBeCalledTimes(1);
-      expect(select).toBeCalledWith([
+      expect(select).toBeCalledTimes(2);
+      expect(select).toHaveBeenNthCalledWith(1, [
         "data->>'userId' AS userId",
         "data->>'nickname' AS nickName",
         "data->>'imgId' AS imgId",
         "data->>'balance' AS balance",
+      ]);
+      expect(select).toHaveBeenNthCalledWith(2, [
+        'balanceGame.typeA',
+        'balanceGame.typeB',
       ]);
       expect(where).toBeCalledTimes(2);
       expect(where).toHaveBeenNthCalledWith(1, "data->>'urlId' = :urlId", {
@@ -284,6 +300,7 @@ describe('BalanceReadRepository', () => {
       );
       expect(getRawMany).toBeCalledTimes(1);
       expect(getOne).toBeCalledTimes(1);
+      expect(reconstituteArray).toBeCalledTimes(1);
     });
 
     it('일치하는 balanceId를 찾지 못하면 예외를 던집니다.', async () => {
@@ -323,7 +340,7 @@ describe('BalanceReadRepository', () => {
 
       expect(select).toBeCalledTimes(1);
       expect(select).toBeCalledWith("user.data->'balance' AS balance");
-      expect(where).toBeCalledTimes(1);
+      expect(where).toBeCalledTimes(2);
       expect(where).toHaveBeenNthCalledWith(
         1,
         "user.data->>'userId' = :userId",

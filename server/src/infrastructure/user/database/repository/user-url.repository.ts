@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { UserUrlMapper } from '../mapper';
 import { IUrlRepository, UrlFactory } from '@domain';
-// import { UserUrlEntity } from '../entity/cud/user-url.entity';
 import { DeleteUrlException, UpdateUrlException } from '@common';
 import {
   CreateUserUrlDto,

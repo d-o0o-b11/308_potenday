@@ -9,8 +9,6 @@ import {
   adjectiveExpressionUserId2,
   defaultUrl,
 } from './data';
-// import { UserUrlEntity } from '@infrastructure/user/database/entity/cud/user-url.entity';
-// import { UserEntity } from '@infrastructure/user/database/entity/cud/user.entity';
 import {
   UserAdjectiveExpressionEntity,
   UserEntity,

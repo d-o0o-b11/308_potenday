@@ -5,7 +5,6 @@ import {
   AdjectiveExpressionFactory,
   IAdjectiveExpressionRepository,
 } from '@domain';
-// import { UserAdjectiveExpressionEntity } from '../entity/cud/user-adjective-expression.entity';
 import {
   ReconstituteAdjectiveExpressionArrayDto,
   SaveUserAdjectiveExpressionDto,
