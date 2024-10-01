@@ -24,7 +24,7 @@ import {
   UpdateStatusFalseCommand,
 } from '@application';
 import {
-  CountUsersInRoomResponseDto,
+  CountUserListInRoomResponseDto,
   GetUrlStatusResponseDto,
   SetUrlResponseDto,
 } from './dto';
@@ -70,7 +70,7 @@ export class UserUrlController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: CountUsersInRoomResponseDto,
+    type: CountUserListInRoomResponseDto,
   })
   @ApiInternalServerErrorResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,

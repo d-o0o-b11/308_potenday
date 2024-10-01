@@ -35,13 +35,13 @@ export class MbtiReadRepository implements IMbtiReadRepository {
       .set({
         data: () =>
           `jsonb_set(
-          data, 
-          '{mbtiList}', 
-          (CASE 
-            WHEN data->'mbtiList' IS NULL 
-            THEN '[]' 
-            ELSE data->'mbtiList' 
-          END) || '${JSON.stringify(mbtiList)}'::jsonb, 
+          data,
+          '{mbti}',
+          (CASE
+            WHEN data->'mbti' IS NULL
+            THEN '[]'
+            ELSE data->'mbti'
+          END) || '${JSON.stringify(mbtiList)}'::jsonb,
           true
         )`,
       })
@@ -66,7 +66,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
     }
 
     // mbti 배열에서 toUserId가 일치하는 항목을 찾음
-    const mbtiList = JSON.parse(user.mbti) as Mbti[];
+    const mbtiList = user.mbti as Mbti[]; //JSON.parse(user.mbti) as Mbti[];
     const hasMbti = mbtiList.some((mbti) => mbti.toUserId === dto.toUserId);
 
     // toUserId가 존재하면 true, 그렇지 않으면 false 반환
@@ -101,7 +101,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
         "data->'userId' AS user_id",
         "data->'nickname' AS nick_name",
         "data->'imgId' AS img_id",
-        "data->'mbtiList' AS mbti_list",
+        "data->'mbti' AS mbti_list",
       ])
       .where("data->>'urlId' = :urlId", { urlId })
       .getRawMany();
@@ -133,14 +133,14 @@ export class MbtiReadRepository implements IMbtiReadRepository {
         "data->'userId' AS user_id",
         "data->'nickname' AS nick_name",
         "data->'imgId' AS img_id",
-        "data->'mbtiList' AS mbti_list",
+        "data->'mbti' AS mbti_list",
       ])
       .where("data->>'urlId' = :urlId", { urlId: dto.urlId })
       .andWhere(
         `
         EXISTS (
           SELECT 1
-          FROM jsonb_array_elements(data->'mbtiList') AS mbti
+          FROM jsonb_array_elements(data->'mbti') AS mbti
           WHERE mbti->>'toUserId' = :toUserId
         )
       `,
@@ -181,7 +181,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
       throw new NotFoundMbtiException();
     }
 
-    const mbtis: Mbti[] = JSON.parse(user.mbti);
+    const mbtis: Mbti[] = user.mbti; //JSON.parse(user.mbti);
 
     const updatedMbtis = mbtis.filter((mbti) => mbti.mbtiId !== mbtiId);
 

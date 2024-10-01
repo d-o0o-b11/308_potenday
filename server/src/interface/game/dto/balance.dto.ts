@@ -2,7 +2,6 @@ import { UserBalance } from '@domain';
 import { IsIn, IsNumber, IsNumberString } from 'class-validator';
 import { BALANCE_TYPES, BalanceType } from '@domain';
 
-// console.log('dd', BALANCE_TYPES);
 export class CreateBalanceDto {
   /**
    * USER ID

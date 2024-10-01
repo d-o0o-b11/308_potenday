@@ -107,7 +107,7 @@ describe('MbtiReadRepository', () => {
       const getRawOne = jest
         .spyOn(queryBuilder, 'getRawOne')
         .mockResolvedValue({
-          mbti: JSON.stringify([{ toUserId: 127, mbti: 'INTJ' }]),
+          mbti: [{ toUserId: 127, mbti: 'INTJ' }],
         });
 
       const result = await repository.isSubmitUser(dto, manager);
@@ -128,7 +128,7 @@ describe('MbtiReadRepository', () => {
       const getRawOne = jest
         .spyOn(queryBuilder, 'getRawOne')
         .mockResolvedValueOnce({
-          mbti: JSON.stringify([{ toUserId: 3, mbti: 'INTJ' }]),
+          mbti: [{ toUserId: 3, mbti: 'INTJ' }],
         });
 
       const result = await repository.isSubmitUser(dto, manager);
@@ -224,7 +224,7 @@ describe('MbtiReadRepository', () => {
         "data->'userId' AS user_id",
         "data->'nickname' AS nick_name",
         "data->'imgId' AS img_id",
-        "data->'mbtiList' AS mbti_list",
+        "data->'mbti' AS mbti_list",
       ]);
       expect(where).toBeCalledTimes(1);
       expect(where).toBeCalledWith("data->>'urlId' = :urlId", { urlId });
@@ -288,7 +288,7 @@ describe('MbtiReadRepository', () => {
         "data->'userId' AS user_id",
         "data->'nickname' AS nick_name",
         "data->'imgId' AS img_id",
-        "data->'mbtiList' AS mbti_list",
+        "data->'mbti' AS mbti_list",
       ]);
       expect(where).toBeCalledWith("data->>'urlId' = :urlId", {
         urlId: dto.urlId,
@@ -326,7 +326,7 @@ describe('MbtiReadRepository', () => {
       const getRawOne = jest
         .spyOn(queryBuilder, 'getRawOne')
         .mockResolvedValueOnce({
-          mbti: JSON.stringify([{ mbtiId: 1, mbti: 'INTJ' }]),
+          mbti: [{ mbtiId: 1, mbti: 'INTJ' }],
         });
       const execute = jest
         .spyOn(queryBuilder, 'execute')
@@ -379,7 +379,7 @@ describe('MbtiReadRepository', () => {
       const getRawOne = jest
         .spyOn(queryBuilder, 'getRawOne')
         .mockResolvedValueOnce({
-          mbti: JSON.stringify([{ mbtiId: 1, mbti: 'INTJ' }]),
+          mbti: [{ mbtiId: 1, mbti: 'INTJ' }],
         });
       const execute = jest
         .spyOn(queryBuilder, 'execute')

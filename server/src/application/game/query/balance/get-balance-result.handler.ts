@@ -22,8 +22,8 @@ export class GetBalanceResultQueryHandler
   ): Promise<CalculatePercentagesResponseDto[]> {
     return await this.balanceReadRepository.find(
       {
-        urlId: query.urlId,
-        balanceId: query.balanceId,
+        urlId: Number(query.urlId),
+        balanceId: Number(query.balanceId),
       },
       this.readManager,
     );

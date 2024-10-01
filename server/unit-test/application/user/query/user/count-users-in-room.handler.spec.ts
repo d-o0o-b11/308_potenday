@@ -39,10 +39,17 @@ describe('CountUsersInRoomQueryHandler', () => {
     const query = new CountUsersInRoomQuery(111);
 
     it('해당 url에 존재하는 유저 정보, 인원 수를 반환합니다.', async () => {
-      const checkUserLimitForUrl = jest.spyOn(
-        urlService,
-        'checkUserLimitForUrl',
-      );
+      const checkUserLimitForUrl = jest
+        .spyOn(urlService, 'checkUserLimitForUrl')
+        .mockResolvedValue({
+          userInfo: [
+            {
+              getUserId: () => 11,
+              getImgId: () => 1,
+              getNickname: () => 'd_o0o_b',
+            },
+          ],
+        } as any);
 
       await handler.execute(query);
 

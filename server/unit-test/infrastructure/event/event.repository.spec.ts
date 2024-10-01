@@ -35,8 +35,8 @@ describe('EventRepository', () => {
       expect(save).toBeCalledTimes(1);
       expect(save).toBeCalledWith(
         new EventEntity({
-          eventType,
-          eventMethod,
+          type: eventType,
+          method: eventMethod,
           event: rest,
         }),
       );

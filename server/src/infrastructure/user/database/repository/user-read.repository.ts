@@ -45,6 +45,7 @@ export class UserReadRepository implements IUserReadRepository {
 
     // 모든 Promise가 완료될 때까지 대기
     const findResult = await Promise.all(findPromises);
+
     return findResult;
   }
 

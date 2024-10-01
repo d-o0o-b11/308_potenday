@@ -1,5 +1,4 @@
 import { UserMbti } from '@domain';
-import { OmitType } from '@nestjs/swagger';
 
 export class SaveUserMbtiDto {
   constructor(
@@ -10,7 +9,13 @@ export class SaveUserMbtiDto {
   ) {}
 }
 
-export class CreateUserMbtiDto extends OmitType(SaveUserMbtiDto, ['urlId']) {}
+export class CreateUserMbtiDto {
+  constructor(
+    public readonly userId: number,
+    public readonly mbti: string,
+    public readonly toUserId: number,
+  ) {}
+}
 
 export class UserMbtiRawDto {
   constructor(

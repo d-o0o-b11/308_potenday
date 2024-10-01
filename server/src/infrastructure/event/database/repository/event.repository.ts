@@ -11,8 +11,8 @@ export class EventRepository implements IEventRepository {
 
     await manager.save(
       new EventEntity({
-        eventType,
-        eventMethod,
+        type: eventType,
+        method: eventMethod,
         event: rest,
       }),
     );

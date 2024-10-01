@@ -7,6 +7,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { IUrlReadRepository } from '@domain';
 import { FindOneByUrlIdDto } from '@application';
+import { NotFoundUrlException } from '@common';
 
 @QueryHandler(GetUrlStatusQuery)
 export class GetUrlStatusHandler implements IQueryHandler<GetUrlStatusQuery> {
@@ -25,6 +26,10 @@ export class GetUrlStatusHandler implements IQueryHandler<GetUrlStatusQuery> {
       new FindOneByUrlIdDto(urlId),
       this.readManager,
     );
+
+    if (!findResult) {
+      throw new NotFoundUrlException();
+    }
 
     return { status: findResult.getStatus() };
   }

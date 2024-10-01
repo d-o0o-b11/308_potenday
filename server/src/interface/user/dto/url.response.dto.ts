@@ -30,6 +30,40 @@ export class CountUsersInRoomResponseDto {
    */
   userInfo: UserRead[];
 }
+
+export class CountUserListInRoomResponseDto {
+  /**
+   * 인원 수
+   * @example 0
+   */
+  userCount: number;
+
+  /**
+   * 유저 정보
+   */
+  userInfo: UserInfoResponseDto[];
+}
+
+class UserInfoResponseDto {
+  /**
+   * 유저 ID
+   * @example 11
+   */
+  id: number;
+
+  /**
+   * 이미지 ID
+   * @example 2
+   */
+  imgId: number;
+
+  /**
+   * 닉네임
+   * @example 'd_o0o_b'
+   */
+  nickName: string;
+}
+
 export class CountUsersInRoomDto {
   /**
    * 인원 수
