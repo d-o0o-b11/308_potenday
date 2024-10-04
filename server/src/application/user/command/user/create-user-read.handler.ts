@@ -41,7 +41,7 @@ export class CreateUserReadCommandHandler
           'save',
           command.userId,
           command.imgId,
-          command.nickName,
+          command.name,
           command.urlId,
           command.createdAt,
           command.updatedAt,
@@ -54,7 +54,7 @@ export class CreateUserReadCommandHandler
         new CreateUserReadDto(
           command.userId,
           command.imgId,
-          command.nickName,
+          command.name,
           command.urlId,
           command.createdAt,
           command.updatedAt,

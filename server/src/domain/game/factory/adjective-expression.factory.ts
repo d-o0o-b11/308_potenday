@@ -40,7 +40,7 @@ export class AdjectiveExpressionFactory {
     return new UserRead(
       dto.userId,
       dto.imgId,
-      dto.nickname,
+      dto.name,
       dto.urlId,
       new Date(Date.now()),
       new Date(Date.now()),

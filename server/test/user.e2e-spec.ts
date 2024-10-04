@@ -94,7 +94,7 @@ describe('UserController (e2e)', () => {
             data: {
               userId: element,
               imgId: maxUser.imgId,
-              nickname: maxUser.nickname,
+              name: maxUser.name,
               urlId: maxUrlId,
               createdAt: maxReadUrl.createdAt,
               updatedAt: maxReadUrl.updatedAt,
@@ -121,7 +121,7 @@ describe('UserController (e2e)', () => {
       expect(response.body).toStrictEqual({
         id: expect.any(Number),
         imgId: defaultUser.imgId,
-        nickName: defaultUser.nickName,
+        name: defaultUser.name,
         urlId: urlId,
       });
 

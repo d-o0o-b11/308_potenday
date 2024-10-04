@@ -42,7 +42,7 @@ export class UserController {
     dto: CreateUserCommandDto,
   ) {
     return this.commandBus.execute(
-      new CreateUserCommand(dto.urlId, dto.imgId, dto.nickName),
+      new CreateUserCommand(dto.urlId, dto.imgId, dto.name),
     );
   }
 }

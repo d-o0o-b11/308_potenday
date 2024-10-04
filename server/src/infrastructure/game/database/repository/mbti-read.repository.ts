@@ -99,7 +99,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
       .createQueryBuilder(UserReadEntity, 'user')
       .select([
         "data->'userId' AS user_id",
-        "data->'nickname' AS nick_name",
+        "data->'name' AS name",
         "data->'imgId' AS img_id",
         "data->'mbti' AS mbti_list",
       ])
@@ -117,7 +117,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
           user.user_id,
           matchingMbti.mbti ?? null,
           null,
-          user.nick_name,
+          user.name,
           user.img_id,
         ),
       );
@@ -131,7 +131,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
       .createQueryBuilder(UserReadEntity, 'user')
       .select([
         "data->'userId' AS user_id",
-        "data->'nickname' AS nick_name",
+        "data->'name' AS name",
         "data->'imgId' AS img_id",
         "data->'mbti' AS mbti_list",
       ])
@@ -159,7 +159,7 @@ export class MbtiReadRepository implements IMbtiReadRepository {
           user.user_id,
           filteredMbti[0].mbti,
           dto.toUserId,
-          user.nick_name,
+          user.name,
           user.img_id,
         ),
       );

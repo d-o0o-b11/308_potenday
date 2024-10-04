@@ -31,7 +31,7 @@ export class UserReadRepository implements IUserReadRepository {
         new CreateUserReadDto(
           user.data.userId,
           user.data.imgId,
-          user.data.nickname,
+          user.data.name,
           user.data.urlId,
           user.data.createdAt,
           user.data.updatedAt,

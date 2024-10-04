@@ -20,7 +20,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   ) {}
 
   async execute(command: CreateUserCommand): Promise<UserResponseDto> {
-    const { urlId, imgId, nickName } = command;
+    const { urlId, imgId, name } = command;
 
     const { userCount, status } = await this.urlService.checkUserLimitForUrl(
       new FindOneUserUrlDto(urlId),
@@ -35,7 +35,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       throw new MaximumUrlException();
     }
     const result = await this.userRepository.create(
-      new CreateUserDto(urlId, imgId, nickName),
+      new CreateUserDto(urlId, imgId, name),
     );
 
     //saga 만들기
@@ -43,7 +43,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       new CreateUserEvent(
         result.getId(),
         result.getImgId(),
-        result.getNickName(),
+        result.getName(),
         result.getUrlId(),
         result.getCreatedAt(),
         result.getUpdatedAt(),
@@ -54,7 +54,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     return {
       id: result.getId(),
       imgId: result.getImgId(),
-      nickName: result.getNickName(),
+      name: result.getName(),
       urlId: result.getUrlId(),
     };
   }

@@ -37,12 +37,12 @@ describe('GetUsersInRoomQueryHandler', () => {
       {
         getUserId: () => 126,
         getImgId: () => 1,
-        getNickname: () => 'd_o0o_b',
+        getName: () => 'd_o0o_b',
       },
       {
         getUserId: () => 127,
         getImgId: () => 2,
-        getNickname: () => 'd_o0o_b2',
+        getName: () => 'd_o0o_b2',
       },
     ] as any;
 
@@ -58,7 +58,7 @@ describe('GetUsersInRoomQueryHandler', () => {
       expect(result).toStrictEqual({
         userId: userList[query.roundId - 1].getUserId(),
         imgId: userList[query.roundId - 1].getImgId(),
-        nickName: userList[query.roundId - 1].getNickname(),
+        name: userList[query.roundId - 1].getName(),
       });
     });
   });

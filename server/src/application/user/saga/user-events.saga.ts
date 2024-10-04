@@ -15,7 +15,7 @@ export class UserSaga {
         return new CreateUserReadCommand(
           event.userId,
           event.imgId,
-          event.nickname,
+          event.name,
           event.urlId,
           event.createdAt,
           event.updatedAt,

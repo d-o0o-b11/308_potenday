@@ -22,7 +22,7 @@ export class UserRead {
   constructor(
     private readonly userId: number,
     private readonly imgId: number,
-    private readonly nickname: string,
+    private readonly name: string,
     private readonly urlId: number,
     private readonly createdAt: Date,
     private readonly updatedAt: Date,
@@ -40,8 +40,8 @@ export class UserRead {
     return this.imgId;
   }
 
-  getNickname(): Readonly<string> {
-    return this.nickname;
+  getName(): Readonly<string> {
+    return this.name;
   }
 
   getUrlId(): Readonly<number> {

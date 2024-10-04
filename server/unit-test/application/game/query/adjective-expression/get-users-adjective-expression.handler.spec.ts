@@ -56,7 +56,7 @@ describe('GetUsersAdjectiveExpressionQueryHandler', () => {
         }),
         getUserId: () => 11,
         getImgId: () => 2,
-        getNickname: () => 'd_o0o_b11',
+        getName: () => 'd_o0o_b11',
       },
     ] as any;
 

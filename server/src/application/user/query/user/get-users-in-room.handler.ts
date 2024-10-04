@@ -22,7 +22,7 @@ export class GetUsersInRoomQueryHandler
     return {
       userId: user.getUserId(),
       imgId: user.getImgId(),
-      nickName: user.getNickname(),
+      name: user.getName(),
     };
   }
 }

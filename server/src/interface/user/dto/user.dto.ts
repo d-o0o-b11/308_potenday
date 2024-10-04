@@ -14,10 +14,10 @@ export class FindOneUserInfoDto {
   readonly imgId: number;
 
   /**
-   * nickName
+   * name
    * @example d_o0o_b
    */
-  readonly nickName: string;
+  readonly name: string;
 }
 
 export class CreateUserCommandDto {
@@ -40,5 +40,5 @@ export class CreateUserCommandDto {
    * @example 'd_o0o_b'
    */
   @IsString()
-  readonly nickName: string;
+  readonly name: string;
 }

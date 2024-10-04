@@ -61,7 +61,7 @@ class UserInfoResponseDto {
    * 닉네임
    * @example 'd_o0o_b'
    */
-  nickName: string;
+  name: string;
 }
 
 export class CountUsersInRoomDto {

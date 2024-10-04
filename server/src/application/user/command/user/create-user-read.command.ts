@@ -4,7 +4,7 @@ export class CreateUserReadCommand implements ICommand {
   constructor(
     public readonly userId: number,
     public readonly imgId: number,
-    public readonly nickName: string,
+    public readonly name: string,
     public readonly urlId: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date | null,

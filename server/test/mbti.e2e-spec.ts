@@ -81,7 +81,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId1,
             urlId,
-            nickname: mbtiUserId1.nickName,
+            name: mbtiUserId1.name,
             imgId: mbtiUserId1.imgId,
             mbti: [
               {
@@ -102,7 +102,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId2,
             urlId,
-            nickname: mbtiUserId2.nickName,
+            name: mbtiUserId2.name,
             imgId: mbtiUserId2.imgId,
             mbti: [
               {
@@ -135,7 +135,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
       expect(response.body).toStrictEqual({
         userId: userId,
         imgId: expectedUser.imgId,
-        nickName: expectedUser.nickName,
+        name: expectedUser.name,
       });
     };
 
@@ -217,7 +217,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId1,
             urlId,
-            nickname: mbtiUserId1.nickName,
+            name: mbtiUserId1.name,
             imgId: mbtiUserId1.imgId,
           },
         } as any)
@@ -228,7 +228,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId2,
             urlId,
-            nickname: mbtiUserId2.nickName,
+            name: mbtiUserId2.name,
             imgId: mbtiUserId2.imgId,
           },
         } as any)
@@ -239,7 +239,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: submitUserId,
             urlId,
-            nickname: mbtiSubmitUser.nickName,
+            name: mbtiSubmitUser.name,
             imgId: mbtiSubmitUser.imgId,
             mbti: [
               {
@@ -256,7 +256,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: otherUserId,
             urlId,
-            nickname: mbtiOtherUser.nickName,
+            name: mbtiOtherUser.name,
             imgId: mbtiOtherUser.imgId,
             mbti: [
               {
@@ -417,7 +417,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId1,
             urlId,
-            nickname: mbtiUserId1.nickName,
+            name: mbtiUserId1.name,
             imgId: mbtiUserId1.imgId,
             mbti: [
               {
@@ -438,7 +438,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId2,
             urlId,
-            nickname: mbtiUserId2.nickName,
+            name: mbtiUserId2.name,
             imgId: mbtiUserId2.imgId,
             mbti: [
               {
@@ -468,14 +468,14 @@ describe('AdjectiveExpressionController (e2e)', () => {
         answerUser: {
           imgId: mbtiUserId1.imgId,
           mbti: 'ISTJ',
-          nickName: mbtiUserId1.nickName,
+          name: mbtiUserId1.name,
           userId: userId1,
         },
         guessingUsers: [
           {
             imgId: mbtiUserId2.imgId,
             mbti: 'ISTP',
-            nickName: mbtiUserId2.nickName,
+            name: mbtiUserId2.name,
             userId: userId2,
           },
         ],
@@ -545,7 +545,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId1,
             urlId,
-            nickname: mbtiUserId1.nickName,
+            name: mbtiUserId1.name,
             imgId: mbtiUserId1.imgId,
             mbti: [
               {
@@ -566,7 +566,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
           data: {
             userId: userId2,
             urlId,
-            nickname: mbtiUserId2.nickName,
+            name: mbtiUserId2.name,
             imgId: mbtiUserId2.imgId,
             mbti: [
               {
@@ -593,13 +593,13 @@ describe('AdjectiveExpressionController (e2e)', () => {
         {
           imgId: mbtiUserId1.imgId,
           mbti: 'ISTJ',
-          nickName: mbtiUserId1.nickName,
+          name: mbtiUserId1.name,
           userId: userId1,
         },
         {
           imgId: mbtiUserId2.imgId,
           mbti: 'ESTP',
-          nickName: mbtiUserId2.nickName,
+          name: mbtiUserId2.name,
           userId: userId2,
         },
       ]);

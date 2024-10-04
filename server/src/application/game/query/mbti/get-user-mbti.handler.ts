@@ -36,7 +36,7 @@ export class GetUserMbtiQueryHandler
       const userInfo = {
         userId: user.getUserId(),
         mbti: user.getMbti(),
-        nickName: user.getNickName(),
+        name: user.getName(),
         imgId: user.getImgId(),
       };
 

@@ -114,7 +114,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
       .createQueryBuilder(UserReadEntity, 'user')
       .select([
         "data->>'userId' AS userId",
-        "data->>'nickname' AS nickName",
+        "data->>'name' AS name",
         "data->>'imgId' AS imgId",
         "data->>'balance' AS balance",
       ])
@@ -151,7 +151,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
 
       return {
         userId: user.userid,
-        nickName: user.nickname,
+        name: user.name,
         imgId: user.imgid,
         balances: filteredBalances[0],
       };
@@ -162,7 +162,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
         new ReconstituteBalanceArrayDto(
           dto.balanceId,
           Number(balance.userid),
-          balance.nickname,
+          balance.name,
           Number(balance.imgid),
           userMatchBalance[idx].balances.balanceId,
           userMatchBalance[idx].balances.balanceType,
@@ -201,7 +201,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
 
       acc[balanceTypeText].users.push({
         id: balance.getUserId(),
-        nickName: balance.getNickName(),
+        name: balance.getName(),
         imgId: balance.getImgId(),
       });
 

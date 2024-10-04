@@ -55,7 +55,7 @@ describe('UserReadRepository', () => {
     const mockUserRead = {
       userId: dto.userId,
       imgId: dto.imgId,
-      nickname: dto.nickname,
+      name: dto.name,
       urlId: dto.urlId,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
@@ -87,7 +87,7 @@ describe('UserReadRepository', () => {
         data: {
           userId: 1,
           imgId: 1,
-          nickname: 'd_o0o_b',
+          name: 'd_o0o_b',
           urlId: 111,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -117,7 +117,7 @@ describe('UserReadRepository', () => {
         data: {
           userId: 2,
           imgId: 2,
-          nickname: 'd_o0o_b2',
+          name: 'd_o0o_b2',
           urlId: 111,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -182,7 +182,7 @@ describe('UserReadRepository', () => {
           new CreateUserReadDto(
             element.data.userId,
             element.data.imgId,
-            element.data.nickname,
+            element.data.name,
             element.data.urlId,
             element.data.createdAt,
             element.data.updatedAt,

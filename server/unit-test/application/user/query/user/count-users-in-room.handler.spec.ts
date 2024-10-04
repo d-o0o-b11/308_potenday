@@ -46,7 +46,7 @@ describe('CountUsersInRoomQueryHandler', () => {
             {
               getUserId: () => 11,
               getImgId: () => 1,
-              getNickname: () => 'd_o0o_b',
+              getName: () => 'd_o0o_b',
             },
           ],
         } as any);

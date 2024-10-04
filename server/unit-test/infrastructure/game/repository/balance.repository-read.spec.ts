@@ -232,7 +232,7 @@ describe('BalanceReadRepository', () => {
       const mockUsers = [
         {
           userId: '1',
-          nickName: 'user1',
+          name: 'user1',
           imgId: 'image1',
           balance: JSON.stringify([
             { balanceId: 1, balanceType: BALANCE_TYPES.A },
@@ -263,7 +263,7 @@ describe('BalanceReadRepository', () => {
             typeB: 'typeB',
           }),
           getUserId: () => 1,
-          getNickName: () => 'd_o0o_b',
+          getName: () => 'd_o0o_b',
           getImgId: () => 1,
         } as any);
 
@@ -272,7 +272,7 @@ describe('BalanceReadRepository', () => {
       expect(select).toBeCalledTimes(2);
       expect(select).toHaveBeenNthCalledWith(1, [
         "data->>'userId' AS userId",
-        "data->>'nickname' AS nickName",
+        "data->>'name' AS name",
         "data->>'imgId' AS imgId",
         "data->>'balance' AS balance",
       ]);

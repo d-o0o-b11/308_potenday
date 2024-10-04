@@ -23,7 +23,7 @@ export class UserMbtiRawDto {
     public readonly userId: number,
     public readonly mbti: string,
     public readonly toUserId: number,
-    public readonly nickName: string,
+    public readonly name: string,
     public readonly imgId: number,
   ) {}
 }

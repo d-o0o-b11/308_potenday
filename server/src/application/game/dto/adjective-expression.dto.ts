@@ -19,7 +19,7 @@ export class FindUserAdjectiveExpressionReadDto {
   constructor(
     public readonly userId: number,
     public readonly imgId: number,
-    public readonly nickname: string,
+    public readonly name: string,
     public readonly urlId: number,
     public readonly adjectiveExpression?: AdjectiveExpressionRead,
   ) {}

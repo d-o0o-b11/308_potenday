@@ -195,13 +195,13 @@ describe('MbtiReadRepository', () => {
     const getResult = [
       {
         user_id: 1,
-        nick_name: 'd_o0o_b',
+        name: 'd_o0o_b',
         img_id: 2,
         mbti_list: [{ mbti: 'INTJ', toUserId: 1 }],
       },
       {
         user_id: 2,
-        nick_name: 'd_o0o_b2',
+        name: 'd_o0o_b2',
         img_id: 2,
         mbti_list: [{ mbti: 'INTJ', toUserId: 2 }],
       },
@@ -222,7 +222,7 @@ describe('MbtiReadRepository', () => {
       expect(select).toBeCalledTimes(1);
       expect(select).toBeCalledWith([
         "data->'userId' AS user_id",
-        "data->'nickname' AS nick_name",
+        "data->'name' AS name",
         "data->'imgId' AS img_id",
         "data->'mbti' AS mbti_list",
       ]);
@@ -238,7 +238,7 @@ describe('MbtiReadRepository', () => {
             element.user_id,
             element.mbti_list[0].mbti ?? null,
             null,
-            element.nick_name,
+            element.name,
             element.img_id,
           ),
         );
@@ -251,13 +251,13 @@ describe('MbtiReadRepository', () => {
     const getResult = [
       {
         user_id: 1,
-        nick_name: 'd_o0o_b',
+        name: 'd_o0o_b',
         img_id: 1,
         mbti_list: [{ toUserId: 2, mbti: 'INTJ' }],
       },
       {
         user_id: 2,
-        nick_name: 'd_o0o_b2',
+        name: 'd_o0o_b2',
         img_id: 4,
         mbti_list: [{ toUserId: 2, mbti: 'ENFP' }],
       },
@@ -286,7 +286,7 @@ describe('MbtiReadRepository', () => {
 
       expect(select).toBeCalledWith([
         "data->'userId' AS user_id",
-        "data->'nickname' AS nick_name",
+        "data->'name' AS name",
         "data->'imgId' AS img_id",
         "data->'mbti' AS mbti_list",
       ]);
@@ -305,7 +305,7 @@ describe('MbtiReadRepository', () => {
             element.user_id,
             element.mbti_list[0].mbti,
             dto.toUserId,
-            element.nick_name,
+            element.name,
             element.img_id,
           ),
         );

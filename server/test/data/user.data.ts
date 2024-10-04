@@ -28,12 +28,12 @@ export const gamingReadUrl = {
 export const gamingUser = {
   url: gamingUrl.url,
   imgId: 2,
-  nickName: 'TEST NICK',
+  name: 'TEST NICK',
 } as const;
 
 export const defaultUser = {
   imgId: 2,
-  nickName: 'TEST NICK',
+  name: 'TEST NICK',
 } as const;
 
 export const maxUrl = {
@@ -52,5 +52,5 @@ export const maxReadUrl = {
 export const maxUser = {
   url: maxUrl.url,
   imgId: 2,
-  nickName: 'MAX NICK',
+  name: 'MAX NICK',
 } as const as any;

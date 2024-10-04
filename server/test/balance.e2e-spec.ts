@@ -308,7 +308,7 @@ describe('BalanceController (e2e)', () => {
           data: {
             userId: userId1,
             urlId,
-            nickname: balanceUserId1.nickName,
+            name: balanceUserId1.name,
             imgId: balanceUserId1.imgId,
             balance: balanceUser1List,
           },
@@ -320,7 +320,7 @@ describe('BalanceController (e2e)', () => {
           data: {
             userId: userId2,
             urlId,
-            nickname: balanceUserId2.nickName,
+            name: balanceUserId2.name,
             imgId: balanceUserId2.imgId,
             balance: balanceUser2List,
           },
@@ -332,7 +332,7 @@ describe('BalanceController (e2e)', () => {
           data: {
             userId: userId3,
             urlId,
-            nickname: balanceUserId3.nickName,
+            name: balanceUserId3.name,
             imgId: balanceUserId3.imgId,
             balance: balanceUser3List,
           },
@@ -357,12 +357,12 @@ describe('BalanceController (e2e)', () => {
             {
               id: expect.any(Number),
               imgId: balanceUserId1.imgId,
-              nickName: balanceUserId1.nickName,
+              name: balanceUserId1.name,
             },
             {
               id: expect.any(Number),
               imgId: balanceUserId2.imgId,
-              nickName: balanceUserId2.nickName,
+              name: balanceUserId2.name,
             },
           ],
         },
@@ -386,7 +386,7 @@ describe('BalanceController (e2e)', () => {
             {
               id: userId1,
               imgId: balanceUserId1.imgId,
-              nickName: balanceUserId1.nickName,
+              name: balanceUserId1.name,
             },
           ],
         },
@@ -397,12 +397,12 @@ describe('BalanceController (e2e)', () => {
             {
               id: userId2,
               imgId: balanceUserId2.imgId,
-              nickName: balanceUserId2.nickName,
+              name: balanceUserId2.name,
             },
             {
               id: userId3,
               imgId: balanceUserId3.imgId,
-              nickName: balanceUserId3.nickName,
+              name: balanceUserId3.name,
             },
           ],
         },

@@ -25,7 +25,7 @@ export class CountUsersInRoomQueryHandler
     const userInfo = countUserList.userInfo.map((element) => ({
       id: element.getUserId(),
       imgId: element.getImgId(),
-      nickName: element.getNickname(),
+      name: element.getName(),
     }));
 
     return {

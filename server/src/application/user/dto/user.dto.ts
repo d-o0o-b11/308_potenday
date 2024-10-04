@@ -4,7 +4,7 @@ export class CreateUserDto {
   constructor(
     public readonly urlId: number,
     public readonly imgId: number,
-    public readonly nickName: string,
+    public readonly name: string,
   ) {}
 }
 
@@ -12,13 +12,13 @@ export class CreateFactoryUserDto extends CreateUserDto {
   constructor(
     urlId: number,
     imgId: number,
-    nickName: string,
+    name: string,
     public readonly userId: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
     public readonly deletedAt: Date | null,
   ) {
-    super(urlId, imgId, nickName);
+    super(urlId, imgId, name);
   }
 }
 
@@ -26,7 +26,7 @@ export class CreateUserReadDto {
   constructor(
     public readonly userId: number,
     public readonly imgId: number,
-    public readonly nickname: string,
+    public readonly name: string,
     public readonly urlId: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,

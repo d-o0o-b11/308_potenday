@@ -67,7 +67,7 @@ describe('CreateUserHandler', () => {
       const result = {
         getId: () => 111,
         getImgId: () => command.imgId,
-        getNickName: () => command.nickName,
+        getName: () => command.name,
         getUrlId: () => command.urlId,
         getCreatedAt: () => new Date('2024-09-01'),
         getUpdatedAt: () => null,
@@ -90,14 +90,14 @@ describe('CreateUserHandler', () => {
       );
       expect(create).toBeCalledTimes(1);
       expect(create).toBeCalledWith(
-        new CreateUserDto(command.urlId, command.imgId, command.nickName),
+        new CreateUserDto(command.urlId, command.imgId, command.name),
       );
       expect(eventPublish).toBeCalledTimes(1);
       expect(eventPublish).toBeCalledWith(
         new CreateUserEvent(
           result.getId(),
           result.getImgId(),
-          result.getNickName(),
+          result.getName(),
           result.getUrlId(),
           result.getCreatedAt(),
           result.getUpdatedAt(),

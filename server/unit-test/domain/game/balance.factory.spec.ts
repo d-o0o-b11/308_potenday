@@ -24,7 +24,7 @@ describe('BalanceFactory', () => {
     it('UserBalance 객체를 반환합니다. (with balanceGame)', () => {
       const id = 1;
       const userId = 100;
-      const nickName = 'JohnDoe';
+      const name = 'JohnDoe';
       const imgId = 200;
       const balanceId = 300;
       const balanceType = BALANCE_TYPES.A;
@@ -34,7 +34,7 @@ describe('BalanceFactory', () => {
         new ReconstituteBalanceArrayDto(
           id,
           userId,
-          nickName,
+          name,
           imgId,
           balanceId,
           balanceType,
@@ -45,7 +45,7 @@ describe('BalanceFactory', () => {
       expect(result).toBeInstanceOf(UserBalance);
       expect(result.getId()).toBe(id);
       expect(result.getUserId()).toBe(userId);
-      expect(result.getNickName()).toBe(nickName);
+      expect(result.getName()).toBe(name);
       expect(result.getImgId()).toBe(imgId);
       expect(result.getBalanceId()).toBe(balanceId);
       expect(result.getBalanceType()).toBe(balanceType);
@@ -55,7 +55,7 @@ describe('BalanceFactory', () => {
     it('UserBalance 객체를 반환합니다. (without balanceGame)', () => {
       const id = 2;
       const userId = 101;
-      const nickName = 'JaneDoe';
+      const name = 'JaneDoe';
       const imgId = 201;
       const balanceId = 301;
       const balanceType = BALANCE_TYPES.B;
@@ -64,7 +64,7 @@ describe('BalanceFactory', () => {
         new ReconstituteBalanceArrayDto(
           id,
           userId,
-          nickName,
+          name,
           imgId,
           balanceId,
           balanceType,
@@ -74,7 +74,7 @@ describe('BalanceFactory', () => {
       expect(result).toBeInstanceOf(UserBalance);
       expect(result.getId()).toBe(id);
       expect(result.getUserId()).toBe(userId);
-      expect(result.getNickName()).toBe(nickName);
+      expect(result.getName()).toBe(name);
       expect(result.getImgId()).toBe(imgId);
       expect(result.getBalanceId()).toBe(balanceId);
       expect(result.getBalanceType()).toBe(balanceType);
@@ -106,7 +106,7 @@ describe('BalanceFactory', () => {
       expect(result.getBalanceId()).toBe(balanceId);
       expect(result.getBalanceType()).toBe(balanceType);
       expect(result.getCreatedAt()).toBe(createdAt);
-      expect(result.getNickName()).toBeUndefined();
+      expect(result.getName()).toBeUndefined();
       expect(result.getImgId()).toBeUndefined();
       expect(result.getBalanceGame()).toBeUndefined();
     });

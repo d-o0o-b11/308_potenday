@@ -11,7 +11,7 @@ export class User {
   constructor(
     private readonly id: number,
     private readonly imgId: number,
-    private readonly nickName: string,
+    private readonly name: string,
     private readonly urlId: number,
     private readonly createdAt?: Date,
     private readonly updatedAt?: Date,
@@ -27,8 +27,8 @@ export class User {
     return this.imgId;
   }
 
-  getNickName(): Readonly<string> {
-    return this.nickName;
+  getName(): Readonly<string> {
+    return this.name;
   }
 
   getUrlId(): Readonly<number> {

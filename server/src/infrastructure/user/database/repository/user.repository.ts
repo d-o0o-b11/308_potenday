@@ -23,7 +23,7 @@ export class UserRepository implements IUserRepository {
         userId: result.id,
         imgId: result.imgId,
         urlId: result.urlId,
-        nickName: result.nickName,
+        name: result.name,
         createdAt: result.createdAt,
         updatedAt: result.updatedAt,
         deletedAt: result.deletedAt,

@@ -88,7 +88,7 @@ export class AdjectiveExpressionReadRepository
       .createQueryBuilder(UserReadEntity, 'user')
       .select([
         "data->>'userId' AS id",
-        "data->>'nickname' AS nickname",
+        "data->>'name' AS name",
         "data->>'imgId' AS imgId",
         "data->'adjectiveExpression' AS adjectiveExpression",
       ])
@@ -107,7 +107,7 @@ export class AdjectiveExpressionReadRepository
         new FindUserAdjectiveExpressionReadDto(
           Number(user.id),
           Number(user.imgid),
-          user.nickname,
+          user.name,
           Number(urlId),
           user.adjectiveexpression,
         ),

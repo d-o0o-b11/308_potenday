@@ -12,10 +12,10 @@ export class UserMbtiAnswer {
   mbti: string;
 
   /**
-   * nickName
+   * name
    * @example 'd_o0o_b11'
    */
-  nickName: string;
+  name: string;
 
   /**
    * imgId

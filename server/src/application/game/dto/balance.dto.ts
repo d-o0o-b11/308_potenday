@@ -54,7 +54,7 @@ export class ReconstituteBalanceArrayDto {
   constructor(
     public readonly id: number,
     public readonly userId: number,
-    public readonly nickName: string,
+    public readonly name: string,
     public readonly imgId: number,
     public readonly balanceId: number,
     public readonly balanceType: BalanceType,

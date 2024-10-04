@@ -108,7 +108,7 @@ describe('UserUrlController (e2e)', () => {
         await readManager.save(UserReadEntity, {
           data: {
             userId: waitingUrlUserId,
-            nickname: waitingReadUser.nickName,
+            name: waitingReadUser.name,
             urlId: waitingUrlId,
             ...waitingReadUser,
           },
@@ -143,7 +143,7 @@ describe('UserUrlController (e2e)', () => {
           {
             id: waitingUrlUserId,
             imgId: waitingUser.imgId,
-            nickName: waitingUser.nickName,
+            name: waitingUser.name,
           },
         ],
       });

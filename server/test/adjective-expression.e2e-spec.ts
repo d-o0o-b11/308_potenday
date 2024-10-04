@@ -258,13 +258,13 @@ describe('AdjectiveExpressionController (e2e)', () => {
         {
           adjectiveExpressionList: ['열정적인'],
           imgId: adjectiveExpressionUserId1.imgId,
-          nickName: adjectiveExpressionUserId1.nickName,
+          name: adjectiveExpressionUserId1.name,
           userId: expect.any(Number),
         },
         {
           adjectiveExpressionList: ['꼼꼼한', '자신감있는', '열정적인'],
           imgId: adjectiveExpressionUserId2.imgId,
-          nickName: adjectiveExpressionUserId2.nickName,
+          name: adjectiveExpressionUserId2.name,
           userId: userId2,
         },
       ]);

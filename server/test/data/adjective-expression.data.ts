@@ -1,11 +1,11 @@
 export const adjectiveExpressionUserId1 = {
-  nickName: 'TEST_USER1',
+  name: 'TEST_USER1',
   imgId: 2,
 };
 
 export const adjectiveExpressionUserId1Read = {
   ...adjectiveExpressionUserId1,
-  nickname: adjectiveExpressionUserId1.nickName,
+  name: adjectiveExpressionUserId1.name,
   createdAt: new Date('2024-09-21'),
   updatedAt: null,
   deletedAt: null,
@@ -16,12 +16,12 @@ export const adjectiveExpressionUserId1Read = {
 };
 
 export const adjectiveExpressionUserId2 = {
-  nickName: 'TEST_USER2',
+  name: 'TEST_USER2',
   imgId: 3,
 };
 export const adjectiveExpressionUserId2Read = {
   ...adjectiveExpressionUserId2,
-  nickname: adjectiveExpressionUserId2.nickName,
+  name: adjectiveExpressionUserId2.name,
   createdAt: new Date('2024-09-21'),
   updatedAt: null,
   deletedAt: null,
@@ -32,13 +32,13 @@ export const adjectiveExpressionUserId2Read = {
 };
 
 export const submitAdjectiveUser = {
-  nickName: 'SUBMIT_USER',
+  name: 'SUBMIT_USER',
   imgId: 2,
 };
 
 export const submitAdjectiveUserRead = {
   ...submitAdjectiveUser,
-  nickname: submitAdjectiveUser.nickName,
+  name: submitAdjectiveUser.name,
   createdAt: new Date('2024-09-21'),
   updatedAt: null,
   deletedAt: null,
@@ -49,7 +49,7 @@ export const submitAdjectiveUserRead = {
 };
 
 export const noneSubmitAdjectiveUser = {
-  nickName: 'TEST_USER',
+  name: 'TEST_USER',
   imgId: 2,
 };
 
@@ -62,7 +62,7 @@ export const noneSubmitAdjectiveUserRead = {
 };
 
 export const noneSubmitBalanceUser = {
-  nickName: 'TEST_USER',
+  name: 'TEST_USER',
   imgId: 2,
 };
 
@@ -75,7 +75,7 @@ export const noneSubmitBalanceUserRead = {
 };
 
 export const submitBalanceUser = {
-  nickName: 'SUBMIT_USER',
+  name: 'SUBMIT_USER',
   imgId: 2,
 };
 

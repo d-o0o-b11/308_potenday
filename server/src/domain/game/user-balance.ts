@@ -6,7 +6,7 @@ export class UserBalance {
     private readonly userId: number,
     private readonly balanceType: BalanceType,
     private readonly balanceId: number,
-    private readonly nickName?: string,
+    private readonly name?: string,
     private readonly imgId?: number,
     private readonly balanceGame?: { typeA: string; typeB: string },
     private readonly createdAt?: Date,
@@ -30,11 +30,11 @@ export class UserBalance {
 
   /**
    * @memo
-   * UserBalanceEntity에는 nickName,imgId 컬럼이 없다...
+   * UserBalanceEntity에는 name,imgId 컬럼이 없다...
    * 여기에 추가하는게 맞는걸까?
    */
-  getNickName(): Readonly<string> {
-    return this.nickName;
+  getName(): Readonly<string> {
+    return this.name;
   }
 
   getImgId(): Readonly<number> {

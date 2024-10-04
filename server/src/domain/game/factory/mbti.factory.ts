@@ -10,7 +10,7 @@ export class MbtiFactory {
       raw.userId,
       raw.mbti,
       raw.toUserId,
-      raw.nickName,
+      raw.name,
       raw.imgId,
     );
   }

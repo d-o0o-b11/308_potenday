@@ -37,7 +37,7 @@ describe('UserFactory', () => {
       const dto: CreateFactoryUserDto = {
         userId: 1,
         imgId: 2,
-        nickName: 'd_o0o_b',
+        name: 'd_o0o_b',
         urlId: 126,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -59,7 +59,7 @@ describe('UserFactory', () => {
       const dto: CreateUserReadDto = {
         userId: 1,
         imgId: 2,
-        nickname: 'd_o0o_b',
+        name: 'd_o0o_b',
         urlId: 126,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -90,7 +90,7 @@ describe('UserFactory', () => {
       expect(userRead).toBeInstanceOf(UserRead);
       expect(userRead.getUserId()).toBe(dto.userId);
       expect(userRead.getImgId()).toBe(dto.imgId);
-      expect(userRead.getNickname()).toBe(dto.nickname);
+      expect(userRead.getName()).toBe(dto.name);
       expect(userRead.getUrlId()).toBe(dto.urlId);
       expect(userRead.getCreatedAt()).toBe(dto.createdAt);
       expect(userRead.getUpdatedAt()).toBe(dto.updatedAt);

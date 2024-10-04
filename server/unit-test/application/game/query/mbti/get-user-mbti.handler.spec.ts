@@ -49,14 +49,14 @@ describe('GetUserMbtiQueryHandler', () => {
       {
         getUserId: () => 126,
         getMbti: () => 'INTJ',
-        getNickName: () => 'd_o0o_b11',
+        getName: () => 'd_o0o_b11',
         getImgId: () => 1,
         getToUserId: () => 126,
       },
       {
         getUserId: () => 127,
         getMbti: () => 'INTP',
-        getNickName: () => 'd_o0o_b22',
+        getName: () => 'd_o0o_b22',
         getImgId: () => 2,
         getToUserId: () => 126,
       },
@@ -78,14 +78,14 @@ describe('GetUserMbtiQueryHandler', () => {
         answerUser: {
           imgId: mbtiList[0].getImgId(),
           mbti: mbtiList[0].getMbti(),
-          nickName: mbtiList[0].getNickName(),
+          name: mbtiList[0].getName(),
           userId: mbtiList[0].getUserId(),
         },
         guessingUsers: [
           {
             imgId: mbtiList[1].getImgId(),
             mbti: mbtiList[1].getMbti(),
-            nickName: mbtiList[1].getNickName(),
+            name: mbtiList[1].getName(),
             userId: mbtiList[1].getUserId(),
           },
         ],

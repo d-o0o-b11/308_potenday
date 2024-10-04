@@ -13,7 +13,7 @@ export class BalanceFactory {
       dto.userId,
       dto.balanceType,
       dto.balanceId,
-      dto.nickName,
+      dto.name,
       dto.imgId,
       dto.balanceGame,
     );

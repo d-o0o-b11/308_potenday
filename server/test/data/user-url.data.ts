@@ -12,7 +12,7 @@ export const waitingReadUrl = {
 
 export const waitingUser = {
   imgId: 2,
-  nickName: 'TEST NICK',
+  name: 'TEST NICK',
 } as const;
 
 export const waitingReadUser = {

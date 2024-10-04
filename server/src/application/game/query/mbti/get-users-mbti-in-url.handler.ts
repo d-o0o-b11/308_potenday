@@ -27,7 +27,7 @@ export class GetUsersMbtiInUrlQueryHandler
     const result = findMbtiList.map((user) => {
       return {
         userId: user.getUserId(),
-        nickName: user.getNickName(),
+        name: user.getName(),
         imgId: user.getImgId(),
         mbti: user.getMbti(),
       };

@@ -52,7 +52,7 @@ export class GetUsersAdjectiveExpressionQueryHandler
         return {
           userId: user.getUserId(),
           imgId: user.getImgId(),
-          nickName: user.getNickname(),
+          name: user.getName(),
           adjectiveExpressionList,
         };
       }),

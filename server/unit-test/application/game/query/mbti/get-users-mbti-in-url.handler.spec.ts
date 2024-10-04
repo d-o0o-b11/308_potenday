@@ -51,13 +51,13 @@ describe('GetUsersMbtiInUrlQueryHandler', () => {
     const findResult = [
       {
         getUserId: () => 126,
-        getNickName: () => 'd_o0o_b11',
+        getName: () => 'd_o0o_b11',
         getImgId: () => 1,
         getMbti: () => 'ISTJ',
       },
       {
         getUserId: () => 127,
-        getNickName: () => 'd_o0o_b22',
+        getName: () => 'd_o0o_b22',
         getImgId: () => 2,
         getMbti: () => 'ESTJ',
       },
@@ -76,13 +76,13 @@ describe('GetUsersMbtiInUrlQueryHandler', () => {
         {
           imgId: findResult[0].getImgId(),
           mbti: findResult[0].getMbti(),
-          nickName: findResult[0].getNickName(),
+          name: findResult[0].getName(),
           userId: findResult[0].getUserId(),
         },
         {
           imgId: findResult[1].getImgId(),
           mbti: findResult[1].getMbti(),
-          nickName: findResult[1].getNickName(),
+          name: findResult[1].getName(),
           userId: findResult[1].getUserId(),
         },
       ]);

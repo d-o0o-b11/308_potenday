@@ -69,7 +69,7 @@ export class CreateUserEvent {
   constructor(
     public readonly userId: number,
     public readonly imgId: number,
-    public readonly nickname: string,
+    public readonly name: string,
     public readonly urlId: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date | null,
@@ -83,7 +83,7 @@ export class CreateUserReadEvent extends BaseEvent {
     public readonly eventMethod: string,
     public readonly userId: number,
     public readonly imgId: number,
-    public readonly nickname: string,
+    public readonly name: string,
     public readonly urlId: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,

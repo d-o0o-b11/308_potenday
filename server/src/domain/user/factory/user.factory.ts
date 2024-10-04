@@ -19,7 +19,7 @@ export class UserFactory {
     const user = new User(
       dto.userId,
       dto.imgId,
-      dto.nickName,
+      dto.name,
       dto.urlId,
       dto.createdAt,
       dto.updatedAt,
@@ -33,7 +33,7 @@ export class UserFactory {
     return new UserRead(
       dto.userId,
       dto.imgId,
-      dto.nickname,
+      dto.name,
       dto.urlId,
       dto.createdAt,
       dto.updatedAt,

@@ -72,7 +72,7 @@ describe('AdjectiveExpressionFactory', () => {
       const dto = {
         userId: 126,
         imgId: 2,
-        nickname: 'd_o0o_b',
+        name: 'd_o0o_b',
         urlId: 111,
         adjectiveExpression: {
           adjectiveExpressionIdList: [1, 11],
@@ -84,7 +84,7 @@ describe('AdjectiveExpressionFactory', () => {
         new FindUserAdjectiveExpressionReadDto(
           dto.userId,
           dto.imgId,
-          dto.nickname,
+          dto.name,
           dto.urlId,
           dto.adjectiveExpression,
         ),
@@ -93,7 +93,7 @@ describe('AdjectiveExpressionFactory', () => {
       expect(result).toBeInstanceOf(UserRead);
       expect(result.getUserId()).toBe(dto.userId);
       expect(result.getImgId()).toBe(dto.imgId);
-      expect(result.getNickname()).toBe(dto.nickname);
+      expect(result.getName()).toBe(dto.name);
       expect(result.getUrlId()).toBe(dto.urlId);
       expect(result.getAdjectiveExpressions()).toBe(dto.adjectiveExpression);
       expect(result.getCreatedAt()).toBeInstanceOf(Date);

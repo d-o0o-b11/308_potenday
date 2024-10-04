@@ -163,7 +163,7 @@ describe('UrlService', () => {
       const userList = {
         userCount: 1,
         userInfo: {
-          nickName: 126,
+          name: 126,
         },
       } as any;
 
@@ -200,10 +200,10 @@ describe('UrlService', () => {
     it('url에 속한 유저 정보, 인원 수를 반환합니다.', async () => {
       const findListResult = [
         {
-          nickName: 'd_o0o_b',
+          name: 'd_o0o_b',
         },
         {
-          nickName: 'd_o0o_b2',
+          name: 'd_o0o_b2',
         },
       ] as any;
 

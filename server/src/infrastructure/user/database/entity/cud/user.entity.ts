@@ -24,8 +24,8 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'int4', name: 'img_id', nullable: false })
   imgId: number;
 
-  @Column({ type: 'varchar', name: 'nickname', nullable: false })
-  nickName: string;
+  @Column({ type: 'varchar', name: 'name', nullable: false })
+  name: string;
 
   @Column({ type: 'int4', name: 'url_id', nullable: false })
   urlId: number;

@@ -15,7 +15,7 @@ export class UserResponseDto {
    * 닉네임
    * @example 'd_o0o_b'
    */
-  nickName: string;
+  name: string;
 
   /**
    * 온보딩 여부

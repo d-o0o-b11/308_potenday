@@ -245,7 +245,7 @@ describe('AdjectiveExpressionReadRepository', () => {
       const mockUserList = [
         {
           id: 1,
-          nickname: 'd_o0o_b',
+          name: 'd_o0o_b',
           imgId: 1,
           adjectiveExpression: JSON.stringify({
             adjectiveExpressionIdList: [1, 2, 3],
@@ -254,7 +254,7 @@ describe('AdjectiveExpressionReadRepository', () => {
         },
         {
           id: 2,
-          nickname: 'd_o0o_b2',
+          name: 'd_o0o_b2',
           imgId: 3,
           adjectiveExpression: JSON.stringify({
             adjectiveExpressionIdList: [4, 5],
@@ -281,7 +281,7 @@ describe('AdjectiveExpressionReadRepository', () => {
       expect(select).toBeCalledTimes(1);
       expect(select).toBeCalledWith([
         "data->>'userId' AS id",
-        "data->>'nickname' AS nickname",
+        "data->>'name' AS name",
         "data->>'imgId' AS imgId",
         "data->'adjectiveExpression' AS adjectiveExpression",
       ]);

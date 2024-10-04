@@ -8,7 +8,7 @@ describe('UserMapper', () => {
       const dto: CreateUserDto = {
         urlId: 1,
         imgId: 101,
-        nickName: 'TestUser',
+        name: 'TestUser',
       };
 
       const entity = UserMapper.toEntity(dto);
@@ -16,7 +16,7 @@ describe('UserMapper', () => {
       expect(entity).toBeInstanceOf(UserEntity);
       expect(entity.urlId).toBe(dto.urlId);
       expect(entity.imgId).toBe(dto.imgId);
-      expect(entity.nickName).toBe(dto.nickName);
+      expect(entity.name).toBe(dto.name);
     });
   });
 
@@ -26,7 +26,7 @@ describe('UserMapper', () => {
         userId: 1,
         urlId: 1,
         imgId: 101,
-        nickname: 'd_o0o_b',
+        name: 'd_o0o_b',
         createdAt: new Date(),
       } as any;
 

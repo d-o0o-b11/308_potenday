@@ -7,7 +7,7 @@ export class UserMapper {
     const entity = new UserEntity();
     entity.urlId = dto.urlId;
     entity.imgId = dto.imgId;
-    entity.nickName = dto.nickName;
+    entity.name = dto.name;
     return entity;
   }
 

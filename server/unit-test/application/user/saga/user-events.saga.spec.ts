@@ -40,7 +40,7 @@ describe('UserSaga', () => {
           new CreateUserReadCommand(
             event.userId,
             event.imgId,
-            event.nickname,
+            event.name,
             event.urlId,
             event.createdAt,
             event.updatedAt,

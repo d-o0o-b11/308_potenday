@@ -15,7 +15,7 @@ export class GroupByUserAdjectiveExpressionDto {
    * @example 'd_o0o_b'
    */
   @IsString()
-  nickName: string;
+  name: string;
 
   /**
    * USER 이미지 ID
