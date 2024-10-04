@@ -105,10 +105,10 @@ export class AdjectiveExpressionReadRepository
     const result = userList.map((user) => {
       return this.adjectiveExpressionFactory.reconstituteAdjectiveExpressionRead(
         new FindUserAdjectiveExpressionReadDto(
-          user.id,
-          user.imgid,
+          Number(user.id),
+          Number(user.imgid),
           user.nickname,
-          urlId,
+          Number(urlId),
           user.adjectiveexpression,
         ),
       );
