@@ -6,16 +6,28 @@ import { getEntityManagerToken } from '@nestjs/typeorm';
 import { AppModule } from '@app.module';
 import {
   adjectiveExpressionUserId1,
+  adjectiveExpressionUserId1Read,
   adjectiveExpressionUserId2,
+  adjectiveExpressionUserId2Read,
+  defaultReadUrl,
   defaultUrl,
+  noneSubmitAdjectiveUser,
+  noneSubmitAdjectiveUserRead,
+  submitAdjectiveUser,
+  submitAdjectiveUserRead,
 } from './data';
-import { UserAdjectiveExpressionEntity } from '@game/infrastructure/database/entity/user-adjective-expression.entity';
-import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
+import {
+  UrlReadEntity,
+  UserAdjectiveExpressionEntity,
+  UserEntity,
+  UserReadEntity,
+  UserUrlEntity,
+} from '@infrastructure';
 
 describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;
   let manager: EntityManager;
+  let readManager: EntityManager;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -28,6 +40,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
     // app 실행
     await app.init();
     manager = app.get(getEntityManagerToken());
+    readManager = app.get(getEntityManagerToken('read'));
   });
 
   describe('GET /adjective-expression/list', () => {
@@ -58,26 +71,55 @@ describe('AdjectiveExpressionController (e2e)', () => {
   });
 
   describe('POST /adjective-expression', () => {
-    let url: UserUrlEntity;
+    let urlId: number;
+    let urlReadId: string;
     let userId: number;
     let submitUserId: number;
+    let noneSubmitUserReadId: string;
+    let submitUserReadId: string;
 
     beforeAll(async () => {
-      url = await manager.save(UserUrlEntity, defaultUrl);
+      urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
       userId = (
         await manager.save(UserEntity, {
-          nickName: 'TEST_USER',
-          imgId: 2,
-          urlId: url.id,
-          onboarding: true,
+          ...noneSubmitAdjectiveUser,
+          urlId,
         })
       ).id;
       submitUserId = (
         await manager.save(UserEntity, {
-          nickName: 'SUBMIT_USER',
-          imgId: 2,
-          urlId: url.id,
+          ...submitAdjectiveUser,
+          urlId,
         })
+      ).id;
+
+      urlReadId = (
+        await readManager.save(UrlReadEntity, {
+          data: {
+            ...defaultReadUrl,
+            urlId,
+            userIdList: [userId, submitUserId],
+          },
+        } as any)
+      ).id;
+
+      noneSubmitUserReadId = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId,
+            urlId,
+            ...noneSubmitAdjectiveUserRead,
+          },
+        } as any)
+      ).id;
+      submitUserReadId = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: submitUserId,
+            urlId,
+            ...submitAdjectiveUserRead,
+          },
+        } as any)
       ).id;
     });
 
@@ -85,9 +127,9 @@ describe('AdjectiveExpressionController (e2e)', () => {
       await request(app.getHttpServer())
         .post('/adjective-expression')
         .send({
-          urlId: url.id,
+          urlId,
           userId: userId,
-          expressionIds: [1, 2, 3],
+          expressionIdList: [1, 2, 3],
         })
         .expect(HttpStatus.CREATED);
 
@@ -96,8 +138,16 @@ describe('AdjectiveExpressionController (e2e)', () => {
           userId: userId,
         },
       });
-
       expect(find.length).toBe(3);
+
+      const findRead: any = await readManager.findOne(UserReadEntity, {
+        where: {
+          id: noneSubmitUserReadId,
+        },
+      });
+      expect(
+        findRead.data.adjectiveExpression.adjectiveExpressionIdList,
+      ).toStrictEqual([1, 2, 3]);
     });
 
     it('형용사 표현 게임 동일한 유저가 2번 입력시 에러', async () => {
@@ -109,13 +159,13 @@ describe('AdjectiveExpressionController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/adjective-expression')
         .send({
-          urlId: url.id,
+          urlId,
           userId: submitUserId,
-          expressionIds: [1, 2, 3],
+          expressionIdList: [1, 2, 3],
         });
 
       expect(response.body).toStrictEqual({
-        code: 'USER_ADJECTIVE_EXPRESSION_SUBMIT',
+        code: 'SUBMIT_ADJECTIVE_EXPRESSION',
         status: 409,
         timestamp: expect.any(String),
         path: 'POST /adjective-expression',
@@ -127,14 +177,16 @@ describe('AdjectiveExpressionController (e2e)', () => {
           userId: submitUserId,
         },
       });
-
       expect(find.length).toStrictEqual(1);
     });
 
     afterAll(async () => {
       await manager.delete(UserEntity, userId);
       await manager.delete(UserEntity, submitUserId);
-      await manager.delete(UserUrlEntity, url.id);
+      await manager.delete(UserUrlEntity, urlId);
+      await readManager.delete(UrlReadEntity, urlReadId);
+      await readManager.delete(UserReadEntity, noneSubmitUserReadId);
+      await readManager.delete(UserReadEntity, submitUserReadId);
     });
   });
 
@@ -142,6 +194,10 @@ describe('AdjectiveExpressionController (e2e)', () => {
     let urlId: number;
     let userId1: number;
     let userId2: number;
+
+    let urlReadId: string;
+    let adjectiveExpressionUserIdRead1: string;
+    let adjectiveExpressionUserIdRead2: string;
 
     beforeAll(async () => {
       urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
@@ -159,24 +215,35 @@ describe('AdjectiveExpressionController (e2e)', () => {
         })
       ).id;
 
-      await manager.save(UserAdjectiveExpressionEntity, [
-        {
-          userId: userId1,
-          adjectiveExpressionId: 1,
-        },
-        {
-          userId: userId1,
-          adjectiveExpressionId: 2,
-        },
-        {
-          userId: userId1,
-          adjectiveExpressionId: 16,
-        },
-        {
-          userId: userId2,
-          adjectiveExpressionId: 16,
-        },
-      ]);
+      urlReadId = (
+        await readManager.save(UrlReadEntity, {
+          data: {
+            ...defaultReadUrl,
+            urlId,
+            userIdList: [userId1, userId2],
+          },
+        } as any)
+      ).id;
+
+      adjectiveExpressionUserIdRead1 = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: userId1,
+            urlId,
+            ...adjectiveExpressionUserId1Read,
+          },
+        } as any)
+      ).id;
+
+      adjectiveExpressionUserIdRead2 = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: userId2,
+            urlId,
+            ...adjectiveExpressionUserId2Read,
+          },
+        } as any)
+      ).id;
     });
 
     it('해당 url에 있는 유저의 형용사 표현 출력', async () => {
@@ -189,16 +256,16 @@ describe('AdjectiveExpressionController (e2e)', () => {
 
       expect(resposne.body).toStrictEqual([
         {
-          expressions: ['꼼꼼한', '솔직한', '엉뚱한'],
+          adjectiveExpressionList: ['열정적인'],
           imgId: adjectiveExpressionUserId1.imgId,
-          nickName: adjectiveExpressionUserId1.nickName,
+          name: adjectiveExpressionUserId1.name,
           userId: expect.any(Number),
         },
         {
-          expressions: ['엉뚱한'],
+          adjectiveExpressionList: ['꼼꼼한', '자신감있는', '열정적인'],
           imgId: adjectiveExpressionUserId2.imgId,
-          nickName: adjectiveExpressionUserId2.nickName,
-          userId: expect.any(Number),
+          name: adjectiveExpressionUserId2.name,
+          userId: userId2,
         },
       ]);
     });
@@ -207,6 +274,9 @@ describe('AdjectiveExpressionController (e2e)', () => {
       await manager.delete(UserEntity, userId1);
       await manager.delete(UserEntity, userId2);
       await manager.delete(UserUrlEntity, urlId);
+      await readManager.delete(UrlReadEntity, urlReadId);
+      await readManager.delete(UserReadEntity, adjectiveExpressionUserIdRead1);
+      await readManager.delete(UserReadEntity, adjectiveExpressionUserIdRead2);
     });
   });
 

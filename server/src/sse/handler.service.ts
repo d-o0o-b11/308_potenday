@@ -5,8 +5,9 @@ import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 export class StockCreatedListener {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  @OnEvent('statusUpdated')
-  handleStockCreatedEvent(event) {
-    this.eventEmitter.emit('statusUpdated', event);
-  }
+  // @OnEvent('statusUpdated')
+  // handleStockCreatedEvent(event) {
+  //   console.log(event);
+  //   // this.eventEmitter.emit('statusUpdated', event);
+  // }
 }

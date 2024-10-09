@@ -1,11 +1,19 @@
 export const mbtiUserId1 = {
-  nickName: 'TEST_USER1',
+  name: 'TEST_USER1',
   imgId: 2,
-  onboarding: true,
 };
 
 export const mbtiUserId2 = {
-  nickName: 'TEST_USER2',
+  name: 'TEST_USER2',
   imgId: 3,
-  onboarding: true,
+};
+
+export const mbtiSubmitUser = {
+  name: 'SUBMIT_USER',
+  imgId: 2,
+};
+
+export const mbtiOtherUser = {
+  name: 'OTHER_USER',
+  imgId: 2,
 };

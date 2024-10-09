@@ -30,8 +30,14 @@ export default class BalanceListSeeder implements Seeder {
        * INSERT ON CONFLICT
        * 데이터가 이미 존재하는 경우 업데이트되도록
        */
+      // await dataSource.query(
+      //   `INSERT INTO public.balance_list (id, "type_A", "type_B") VALUES ($1, $2, $3);`,
+      //   [index + 1, question.type_A, question.type_B],
+      // );
       await dataSource.query(
-        `INSERT INTO public.balance_list (id, "type_A", "type_B") VALUES ($1, $2, $3);`,
+        `INSERT INTO public.balance_list (id, "type_A", "type_B")
+         VALUES ($1, $2, $3)
+         ON CONFLICT (id) DO UPDATE SET "type_A" = EXCLUDED."type_A", "type_B" = EXCLUDED."type_B";`,
         [index + 1, question.type_A, question.type_B],
       );
     }

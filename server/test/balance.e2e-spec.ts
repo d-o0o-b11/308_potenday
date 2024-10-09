@@ -5,19 +5,34 @@ import { EntityManager } from 'typeorm';
 import { getEntityManagerToken } from '@nestjs/typeorm';
 import { AppModule } from '@app.module';
 import {
+  balanceUser1List,
+  balanceUser2List,
+  balanceUser3List,
   balanceUserId1,
   balanceUserId2,
   balanceUserId3,
+  defaultReadUrl,
   defaultUrl,
+  noneSubmitBalanceUser,
+  noneSubmitBalanceUserRead,
+  submitBalanceUser,
+  submitBalanceUserRead,
 } from './data';
-import { BALANCE_TYPES } from '@game';
-import { UserBalanceEntity } from '@game/infrastructure/database/entity/user-balance.entity';
-import { UserUrlEntity } from '@user/infrastructure/database/entity/user-url.entity';
-import { UserEntity } from '@user/infrastructure/database/entity/user.entity';
+import { BALANCE_TYPES } from '@domain';
+import {
+  UrlReadEntity,
+  UserBalanceEntity,
+  UserEntity,
+  UserReadEntity,
+  UserUrlEntity,
+} from '@infrastructure';
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 describe('BalanceController (e2e)', () => {
   let app: INestApplication;
   let manager: EntityManager;
+  let readManager: EntityManager;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -30,6 +45,7 @@ describe('BalanceController (e2e)', () => {
     // app 실행
     await app.init();
     manager = app.get(getEntityManagerToken());
+    readManager = app.get(getEntityManagerToken('read'));
   });
 
   describe('GET /balance/list', () => {
@@ -83,48 +99,86 @@ describe('BalanceController (e2e)', () => {
   });
 
   describe('POST /balance', () => {
-    let url: UserUrlEntity;
+    let urlId: number;
     let userId: number;
     let submitUserId: number;
 
+    let urlReadId: string;
+    let noneSubmitUserReadId: string;
+    let submitUserReadId: string;
+
     beforeAll(async () => {
-      url = await manager.save(UserUrlEntity, defaultUrl);
+      urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
       userId = (
         await manager.save(UserEntity, {
-          nickName: 'TEST_USER',
-          imgId: 2,
-          urlId: url.id,
-          onboarding: true,
+          ...noneSubmitBalanceUser,
+          urlId,
         })
       ).id;
       submitUserId = (
         await manager.save(UserEntity, {
-          nickName: 'SUBMIT_USER',
-          imgId: 2,
-          urlId: url.id,
+          ...submitBalanceUser,
+          urlId,
         })
+      ).id;
+
+      urlReadId = (
+        await readManager.save(UrlReadEntity, {
+          data: {
+            ...defaultReadUrl,
+            urlId,
+            userIdList: [userId, submitUserId],
+          },
+        } as any)
+      ).id;
+      noneSubmitUserReadId = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId,
+            urlId,
+            ...noneSubmitBalanceUserRead,
+          },
+        } as any)
+      ).id;
+      submitUserReadId = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: submitUserId,
+            urlId,
+            ...submitBalanceUserRead,
+          },
+        } as any)
       ).id;
     });
 
     it('밸런스 게임 투표', async () => {
+      const balanceData = {
+        balanceId: 1,
+        balanceType: BALANCE_TYPES.A,
+      };
       await request(app.getHttpServer())
         .post('/balance')
         .send({
-          urlId: url.id,
+          urlId: urlId,
           userId: userId,
-          balanceId: 1,
-          balanceType: BALANCE_TYPES.A,
+          balanceId: balanceData.balanceId,
+          balanceType: balanceData.balanceType,
         })
         .expect(HttpStatus.CREATED);
 
-      const find = await manager.findOne(UserBalanceEntity, {
-        where: {
-          userId: userId,
-          balanceId: 1,
-        },
-      });
+      await sleep(500);
 
-      expect(find).not.toBeNull();
+      const findOne = (await readManager.findOne(UserReadEntity, {
+        where: {
+          id: noneSubmitUserReadId,
+        },
+      })) as any;
+
+      expect(findOne.data.balance).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining(balanceData), // balanceData와 속성들이 일치하는 객체가 있는지 확인
+        ]),
+      );
     });
 
     it('밸런스 게임 투표 동일한 유저가 2번 이상 투표할 경우 에러', async () => {
@@ -137,55 +191,43 @@ describe('BalanceController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/balance')
         .send({
-          urlId: url.id,
+          urlId: urlId,
           userId: submitUserId,
           balanceId: 1,
-          balanceType: BALANCE_TYPES.A,
+          balanceType: BALANCE_TYPES.B,
         });
 
       expect(response.body).toStrictEqual({
-        code: 'USER_BALANCE_SUBMIT',
+        code: 'SUBMIT_USER_BALANCE',
         status: 409,
         path: 'POST /balance',
         timestamp: expect.any(String),
         message: '이미 해당 라운드 밸런스 게임에 의견을 제출하였습니다.',
       });
 
-      const find = await manager.find(UserBalanceEntity, {
+      const findOne = (await readManager.findOne(UserReadEntity, {
         where: {
-          userId: submitUserId,
-          balanceId: 1,
+          id: submitUserReadId,
         },
-      });
+      })) as any;
 
-      expect(find.length).toStrictEqual(1);
-    });
-
-    it('다음 라운드 밸런스 게임 투표 저장', async () => {
-      await request(app.getHttpServer())
-        .post('/balance')
-        .send({
-          urlId: url.id,
-          userId: userId,
-          balanceId: 2,
-          balanceType: BALANCE_TYPES.B,
-        })
-        .expect(HttpStatus.CREATED);
-
-      const find = await manager.findOne(UserBalanceEntity, {
-        where: {
-          userId: userId,
-          balanceId: 2,
-        },
-      });
-
-      expect(find).not.toBeNull();
+      expect(findOne.data.balance).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            balanceId: submitBalanceUserRead.balance[0].balanceId,
+            balanceType: submitBalanceUserRead.balance[0].balanceType,
+          }), // balanceData와 속성들이 일치하는 객체가 있는지 확인
+        ]),
+      );
     });
 
     afterAll(async () => {
       await manager.delete(UserEntity, userId);
       await manager.delete(UserEntity, submitUserId);
-      await manager.delete(UserUrlEntity, url.id);
+      await manager.delete(UserUrlEntity, urlId);
+      await readManager.delete(UrlReadEntity, urlReadId);
+      await readManager.delete(UserReadEntity, noneSubmitUserReadId);
+      await readManager.delete(UserReadEntity, submitUserReadId);
     });
   });
 
@@ -194,6 +236,11 @@ describe('BalanceController (e2e)', () => {
     let userId1: number;
     let userId2: number;
     let userId3: number;
+
+    let urlReadId: string;
+    let userReadId1: string;
+    let userReadId2: string;
+    let userReadId3: string;
 
     beforeAll(async () => {
       urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
@@ -218,33 +265,79 @@ describe('BalanceController (e2e)', () => {
         })
       ).id;
 
+      urlReadId = (
+        await readManager.save(UrlReadEntity, {
+          data: {
+            ...defaultReadUrl,
+            urlId,
+            userIdList: [userId1, userId2, userId3],
+          },
+        } as any)
+      ).id;
+
       await manager.save(UserBalanceEntity, [
         {
           userId: userId1,
-          balanceId: 1,
-          balanceType: BALANCE_TYPES.A,
+          balanceId: balanceUser1List[0].balanceId,
+          balanceType: balanceUser1List[0].balanceType,
         },
         {
           userId: userId2,
-          balanceId: 1,
-          balanceType: BALANCE_TYPES.A,
+          balanceId: balanceUser2List[0].balanceId,
+          balanceType: balanceUser2List[0].balanceType,
         },
         {
           userId: userId1,
-          balanceId: 2,
-          balanceType: BALANCE_TYPES.A,
+          balanceId: balanceUser1List[1].balanceId,
+          balanceType: balanceUser1List[1].balanceType,
         },
         {
           userId: userId2,
-          balanceId: 2,
-          balanceType: BALANCE_TYPES.A,
+          balanceId: balanceUser2List[1].balanceId,
+          balanceType: balanceUser2List[1].balanceType,
         },
         {
           userId: userId3,
-          balanceId: 2,
-          balanceType: BALANCE_TYPES.B,
+          balanceId: balanceUser3List[0].balanceId,
+          balanceType: balanceUser3List[0].balanceType,
         },
       ]);
+
+      userReadId1 = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: userId1,
+            urlId,
+            name: balanceUserId1.name,
+            imgId: balanceUserId1.imgId,
+            balance: balanceUser1List,
+          },
+        } as any)
+      ).id;
+
+      userReadId2 = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: userId2,
+            urlId,
+            name: balanceUserId2.name,
+            imgId: balanceUserId2.imgId,
+            balance: balanceUser2List,
+          },
+        } as any)
+      ).id;
+
+      userReadId3 = (
+        await readManager.save(UserReadEntity, {
+          data: {
+            userId: userId3,
+            urlId,
+            name: balanceUserId3.name,
+            imgId: balanceUserId3.imgId,
+            balance: balanceUser3List,
+          },
+        } as any)
+      ).id;
     });
 
     it('각 밸런스 게임 결과 보기 (100%)', async () => {
@@ -264,12 +357,12 @@ describe('BalanceController (e2e)', () => {
             {
               id: expect.any(Number),
               imgId: balanceUserId1.imgId,
-              nickName: balanceUserId1.nickName,
+              name: balanceUserId1.name,
             },
             {
               id: expect.any(Number),
               imgId: balanceUserId2.imgId,
-              nickName: balanceUserId2.nickName,
+              name: balanceUserId2.name,
             },
           ],
         },
@@ -277,7 +370,7 @@ describe('BalanceController (e2e)', () => {
     });
 
     it('각 밸런스 게임 결과 보기 (66% : 33%)', async () => {
-      const resposne = await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .get('/balance')
         .query({
           urlId: urlId,
@@ -285,31 +378,31 @@ describe('BalanceController (e2e)', () => {
         })
         .expect(HttpStatus.OK);
 
-      expect(resposne.body).toStrictEqual([
+      expect(response.body).toStrictEqual([
         {
           balanceType: '브레인 팀에서 숨쉬듯 자괴감 느끼기',
-          percent: '66%',
+          percent: '33%',
           users: [
             {
-              id: expect.any(Number),
+              id: userId1,
               imgId: balanceUserId1.imgId,
-              nickName: balanceUserId1.nickName,
-            },
-            {
-              id: expect.any(Number),
-              imgId: balanceUserId2.imgId,
-              nickName: balanceUserId2.nickName,
+              name: balanceUserId1.name,
             },
           ],
         },
         {
           balanceType: '내가 팀 내 유일한 희망되기',
-          percent: '33%',
+          percent: '66%',
           users: [
             {
-              id: expect.any(Number),
+              id: userId2,
+              imgId: balanceUserId2.imgId,
+              name: balanceUserId2.name,
+            },
+            {
+              id: userId3,
               imgId: balanceUserId3.imgId,
-              nickName: balanceUserId3.nickName,
+              name: balanceUserId3.name,
             },
           ],
         },
@@ -321,6 +414,10 @@ describe('BalanceController (e2e)', () => {
       await manager.delete(UserEntity, userId2);
       await manager.delete(UserEntity, userId3);
       await manager.delete(UserUrlEntity, urlId);
+      await readManager.delete(UrlReadEntity, urlReadId);
+      await readManager.delete(UserReadEntity, userReadId1);
+      await readManager.delete(UserReadEntity, userReadId2);
+      await readManager.delete(UserReadEntity, userReadId3);
     });
   });
 
