@@ -7,6 +7,7 @@ import {
   UpdateUserUrlDto,
   UpdateUserUrlStatusDto,
 } from '@application';
+import { SlackService } from '@common';
 import {
   IEventRepository,
   IUrlReadRepository,
@@ -35,6 +36,7 @@ describe('EventRollbackHandler', () => {
   let eventRepository: IEventRepository;
   let manager: EntityManager;
   let readManager: EntityManager;
+  let slackService: SlackService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -81,6 +83,12 @@ describe('EventRollbackHandler', () => {
           provide: getEntityManagerToken('read'),
           useValue: MockEntityManager(),
         },
+        {
+          provide: SlackService,
+          useValue: {
+            sendErrorMessage: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -96,6 +104,7 @@ describe('EventRollbackHandler', () => {
     eventRepository = module.get<IEventRepository>(EVENT_REPOSITORY_TOKEN);
     manager = module.get<EntityManager>(getEntityManagerToken());
     readManager = module.get<EntityManager>(getEntityManagerToken('read'));
+    slackService = module.get<SlackService>(SlackService);
   });
 
   it('IsDefined', () => {
@@ -107,6 +116,7 @@ describe('EventRollbackHandler', () => {
     expect(eventRepository).toBeDefined();
     expect(manager).toBeDefined();
     expect(readManager).toBeDefined();
+    expect(slackService).toBeDefined();
   });
 
   describe('event: DeleteUrlEvent', () => {
@@ -127,12 +137,13 @@ describe('EventRollbackHandler', () => {
       expect(urlReadDelete).toBeCalledWith(event.urlId, readManager);
     });
 
-    it.skip('DeleteUrlEvent 이벤트 로직 과정에서 오류가 발생하였습니다.', async () => {
+    it('DeleteUrlEvent 이벤트 로직 과정에서 오류가 발생하였습니다.', async () => {
       const create = jest.spyOn(eventRepository, 'create');
       const urlDelete = jest
         .spyOn(urlRepository, 'delete')
         .mockRejectedValue(new Error('오류 발생'));
       const urlReadDelete = jest.spyOn(urlReadRepository, 'delete');
+      const sendErrorMessage = jest.spyOn(slackService, 'sendErrorMessage');
 
       await handler.handle(event);
 
@@ -141,6 +152,7 @@ describe('EventRollbackHandler', () => {
       expect(urlDelete).toBeCalledTimes(1);
       expect(urlDelete).toBeCalledWith(event.urlId, manager);
       expect(urlReadDelete).toBeCalledTimes(0);
+      expect(sendErrorMessage).toBeCalledTimes(1);
     });
   });
 
@@ -174,12 +186,13 @@ describe('EventRollbackHandler', () => {
       );
     });
 
-    it.skip('DeleteUpdateUrlStatusEvent 이벤트 로직 과정에서 오류가 발생하였습니다.', async () => {
+    it('DeleteUpdateUrlStatusEvent 이벤트 로직 과정에서 오류가 발생하였습니다.', async () => {
       const create = jest.spyOn(eventRepository, 'create');
       const urlUpdate = jest
         .spyOn(urlRepository, 'update')
         .mockRejectedValue(new Error('오류 발생'));
       const updateStatus = jest.spyOn(urlReadRepository, 'updateStatus');
+      const sendErrorMessage = jest.spyOn(slackService, 'sendErrorMessage');
 
       await handler.handle(event);
 
@@ -192,6 +205,7 @@ describe('EventRollbackHandler', () => {
         manager,
       );
       expect(updateStatus).toBeCalledTimes(0);
+      expect(sendErrorMessage).toBeCalledTimes(1);
     });
   });
 
@@ -220,13 +234,14 @@ describe('EventRollbackHandler', () => {
       );
     });
 
-    it.skip('DeleteUserEvent 이벤트 로직 과정에서 오류가 발생하였습니다.', async () => {
+    it('DeleteUserEvent 이벤트 로직 과정에서 오류가 발생하였습니다.', async () => {
       const create = jest
         .spyOn(eventRepository, 'create')
         .mockRejectedValue(new Error('에러 발생'));
       const userDelete = jest.spyOn(userRepository, 'delete');
       const userReadDelete = jest.spyOn(userReadRepository, 'delete');
       const deleteUserId = jest.spyOn(urlReadRepository, 'deleteUserId');
+      const sendErrorMessage = jest.spyOn(slackService, 'sendErrorMessage');
 
       await handler.handle(event);
 
@@ -235,6 +250,7 @@ describe('EventRollbackHandler', () => {
       expect(userDelete).toBeCalledTimes(0);
       expect(userReadDelete).toBeCalledTimes(0);
       expect(deleteUserId).toBeCalledTimes(0);
+      expect(sendErrorMessage).toBeCalledTimes(1);
     });
   });
 });

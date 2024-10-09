@@ -1,4 +1,5 @@
 import { BasicException } from '@common/error';
+import { SlackService } from '@common/utils';
 import {
   ExceptionFilter,
   Catch,
@@ -11,6 +12,8 @@ import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
+  private slackService = new SlackService();
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -18,6 +21,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = (exception as any).message;
     let code: string;
+    const stack: string = (exception as any).stack;
 
     if (exception instanceof BasicException) {
       status = exception.getStatus();
@@ -40,6 +44,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       status = HttpStatus.INTERNAL_SERVER_ERROR;
       message = 'Internal Server Error';
     }
+
+    const slackMessage = `
+  - Code: ${code}
+  - Status: ${status}
+  - Path: ${request.method} ${request.url}
+  - Timestamp: ${new Date().toISOString()}
+  - Message: ${message}
+  - Stack Trace: ${stack || 'Null'}
+  `;
+    this.slackService.sendErrorMessage(slackMessage);
 
     response.status(status).json({
       code: code,

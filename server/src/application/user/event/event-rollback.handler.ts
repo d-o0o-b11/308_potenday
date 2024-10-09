@@ -26,6 +26,7 @@ import {
   UpdateUserUrlDto,
   UpdateUserUrlStatusDto,
 } from '../dto';
+import { SlackService } from '@common';
 
 @EventsHandler(DeleteUrlEvent, DeleteUpdateUrlStatusEvent, DeleteUserEvent)
 export class EventRollbackHandler
@@ -45,6 +46,7 @@ export class EventRollbackHandler
     private readonly userRepository: IUserRepository,
     @Inject(EVENT_REPOSITORY_TOKEN)
     private readonly eventRepository: IEventRepository,
+    private readonly slackService: SlackService,
 
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
@@ -76,8 +78,7 @@ export class EventRollbackHandler
       await this.urlRepository.delete(event.urlId, this.manager);
       await this.urlReadRepository.delete(event.urlId, this.readManager);
     } catch (error) {
-      console.error('Error processing DeleteUrlEvent:', error);
-      //슬랙
+      this.errorSendSlack(event, error);
     }
   }
 
@@ -96,8 +97,7 @@ export class EventRollbackHandler
         this.readManager,
       );
     } catch (error) {
-      console.error('Error processing DeleteUpdateUrlStatusEvent:', error);
-      //슬랙
+      this.errorSendSlack(event, error);
     }
   }
 
@@ -112,8 +112,24 @@ export class EventRollbackHandler
         this.readManager,
       );
     } catch (error) {
-      console.error('Error processing DeleteUserEvent:', error);
-      //슬랙
+      this.errorSendSlack(event, error);
     }
+  }
+
+  private errorSendSlack(
+    event: DeleteUrlEvent | DeleteUpdateUrlStatusEvent | DeleteUserEvent,
+    error: any,
+  ) {
+    const { eventMethod, eventType, ...data } = event;
+    const message = `
+      - Code: ${eventType}
+      - eventMethod: ${eventMethod} 
+      - data: ${JSON.stringify(data)}
+      - Timestamp: ${new Date().toISOString()}
+      - Details: ${error || 'No details available'}
+      `;
+
+    // 슬랙에 예외 메시지 전송
+    this.slackService.sendErrorMessage(message);
   }
 }
