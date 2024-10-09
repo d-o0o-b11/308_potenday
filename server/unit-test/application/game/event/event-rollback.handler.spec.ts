@@ -7,6 +7,7 @@ import {
   DeleteUserMbtiReadDto,
   EventGameRollbackHandler,
 } from '@application';
+import { SlackService } from '@common';
 import {
   IAdjectiveExpressionRepository,
   IAdjectiveExpressionRepositoryReadRepository,
@@ -41,6 +42,7 @@ describe('EventGameRollbackHandler', () => {
   let mbtiRepository: IMbtiRepository;
   let manager: EntityManager;
   let readManager: EntityManager;
+  let slackService: SlackService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -82,6 +84,12 @@ describe('EventGameRollbackHandler', () => {
           provide: getEntityManagerToken('read'),
           useValue: MockEntityManager(),
         },
+        {
+          provide: SlackService,
+          useValue: {
+            sendErrorMessage: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -106,6 +114,7 @@ describe('EventGameRollbackHandler', () => {
     mbtiRepository = module.get<IMbtiRepository>(MBTI_REPOSITORY_TOKEN);
     manager = module.get<EntityManager>(getEntityManagerToken());
     readManager = module.get<EntityManager>(getEntityManagerToken('read'));
+    slackService = module.get<SlackService>(SlackService);
   });
 
   it('IsDefined', () => {
@@ -119,6 +128,7 @@ describe('EventGameRollbackHandler', () => {
     expect(mbtiRepository).toBeDefined();
     expect(manager).toBeDefined();
     expect(readManager).toBeDefined();
+    expect(slackService).toBeDefined();
   });
 
   describe('event: DeleteUserExpressionEvent', () => {
@@ -152,7 +162,7 @@ describe('EventGameRollbackHandler', () => {
       expect(adjectiveExpressionDelete).toBeCalledWith(event.urlId, manager);
     });
 
-    it.skip('형용사 표현 데이터 롤백 과정에서 오류가 발생할 경우 슬랙을 보냅니다.', async () => {
+    it('형용사 표현 데이터 롤백 과정에서 오류가 발생할 경우 슬랙을 보냅니다.', async () => {
       const eventCreate = jest.spyOn(eventRepository, 'create');
       const adjectiveExpressionReadDelete = jest
         .spyOn(adjectiveExpressionReadRepository, 'delete')
@@ -161,6 +171,7 @@ describe('EventGameRollbackHandler', () => {
         adjectiveExpressionRepository,
         'delete',
       );
+      const sendErrorMessage = jest.spyOn(slackService, 'sendErrorMessage');
 
       await handler.handle(event);
 
@@ -172,6 +183,7 @@ describe('EventGameRollbackHandler', () => {
         readManager,
       );
       expect(adjectiveExpressionDelete).toBeCalledTimes(0);
+      expect(sendErrorMessage).toBeCalledTimes(1);
     });
   });
 
@@ -204,12 +216,13 @@ describe('EventGameRollbackHandler', () => {
       );
     });
 
-    it.skip('밸런스 데이터 롤백 과정에서 오류가 발생할 경우 슬랙을 보냅니다.', async () => {
+    it('밸런스 데이터 롤백 과정에서 오류가 발생할 경우 슬랙을 보냅니다.', async () => {
       const eventCreate = jest.spyOn(eventRepository, 'create');
       const balanceReadDelete = jest.spyOn(balanceReadRepository, 'delete');
       const balanceDelete = jest
         .spyOn(balanceRepository, 'delete')
         .mockRejectedValue(new Error('오류 발생'));
+      const sendErrorMessage = jest.spyOn(slackService, 'sendErrorMessage');
 
       await handler.handle(event);
 
@@ -225,6 +238,7 @@ describe('EventGameRollbackHandler', () => {
         new DeleteUserBalanceDto(event.userId, event.balanceId),
         manager,
       );
+      expect(sendErrorMessage).toBeCalledTimes(1);
     });
   });
 
@@ -254,12 +268,13 @@ describe('EventGameRollbackHandler', () => {
       expect(mbtiDelete).toBeCalledWith(event.mbtiId, manager);
     });
 
-    it.skip('mbti 데이터 롤백 과정에서 오류가 발생할 경우 슬랙을 보냅니다.', async () => {
+    it('mbti 데이터 롤백 과정에서 오류가 발생할 경우 슬랙을 보냅니다.', async () => {
       const eventCreate = jest.spyOn(eventRepository, 'create');
       const mbtiReadDelete = jest
         .spyOn(mbtiReadRepository, 'delete')
         .mockRejectedValue(new Error('오류 발생'));
       const mbtiDelete = jest.spyOn(mbtiRepository, 'delete');
+      const sendErrorMessage = jest.spyOn(slackService, 'sendErrorMessage');
 
       await handler.handle(event);
 
@@ -271,6 +286,7 @@ describe('EventGameRollbackHandler', () => {
         readManager,
       );
       expect(mbtiDelete).toBeCalledTimes(0);
+      expect(sendErrorMessage).toBeCalledTimes(1);
     });
   });
 });

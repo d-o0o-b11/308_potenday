@@ -8,6 +8,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from '@common';
 import { DataBaseModule } from '@database';
 import { EventModule, GameModule, UserModule } from '@application';
+import { CommonModule } from '@common';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { EventModule, GameModule, UserModule } from '@application';
     UserModule,
     GameModule,
     EventModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [

@@ -30,6 +30,7 @@ import {
   DeleteUserBalanceReadDto,
   DeleteUserMbtiReadDto,
 } from '../dto';
+import { SlackService } from '@common';
 
 @EventsHandler(
   DeleteUserExpressionEvent,
@@ -57,6 +58,7 @@ export class EventGameRollbackHandler
     private readonly mbtiReadRepository: IMbtiReadRepository,
     @Inject(MBTI_REPOSITORY_TOKEN)
     private readonly mbtiRepository: IMbtiRepository,
+    private readonly slackService: SlackService,
 
     @InjectEntityManager() private readonly manager: EntityManager,
     @InjectEntityManager('read') private readonly readManager: EntityManager,
@@ -101,8 +103,7 @@ export class EventGameRollbackHandler
         this.manager,
       );
     } catch (error) {
-      console.error('Error processing DeleteUrlEvent:', error);
-      //슬랙
+      this.errorSendSlack(event, error);
     }
   }
 
@@ -118,8 +119,7 @@ export class EventGameRollbackHandler
         this.manager,
       );
     } catch (error) {
-      console.error('Error processing DeleteUserBalanceEvent:', error);
-      //슬랙
+      this.errorSendSlack(event, error);
     }
   }
 
@@ -132,8 +132,27 @@ export class EventGameRollbackHandler
       );
       await this.mbtiRepository.delete(event.mbtiId, this.manager);
     } catch (error) {
-      console.error('Error processing DeleteUserMbtiEvent:', error);
-      //슬랙
+      this.errorSendSlack(event, error);
     }
+  }
+
+  private errorSendSlack(
+    event:
+      | DeleteUserExpressionEvent
+      | DeleteUserBalanceEvent
+      | DeleteUserMbtiEvent,
+    error: any,
+  ) {
+    const { eventMethod, eventType, ...data } = event;
+    const message = `
+      - Code: ${eventType}
+      - eventMethod: ${eventMethod} 
+      - data: ${JSON.stringify(data)}
+      - Timestamp: ${new Date().toISOString()}
+      - Details: ${error || 'No details available'}
+      `;
+
+    // 슬랙에 예외 메시지 전송
+    this.slackService.sendErrorMessage(message);
   }
 }
