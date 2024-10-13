@@ -29,3 +29,11 @@ export class UserResponseDto {
    */
   urlId: number;
 }
+
+export class UserResponseWithTokenDto extends UserResponseDto {
+  /**
+   * TOKEN
+   * @example TOKEN_STRING
+   */
+  token: string;
+}

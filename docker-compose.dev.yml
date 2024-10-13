@@ -14,6 +14,8 @@ services:
     volumes:
       - ./postgres:/var/lib/postgresql/data
     restart: always
+    networks:
+      - 308_poten_day_network
 
   read-postgres-container:
     container_name: 308_poten_day_read_db
@@ -28,3 +30,9 @@ services:
     volumes:
       - ./read-postgres:/var/lib/postgresql/data
     restart: always
+    networks:
+      - 308_poten_day_network
+
+networks:
+  308_poten_day_network:
+    driver: bridge

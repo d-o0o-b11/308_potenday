@@ -1,12 +1,21 @@
-import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
+import {
+  CommandBus,
+  CommandHandler,
+  EventBus,
+  ICommandHandler,
+} from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { CreateUserCommand } from './create-user.command';
 import { USER_REPOSITORY_TOKEN, URL_SERVICE_TOKEN } from '@infrastructure';
 import { IUserRepository } from '@domain';
-import { IUrlService, UserResponseDto } from '@interface';
+import { IUrlService, UserResponseWithTokenDto } from '@interface';
 import { CreateUserEvent } from '../../event';
 import { MaximumUrlException, StatusFalseUrlException } from '@common';
-import { CreateUserDto, FindOneUserUrlDto } from '@application';
+import {
+  CreateUserDto,
+  FindOneUserUrlDto,
+  GenerateTokenCommand,
+} from '@application';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
@@ -17,9 +26,10 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     private readonly userRepository: IUserRepository,
     @Inject(URL_SERVICE_TOKEN) private readonly urlService: IUrlService,
     private readonly eventBus: EventBus,
+    private readonly commandBus: CommandBus,
   ) {}
 
-  async execute(command: CreateUserCommand): Promise<UserResponseDto> {
+  async execute(command: CreateUserCommand): Promise<UserResponseWithTokenDto> {
     const { urlId, imgId, name } = command;
 
     const { userCount, status } = await this.urlService.checkUserLimitForUrl(
@@ -51,11 +61,16 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       ),
     );
 
+    const tokenResult = await this.commandBus.execute(
+      new GenerateTokenCommand(result.getUrlId(), result.getId()),
+    );
+
     return {
       id: result.getId(),
       imgId: result.getImgId(),
       name: result.getName(),
       urlId: result.getUrlId(),
+      token: tokenResult.token,
     };
   }
 }

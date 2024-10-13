@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Post,
+  Req,
+  Res,
   ValidationPipe,
 } from '@nestjs/common';
 import {
@@ -15,6 +18,7 @@ import {
 import { CreateUserCommandDto, UserResponseDto } from './dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '@application';
+import { Response, Request } from 'express';
 
 @ApiTags('USER API')
 @Controller('user')
@@ -37,12 +41,39 @@ export class UserController {
     type: UserResponseDto,
   })
   @ApiNotFoundResponse({ description: '존재하지 않는 url입니다.' })
-  setUserProfile(
+  async setUserProfile(
     @Body(new ValidationPipe({ whitelist: true, transform: true }))
     dto: CreateUserCommandDto,
+    @Res({ passthrough: true }) res: Response,
   ) {
-    return this.commandBus.execute(
+    const result = await this.commandBus.execute(
       new CreateUserCommand(dto.urlId, dto.imgId, dto.name),
     );
+
+    // 쿠키에 토큰 설정
+    res.cookie(process.env.COOKIE_HEADER, result.token, {
+      httpOnly: true, // 클라이언트에서 접근 불가능
+      secure: true, // HTTPS에서만 동작 (배포 시 활성화)
+      maxAge: 3600000, // 1시간 (토큰의 유효기간과 맞춤)
+    });
+
+    return {
+      id: result.id,
+      imgId: result.imgId,
+      name: result.name,
+      urlId: result.urlId,
+    };
+  }
+
+  @ApiOperation({
+    summary: '쿠키 설정 확인 테스트 API',
+  })
+  @Get('check')
+  checkCookie(@Req() req: Request) {
+    const cookieName = process.env.COOKIE_HEADER; // 확인할 쿠키 이름
+    console.log(req.cookies);
+    const cookieValue = req.cookies[cookieName];
+
+    return cookieValue;
   }
 }

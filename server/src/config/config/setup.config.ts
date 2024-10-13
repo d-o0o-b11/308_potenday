@@ -4,6 +4,7 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
 
 export class SetUpConfig {
   constructor(private readonly app: NestExpressApplication) {}
@@ -60,5 +61,6 @@ export class SetUpConfig {
       credentials: true,
       allowedHeaders: 'Content-Type, Accept, Authorization',
     });
+    this.app.use(cookieParser());
   }
 }
