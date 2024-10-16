@@ -6,19 +6,24 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBody,
+  ApiCookieAuth,
   ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateUserCommandDto, UserResponseDto } from './dto';
+import { CreateUserCommandDto, UserResponseDto, UserTokenDto } from './dto';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '@application';
+import { JwtAuthGuard } from '@application/auth';
 import { Response, Request } from 'express';
+import { Cookies } from '@common';
+import { UserToken } from './common';
 
 @ApiTags('USER API')
 @Controller('user')
@@ -51,7 +56,7 @@ export class UserController {
     );
 
     // 쿠키에 토큰 설정
-    res.cookie(process.env.COOKIE_HEADER, result.token, {
+    res.cookie('potenday_token', result.token, {
       httpOnly: true, // 클라이언트에서 접근 불가능
       secure: true, // HTTPS에서만 동작 (배포 시 활성화)
       maxAge: 3600000, // 1시간 (토큰의 유효기간과 맞춤)
@@ -67,13 +72,24 @@ export class UserController {
 
   @ApiOperation({
     summary: '쿠키 설정 확인 테스트 API',
+    deprecated: true,
   })
+  @ApiCookieAuth('potenday_token')
   @Get('check')
   checkCookie(@Req() req: Request) {
-    const cookieName = process.env.COOKIE_HEADER; // 확인할 쿠키 이름
-    console.log(req.cookies);
+    const cookieName = 'potenday_token'; // 확인할 쿠키 이름
     const cookieValue = req.cookies[cookieName];
 
     return cookieValue;
+  }
+
+  @Get('check2')
+  @ApiCookieAuth('potenday_token')
+  @UseGuards(JwtAuthGuard)
+  checkCookie2(
+    @Cookies('potenday_token') name: string,
+    @UserToken() user: UserTokenDto,
+  ) {
+    return user;
   }
 }

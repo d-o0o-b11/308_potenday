@@ -30,9 +30,10 @@ import {
 import { UrlService } from '../service';
 import { UrlSaga, UserSaga } from '../saga';
 import { EventModule } from '../../event';
+import { AuthModule } from '../../auth';
 
 @Module({
-  imports: [CqrsModule, EventModule],
+  imports: [CqrsModule, AuthModule, EventModule],
   controllers: [UserController, UserUrlController],
   providers: [
     UserEventHandler,

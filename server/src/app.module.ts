@@ -12,6 +12,7 @@ import { CommonModule } from '@common';
 
 @Module({
   imports: [
+    AuthModule,
     DataBaseModule,
     TransactionModule.forRoot(),
     SettingModule,
@@ -37,7 +38,6 @@ import { CommonModule } from '@common';
     GameModule,
     EventModule,
     CommonModule,
-    AuthModule,
   ],
   controllers: [],
   providers: [
