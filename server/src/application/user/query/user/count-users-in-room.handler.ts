@@ -18,6 +18,7 @@ export class CountUsersInRoomQueryHandler
     query: CountUsersInRoomQuery,
   ): Promise<CountUserListInRoomResponseDto> {
     const { urlId } = query;
+
     const countUserList = await this.urlService.checkUserLimitForUrl(
       new FindOneUserUrlDto(urlId),
     );

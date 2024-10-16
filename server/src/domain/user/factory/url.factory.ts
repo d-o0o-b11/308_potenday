@@ -29,7 +29,7 @@ export class UrlFactory {
       dto.createdAt,
       dto.updatedAt,
       dto.deletedAt,
-      null,
+      [],
     );
   }
 

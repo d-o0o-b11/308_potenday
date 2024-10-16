@@ -4,3 +4,4 @@ export * from './constant';
 export * from './filter';
 export * from './utils';
 export * from './common.module';
+export * from './decorator';
