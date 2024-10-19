@@ -7,6 +7,14 @@ export class SaveUserAdjectiveExpressionDto {
   ) {}
 }
 
+export class CreateUserExpressionAndGetSubmitCountDto {
+  constructor(
+    public readonly urlId: number,
+    public readonly userId: number,
+    public readonly expressionIdList: number[],
+  ) {}
+}
+
 export class CreateUserAdjectiveExpressionReadDto {
   constructor(
     public readonly userId: number,

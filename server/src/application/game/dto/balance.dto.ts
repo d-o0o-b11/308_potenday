@@ -9,6 +9,15 @@ export class CreateBalanceReadDto {
   ) {}
 }
 
+export class CreateUserBalanceAndGetSubmitCountDto {
+  constructor(
+    public readonly urlId: number,
+    public readonly userId: number,
+    public readonly balanceId: number,
+    public readonly balanceType: BalanceType,
+  ) {}
+}
+
 export class CreateUserBalanceDto {
   constructor(
     public readonly userId: number,
@@ -20,6 +29,20 @@ export class CreateUserBalanceDto {
 export class FindSubmitUserDto {
   constructor(
     public readonly userId: number,
+    public readonly balanceId: number,
+  ) {}
+}
+
+export class FindBalanceSubmitUserCountDto {
+  constructor(
+    public readonly urlId: number,
+    public readonly balanceId: number,
+  ) {}
+}
+
+export class FindBalanceUserReadDto {
+  constructor(
+    public readonly urlId: number,
     public readonly balanceId: number,
   ) {}
 }

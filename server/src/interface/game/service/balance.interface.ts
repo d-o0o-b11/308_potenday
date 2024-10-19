@@ -1,4 +1,5 @@
-import { CreateBalanceDto, UserBalanceSubmitCountDto } from '../dto';
+import { CreateUserBalanceAndGetSubmitCountDto } from '@application';
+import { UserBalanceSubmitCountDto } from '../dto';
 
 export interface IBalanceService {
   /**
@@ -6,6 +7,6 @@ export interface IBalanceService {
    * 밸런스 의견을 저장하고 현재 제출한 '유저 수' 반환
    */
   saveUserExpressionAndGetSubmitCount: (
-    dto: CreateBalanceDto,
+    dto: CreateUserBalanceAndGetSubmitCountDto,
   ) => Promise<UserBalanceSubmitCountDto>;
 }

@@ -1,5 +1,4 @@
 export * from './adjective-expression.dto';
-export * from './common-question.dto';
 export * from './balance.dto';
 export * from './mbti.dto';
 export * from './balance.response.dto';

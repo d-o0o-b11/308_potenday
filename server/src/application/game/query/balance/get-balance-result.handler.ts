@@ -6,6 +6,7 @@ import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { BALANCE_READ_REPOSITORY_TOKEN } from '@infrastructure';
 import { IBalanceReadRepository } from '@domain';
+import { FindBalanceUserReadDto } from '@application';
 
 @QueryHandler(GetBalanceResultQuery)
 export class GetBalanceResultQueryHandler
@@ -21,10 +22,8 @@ export class GetBalanceResultQueryHandler
     query: GetBalanceResultQuery,
   ): Promise<CalculatePercentagesResponseDto[]> {
     return await this.balanceReadRepository.find(
-      {
-        urlId: Number(query.urlId),
-        balanceId: Number(query.balanceId),
-      },
+      new FindBalanceUserReadDto(query.urlId, query.balanceId),
+
       this.readManager,
     );
   }
