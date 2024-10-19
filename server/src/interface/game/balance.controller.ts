@@ -3,6 +3,7 @@ import {
   GetBalanceListQuery,
   GetBalanceResultQuery,
 } from '@application';
+import { JwtAuthGuard } from '@application/auth';
 import {
   Body,
   Controller,
@@ -11,18 +12,24 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
-  CalculatePercentagesResponseDto,
-  CreateBalanceDto,
-  FindUserBalanceDto,
-} from './dto';
+  ApiCookieAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { CalculatePercentagesResponseDto, CreateBalanceDto } from './dto';
+import { UserToken, UserTokenDto } from '../user';
 
 @ApiTags('[GAME] 밸런스 게임 API')
 @Controller('balance')
+@ApiCookieAuth('potenday_token')
+@UseGuards(JwtAuthGuard)
 export class BalanceController {
   constructor(
     private queryBus: QueryBus,
@@ -45,11 +52,12 @@ export class BalanceController {
   async saveBalanceGame(
     @Body(new ValidationPipe({ whitelist: true, transform: true }))
     dto: CreateBalanceDto,
+    @UserToken() user: UserTokenDto,
   ) {
     await this.commandBus.execute(
       new CreateUserBalanceCommand(
-        dto.urlId,
-        dto.userId,
+        user.urlId,
+        user.userId,
         dto.balanceId,
         dto.balanceType,
       ),
@@ -60,16 +68,20 @@ export class BalanceController {
   @ApiOperation({
     summary: '각 밸런스 게임 결과 보기',
   })
+  @ApiQuery({
+    name: 'balanceId',
+    example: '1',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     type: [CalculatePercentagesResponseDto],
   })
   async findBalanceGameUser(
-    @Query(new ValidationPipe({ whitelist: true, transform: true }))
-    dto: FindUserBalanceDto,
+    @Query('balanceId', ParseIntPipe) balanceId: number,
+    @UserToken() user: UserTokenDto,
   ) {
     return await this.queryBus.execute(
-      new GetBalanceResultQuery(dto.urlId, dto.balanceId),
+      new GetBalanceResultQuery(user.urlId, balanceId),
     );
   }
 }

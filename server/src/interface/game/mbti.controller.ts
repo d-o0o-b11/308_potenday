@@ -6,30 +6,31 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '@application/auth';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
+  ApiCookieAuth,
   ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  FindMbtiRoundDto,
-  FindUserMbtiAnswerResponseDto,
-  SaveMbtiDto,
-} from './dto';
+import { FindUserMbtiAnswerResponseDto, SaveMbtiDto } from './dto';
 import {
   CreateUserMbtiCommand,
   GetUserMbtiQuery,
   GetUsersInRoomQuery,
   GetUsersMbtiInUrlQuery,
 } from '@application';
-import { FindOneUserInfoDto } from '@interface/user';
+import { FindOneUserInfoDto, UserToken, UserTokenDto } from '@interface/user';
 
 @ApiTags('[GAME] MBTI API')
 @Controller('mbti')
+@ApiCookieAuth('potenday_token')
+@UseGuards(JwtAuthGuard)
 export class MbtiController {
   constructor(
     private queryBus: QueryBus,
@@ -42,11 +43,11 @@ export class MbtiController {
   })
   @ApiOkResponse({ type: FindOneUserInfoDto })
   async getUserInfoToROund(
-    @Query(new ValidationPipe({ whitelist: true, transform: true }))
-    dto: FindMbtiRoundDto,
+    @Query('roundId', ParseIntPipe) roundId: number,
+    @UserToken() user: UserTokenDto,
   ) {
     return await this.queryBus.execute(
-      new GetUsersInRoomQuery(dto.urlId, dto.roundId),
+      new GetUsersInRoomQuery(user.urlId, roundId),
     );
   }
 
@@ -58,9 +59,15 @@ export class MbtiController {
   async saveUserMbti(
     @Body(new ValidationPipe({ whitelist: true, transform: true }))
     dto: SaveMbtiDto,
+    @UserToken() user: UserTokenDto,
   ) {
     await this.commandBud.execute(
-      new CreateUserMbtiCommand(dto.urlId, dto.userId, dto.mbti, dto.toUserId),
+      new CreateUserMbtiCommand(
+        user.urlId,
+        user.userId,
+        dto.mbti,
+        dto.toUserId,
+      ),
     );
   }
 
@@ -75,17 +82,19 @@ export class MbtiController {
     type: FindUserMbtiAnswerResponseDto,
   })
   async findResultUserMbti(
-    @Query('urlId', ParseIntPipe) urlId: number,
     @Query('toUserId', ParseIntPipe) toUserId: number,
+    @UserToken() user: UserTokenDto,
   ) {
-    return await this.queryBus.execute(new GetUserMbtiQuery(urlId, toUserId));
+    return await this.queryBus.execute(
+      new GetUserMbtiQuery(user.urlId, toUserId),
+    );
   }
 
   @Get('final')
   @ApiOperation({
     summary: '[마지막] 전체 게임 결과 출력',
   })
-  async finalAllUserData(@Query('urlId', ParseIntPipe) urlId: number) {
-    return await this.queryBus.execute(new GetUsersMbtiInUrlQuery(urlId));
+  async finalAllUserData(@UserToken() user: UserTokenDto) {
+    return await this.queryBus.execute(new GetUsersMbtiInUrlQuery(user.urlId));
   }
 }

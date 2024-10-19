@@ -26,6 +26,11 @@ import {
   UserReadEntity,
   UserUrlEntity,
 } from '@infrastructure';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { TestTokenService } from './test-cookie.service';
+import { JwtAuthGuard } from '@application';
+import { TestJwtAuthGuard } from './auth-test.guard';
+import * as cookieParser from 'cookie-parser';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -33,17 +38,34 @@ describe('BalanceController (e2e)', () => {
   let app: INestApplication;
   let manager: EntityManager;
   let readManager: EntityManager;
+  let testTokenService: TestTokenService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-      providers: [],
-    }).compile();
+      imports: [
+        AppModule,
+        JwtModule.register({
+          secret: process.env.JWT_SECRET_KEY,
+          signOptions: { expiresIn: process.env.JWT_SECRET_KEY_EXPIRE },
+        }),
+      ],
+      providers: [TestTokenService],
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useFactory({
+        factory: (jwtService: JwtService) => new TestJwtAuthGuard(jwtService),
+        inject: [JwtService],
+      })
+      .compile();
 
     // main.ts에서 app에 주입시킨 사항들 추가.
     app = moduleFixture.createNestApplication();
+
+    app.use(cookieParser());
     // app 실행
     await app.init();
+    testTokenService = app.get(TestTokenService);
+
     manager = app.get(getEntityManagerToken());
     readManager = app.get(getEntityManagerToken('read'));
   });
@@ -86,11 +108,21 @@ describe('BalanceController (e2e)', () => {
       },
     ];
 
+    let token: { token: string };
+
+    beforeAll(async () => {
+      token = testTokenService.generateToken({
+        urlId: 999999,
+        userId: 999999,
+      });
+    });
+
     testCases.forEach(({ balanceId, expectedResponse }) => {
       it(`밸런스 게임 질문지 출력 (balanceId: ${balanceId})`, async () => {
         const response = await request(app.getHttpServer())
           .get('/balance/list')
           .query({ balanceId })
+          .set('Cookie', [`test_token=${token.token}`])
           .expect(HttpStatus.OK);
 
         expect(response.body).toStrictEqual(expectedResponse);
@@ -152,6 +184,11 @@ describe('BalanceController (e2e)', () => {
     });
 
     it('밸런스 게임 투표', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId,
+      });
+
       const balanceData = {
         balanceId: 1,
         balanceType: BALANCE_TYPES.A,
@@ -159,11 +196,12 @@ describe('BalanceController (e2e)', () => {
       await request(app.getHttpServer())
         .post('/balance')
         .send({
-          urlId: urlId,
-          userId: userId,
+          urlId,
+          userId,
           balanceId: balanceData.balanceId,
           balanceType: balanceData.balanceType,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.CREATED);
 
       await sleep(500);
@@ -182,6 +220,11 @@ describe('BalanceController (e2e)', () => {
     });
 
     it('밸런스 게임 투표 동일한 유저가 2번 이상 투표할 경우 에러', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: submitUserId,
+      });
+
       await manager.save(UserBalanceEntity, {
         userId: submitUserId,
         balanceId: 1,
@@ -191,11 +234,12 @@ describe('BalanceController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/balance')
         .send({
-          urlId: urlId,
+          urlId,
           userId: submitUserId,
           balanceId: 1,
           balanceType: BALANCE_TYPES.B,
-        });
+        })
+        .set('Cookie', [`test_token=${token.token}`]);
 
       expect(response.body).toStrictEqual({
         code: 'SUBMIT_USER_BALANCE',
@@ -341,12 +385,17 @@ describe('BalanceController (e2e)', () => {
     });
 
     it('각 밸런스 게임 결과 보기 (100%)', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: userId1,
+      });
+
       const resposne = await request(app.getHttpServer())
         .get('/balance')
         .query({
-          urlId: urlId,
           balanceId: 1,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(resposne.body).toStrictEqual([
@@ -370,12 +419,17 @@ describe('BalanceController (e2e)', () => {
     });
 
     it('각 밸런스 게임 결과 보기 (66% : 33%)', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: userId1,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/balance')
         .query({
-          urlId: urlId,
           balanceId: 2,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual([

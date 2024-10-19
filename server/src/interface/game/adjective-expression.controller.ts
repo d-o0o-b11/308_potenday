@@ -3,25 +3,34 @@ import {
   GetAdjectiveExpressionQuery,
   GetUsersAdjectiveExpressionQuery,
 } from '@application';
+import { JwtAuthGuard } from '@application/auth';
 import {
   Body,
   Controller,
   Get,
   HttpStatus,
   Post,
-  Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreateUserAdjectiveExpressionDto,
   GroupByUserAdjectiveExpressionDto,
   UserAdjectiveExpressionSubmitCountDto,
 } from './dto';
+import { UserToken, UserTokenDto } from '../user';
 
 @ApiTags('[GAME] 형용사 표현 API')
 @Controller('adjective-expression')
+@ApiCookieAuth('potenday_token')
+@UseGuards(JwtAuthGuard)
 export class AdjectiveExpressionController {
   constructor(
     private commandBus: CommandBus,
@@ -46,11 +55,12 @@ export class AdjectiveExpressionController {
   async saveExpressionUser(
     @Body(new ValidationPipe({ whitelist: true, transform: true }))
     dto: CreateUserAdjectiveExpressionDto,
+    @UserToken() user: UserTokenDto,
   ) {
     return await this.commandBus.execute(
       new CreateUserAdjectiveExpressionCommand(
-        dto.urlId,
-        dto.userId,
+        user.urlId,
+        user.userId,
         dto.expressionIdList,
       ),
     );
@@ -60,17 +70,13 @@ export class AdjectiveExpressionController {
   @ApiOperation({
     summary: '[게임] url에 있는 유저의 형용사 표현 출력 ',
   })
-  @ApiQuery({
-    name: 'urlId',
-    example: '37',
-  })
   @ApiResponse({
     status: HttpStatus.OK,
     type: [GroupByUserAdjectiveExpressionDto],
   })
-  async getExpressionListUserList(@Query('urlId') urlId: number) {
+  async getExpressionListUserList(@UserToken() user: UserTokenDto) {
     return await this.queryBus.execute(
-      new GetUsersAdjectiveExpressionQuery(urlId),
+      new GetUsersAdjectiveExpressionQuery(user.urlId),
     );
   }
 }

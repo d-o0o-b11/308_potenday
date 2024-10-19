@@ -1,11 +1,14 @@
 import { NextCommonQuestionCommand } from '@application';
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { JwtAuthGuard } from '@application/auth';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PatchCommonQuestionDto } from './dto';
+import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserToken, UserTokenDto } from '@interface/user';
 
 @ApiTags('[GAME] 공통 질문 API')
 @Controller('common-question')
+@ApiCookieAuth('potenday_token')
+@UseGuards(JwtAuthGuard)
 export class CommonQuestionController {
   constructor(private commandBus: CommandBus) {}
 
@@ -13,10 +16,7 @@ export class CommonQuestionController {
   @ApiOperation({
     summary: '[공통질문] 다음으로 넘어가기',
   })
-  async nextPublicQuestion(
-    @Body(new ValidationPipe({ whitelist: true, transform: true }))
-    dto: PatchCommonQuestionDto,
-  ) {
-    await this.commandBus.execute(new NextCommonQuestionCommand(dto.urlId));
+  async nextPublicQuestion(@UserToken() user: UserTokenDto) {
+    await this.commandBus.execute(new NextCommonQuestionCommand(user.urlId));
   }
 }
