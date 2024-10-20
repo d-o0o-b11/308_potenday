@@ -11,6 +11,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '@application';
 import { TestJwtAuthGuard } from './auth-test.guard';
 import * as cookieParser from 'cookie-parser';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('CommonQuestionController (e2e)', () => {
   let app: INestApplication;
@@ -22,9 +23,15 @@ describe('CommonQuestionController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
-        JwtModule.register({
-          secret: process.env.JWT_SECRET_KEY,
-          signOptions: { expiresIn: process.env.JWT_SECRET_KEY_EXPIRE },
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            secret: configService.get('jwt.secretKey'),
+            signOptions: {
+              expiresIn: configService.get('jwt.secretKeyExpire'),
+            },
+          }),
         }),
       ],
       providers: [TestTokenService],

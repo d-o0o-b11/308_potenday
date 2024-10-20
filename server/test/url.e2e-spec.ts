@@ -29,6 +29,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import * as cookieParser from 'cookie-parser';
 import { TestJwtAuthGuard } from './auth-test.guard';
 import { JwtAuthGuard } from '@application';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -42,9 +43,15 @@ describe('UserUrlController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
-        JwtModule.register({
-          secret: process.env.JWT_SECRET_KEY,
-          signOptions: { expiresIn: process.env.JWT_SECRET_KEY_EXPIRE },
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            secret: configService.get('jwt.secretKey'),
+            signOptions: {
+              expiresIn: configService.get('jwt.secretKeyExpire'),
+            },
+          }),
         }),
       ],
       providers: [TestTokenService],
