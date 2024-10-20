@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService, JwtAuthGuard, JwtStrategy } from '../service';
+import { JwtAuthGuard, JwtStrategy } from '../service';
 import { PassportModule } from '@nestjs/passport';
 import { GenerateTokenCommandHandler } from '../command';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -19,12 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
     }),
   ],
-  providers: [
-    JwtAuthGuard,
-    AuthService,
-    JwtStrategy,
-    GenerateTokenCommandHandler,
-  ],
-  exports: [AuthService, PassportModule, JwtModule],
+  providers: [JwtAuthGuard, JwtStrategy, GenerateTokenCommandHandler],
+  exports: [PassportModule, JwtModule],
 })
 export class AuthModule {}
