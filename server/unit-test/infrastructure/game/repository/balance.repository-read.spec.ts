@@ -15,7 +15,6 @@ import {
   NotFoundBalanceListException,
   UpdateBalanceException,
 } from '@common';
-import { FindUserBalanceDto } from '@interface';
 
 describe('BalanceReadRepository', () => {
   let repository: BalanceReadRepository;
@@ -181,7 +180,7 @@ describe('BalanceReadRepository', () => {
   });
 
   describe('findUserCount', () => {
-    const dto: FindUserBalanceDto = { urlId: 1, balanceId: 1 };
+    const dto = { urlId: 1, balanceId: 1 };
 
     it('일치하는 balanceId를 가진 유저 수를 반환합니다.', async () => {
       const mockResult = { count: '5' };
@@ -226,7 +225,7 @@ describe('BalanceReadRepository', () => {
   });
 
   describe('find', () => {
-    const dto: FindUserBalanceDto = { urlId: 1, balanceId: 1 };
+    const dto = { urlId: 1, balanceId: 1 };
 
     it('일치하는 balanceId를 가진 유저 데이터를 반환합니다.', async () => {
       const mockUsers = [

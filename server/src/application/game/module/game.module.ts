@@ -54,9 +54,10 @@ import {
 } from '../service';
 import { EventModule } from '../../event';
 import { GameSaga } from '../saga';
+import { AuthModule } from '@application/auth';
 
 @Module({
-  imports: [CqrsModule, EventModule],
+  imports: [CqrsModule, AuthModule, EventModule],
   controllers: [
     AdjectiveExpressionController,
     CommonQuestionController,

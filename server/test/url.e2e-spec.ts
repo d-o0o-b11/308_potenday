@@ -24,6 +24,12 @@ import {
   UserReadEntity,
   UserUrlEntity,
 } from '@infrastructure';
+import { TestTokenService } from './test-cookie.service';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import * as cookieParser from 'cookie-parser';
+import { TestJwtAuthGuard } from './auth-test.guard';
+import { JwtAuthGuard } from '@application';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -31,17 +37,40 @@ describe('UserUrlController (e2e)', () => {
   let app: INestApplication;
   let manager: EntityManager;
   let readManager: EntityManager;
+  let testTokenService: TestTokenService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-      providers: [],
-    }).compile();
+      imports: [
+        AppModule,
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            secret: configService.get('jwt.secretKey'),
+            signOptions: {
+              expiresIn: configService.get('jwt.secretKeyExpire'),
+            },
+          }),
+        }),
+      ],
+      providers: [TestTokenService],
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useFactory({
+        factory: (jwtService: JwtService) => new TestJwtAuthGuard(jwtService),
+        inject: [JwtService],
+      })
+      .compile();
 
     // main.ts에서 app에 주입시킨 사항들 추가.
     app = moduleFixture.createNestApplication();
+
+    app.use(cookieParser());
     // app 실행
     await app.init();
+    testTokenService = app.get(TestTokenService);
+
     manager = app.get(getEntityManagerToken());
     readManager = app.get(getEntityManagerToken('read'));
   });
@@ -133,9 +162,15 @@ describe('UserUrlController (e2e)', () => {
     });
 
     it('대기방 인원 수 + 해당 방의 유저 정보를 반환합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: waitingUrlId,
+        userId: waitingUrlUserId,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/url/waiting-room')
-        .query({ urlId: waitingUrlId });
+        .set('Cookie', [`test_token=${token.token}`])
+        .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual({
         userCount: 1,
@@ -150,9 +185,15 @@ describe('UserUrlController (e2e)', () => {
     });
 
     it('대기방에 유저가 0명인 경우 count 0을 반환합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: waitingNoneUrlId,
+        userId: undefined,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/url/waiting-room')
-        .query({ urlId: waitingNoneUrlId });
+        .set('Cookie', [`test_token=${token.token}`])
+        .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual({
         userCount: 0,
@@ -161,14 +202,19 @@ describe('UserUrlController (e2e)', () => {
     });
 
     it('존재하지 않는 urlId일 경우 에러를 반환합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: 999999,
+        userId: undefined,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/url/waiting-room')
-        .query({ urlId: 999999 });
+        .set('Cookie', [`test_token=${token.token}`]);
 
       expect(response.body).toStrictEqual({
         code: 'NOT_FOUND_URL',
         status: 404,
-        path: 'GET /url/waiting-room?urlId=999999',
+        path: 'GET /url/waiting-room',
         timestamp: expect.any(String),
         message: '존재하지 않는 URL 입니다.',
       });
@@ -203,9 +249,14 @@ describe('UserUrlController (e2e)', () => {
     });
 
     it('[모두 모였어요] 버튼 클릭 시 url 상태를 false로 변경합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: updateUrlId,
+        userId: 99999,
+      });
+
       await request(app.getHttpServer())
         .patch('/url/status')
-        .query({ urlId: updateUrlId })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       const findUrl = await manager.findOne(UserUrlEntity, {
@@ -240,14 +291,19 @@ describe('UserUrlController (e2e)', () => {
     });
 
     it('존재하지 않는 url 상태 변경 시 에러를 반환합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: 999999,
+        userId: 99999,
+      });
+
       const response = await request(app.getHttpServer())
         .patch('/url/status')
-        .query({ urlId: 999999 });
+        .set('Cookie', [`test_token=${token.token}`]);
 
       expect(response.body).toStrictEqual({
         code: 'NOT_FOUND_URL',
         status: 404,
-        path: 'PATCH /url/status?urlId=999999',
+        path: 'PATCH /url/status',
         timestamp: expect.any(String),
         message: '존재하지 않는 URL 입니다.',
       });
@@ -289,30 +345,47 @@ describe('UserUrlController (e2e)', () => {
     });
 
     it('url 상태가 true일 경우 입장 가능합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: trueUrlId,
+        userId: 99999,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/url/status')
-        .query({ urlId: trueUrlId });
+        .set('Cookie', [`test_token=${token.token}`])
+        .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual({ status: true });
     });
 
-    it('url 상태가 false일 경우 입장 가능합니다.', async () => {
+    it('url 상태가 false일 경우 입장 불가능합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: falseUrlId,
+        userId: 99999,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/url/status')
-        .query({ urlId: falseUrlId });
+        .set('Cookie', [`test_token=${token.token}`])
+        .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual({ status: false });
     });
 
     it('존재하지 않는 url 상태 조회 시 에러를 반환합니다.', async () => {
+      const token = testTokenService.generateToken({
+        urlId: 999999,
+        userId: 99999,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/url/status')
-        .query({ urlId: 999999 });
+        .set('Cookie', [`test_token=${token.token}`]);
 
       expect(response.body).toStrictEqual({
         code: 'NOT_FOUND_URL',
         status: 404,
-        path: 'GET /url/status?urlId=999999',
+        path: 'GET /url/status',
         timestamp: expect.any(String),
         message: '존재하지 않는 URL 입니다.',
       });

@@ -1,5 +1,4 @@
 export const defaultUrl = {
-  id: 1,
   url: 'TEST_URL',
   status: true,
 } as const;

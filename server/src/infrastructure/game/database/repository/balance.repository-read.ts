@@ -8,13 +8,14 @@ import {
 } from '@domain';
 import {
   CalculatePercentagesResponseDto,
-  FindUserBalanceDto,
   FindUserBalanceResponseDto,
   GroupedByBalanceTypeDto,
 } from '@interface';
 import {
   CreateBalanceReadDto,
   DeleteUserBalanceReadDto,
+  FindBalanceSubmitUserCountDto,
+  FindBalanceUserReadDto,
   FindSubmitUserDto,
   ReconstituteBalanceArrayDto,
 } from '@application';
@@ -86,7 +87,10 @@ export class BalanceReadRepository implements IBalanceReadRepository {
     return hasBalance;
   }
 
-  async findUserCount(dto: FindUserBalanceDto, manager: EntityManager) {
+  async findUserCount(
+    dto: FindBalanceSubmitUserCountDto,
+    manager: EntityManager,
+  ) {
     const usersWithMatchingBalance = await manager
       .createQueryBuilder(UserReadEntity, 'user')
       .select('COUNT(*)', 'count') // 일치하는 유저의 수를 세기 위해 COUNT 사용
@@ -109,7 +113,7 @@ export class BalanceReadRepository implements IBalanceReadRepository {
     return { count: usersWithMatchingBalance.count };
   }
 
-  async find(dto: FindUserBalanceDto, manager: EntityManager) {
+  async find(dto: FindBalanceUserReadDto, manager: EntityManager) {
     const usersWithMatchingBalance = await manager
       .createQueryBuilder(UserReadEntity, 'user')
       .select([

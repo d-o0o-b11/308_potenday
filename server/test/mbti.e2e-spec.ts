@@ -19,6 +19,12 @@ import {
   UserReadEntity,
   UserUrlEntity,
 } from '@infrastructure';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { TestTokenService } from './test-cookie.service';
+import { JwtAuthGuard } from '@application';
+import { TestJwtAuthGuard } from './auth-test.guard';
+import * as cookieParser from 'cookie-parser';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -26,17 +32,40 @@ describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;
   let manager: EntityManager;
   let readManager: EntityManager;
+  let testTokenService: TestTokenService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-      providers: [],
-    }).compile();
+      imports: [
+        AppModule,
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            secret: configService.get('jwt.secretKey'),
+            signOptions: {
+              expiresIn: configService.get('jwt.secretKeyExpire'),
+            },
+          }),
+        }),
+      ],
+      providers: [TestTokenService],
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useFactory({
+        factory: (jwtService: JwtService) => new TestJwtAuthGuard(jwtService),
+        inject: [JwtService],
+      })
+      .compile();
 
     // main.ts에서 app에 주입시킨 사항들 추가.
     app = moduleFixture.createNestApplication();
+
+    app.use(cookieParser());
     // app 실행
     await app.init();
+    testTokenService = app.get(TestTokenService);
+
     manager = app.get(getEntityManagerToken());
     readManager = app.get(getEntityManagerToken('read'));
   });
@@ -49,6 +78,7 @@ describe('AdjectiveExpressionController (e2e)', () => {
     let urlReadId: string;
     let mbtiUser1ReadId: string;
     let mbtiUser2ReadId: string;
+    let token: { token: string };
 
     beforeAll(async () => {
       urlId = (await manager.save(UserUrlEntity, defaultUrl)).id;
@@ -117,6 +147,11 @@ describe('AdjectiveExpressionController (e2e)', () => {
           },
         } as any)
       ).id;
+
+      token = testTokenService.generateToken({
+        urlId: urlId,
+        userId: userId1,
+      });
     });
 
     const testMbtiEndpoint = async (
@@ -127,9 +162,10 @@ describe('AdjectiveExpressionController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .get('/mbti')
         .query({
-          urlId: urlId,
+          // urlId: urlId,
           roundId: roundId,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual({
@@ -270,14 +306,18 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('본인 mbti 저장', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: userId1,
+      });
+
       await request(app.getHttpServer())
         .post('/mbti')
         .send({
-          urlId: urlId,
-          userId: userId1,
           mbti: 'ISTJ',
           toUserId: userId1,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.CREATED);
 
       const find = await manager.findOne(UserMbtiEntity, {
@@ -291,21 +331,19 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('다른 유저 mbti 추측값 저장', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: userId1,
+      });
+
       await request(app.getHttpServer())
         .post('/mbti')
         .send({
-          urlId: urlId,
-          userId: userId1,
           mbti: 'ISTP',
           toUserId: userId2,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.CREATED);
-
-      // const findResult = await readManager.findOne(UserReadEntity, {
-      //   where: {
-      //     id: mbtiUser1ReadId,
-      //   },
-      // });
 
       const find = await manager.findOne(UserMbtiEntity, {
         where: {
@@ -318,18 +356,24 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('mbti 값을 동일한 유저가 2번 이상 입력할 경우 에러', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: submitUserId,
+      });
+
       await manager.save(UserMbtiEntity, {
         userId: submitUserId,
         mbti: 'ISTJ',
         toUserId: submitUserId,
       });
 
-      const response = await request(app.getHttpServer()).post('/mbti').send({
-        urlId: urlId,
-        userId: submitUserId,
-        mbti: 'ISTP',
-        toUserId: submitUserId,
-      });
+      const response = await request(app.getHttpServer())
+        .post('/mbti')
+        .send({
+          mbti: 'ISTP',
+          toUserId: submitUserId,
+        })
+        .set('Cookie', [`test_token=${token.token}`]);
 
       expect(response.body).toStrictEqual({
         code: 'USER_MBTI_SUBMIT',
@@ -456,12 +500,17 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('mbti 추측 결과 확인', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: userId1,
+      });
+
       const resposne = await request(app.getHttpServer())
         .get('/mbti/result')
         .query({
-          urlId: urlId,
           toUserId: userId1,
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(resposne.body).toStrictEqual({
@@ -584,9 +633,14 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('전체 mbti 결과 출력', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: 999999,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/mbti/final')
-        .query({ urlId })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual([

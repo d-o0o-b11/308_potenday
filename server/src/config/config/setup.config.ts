@@ -4,6 +4,7 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
 
 export class SetUpConfig {
   constructor(private readonly app: NestExpressApplication) {}
@@ -31,6 +32,11 @@ export class SetUpConfig {
         },
         'access-token',
       )
+      .addCookieAuth('potenday_token', {
+        description:
+          '쿠키를 통해 인증합니다. 로그인 후 JWT 토큰이 이 쿠키에 저장됩니다. 이후 API 호출 시 이 쿠키를 사용해 인증할 수 있습니다.',
+        type: 'http',
+      })
       .build();
 
     const swaggerOptions: SwaggerCustomOptions = {
@@ -60,5 +66,6 @@ export class SetUpConfig {
       credentials: true,
       allowedHeaders: 'Content-Type, Accept, Authorization',
     });
+    this.app.use(cookieParser());
   }
 }

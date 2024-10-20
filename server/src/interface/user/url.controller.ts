@@ -2,17 +2,16 @@ import {
   Controller,
   Get,
   HttpStatus,
-  ParseIntPipe,
   Patch,
   Post,
-  Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiConflictResponse,
+  ApiCookieAuth,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -23,10 +22,12 @@ import {
   GetUrlStatusQuery,
   UpdateStatusFalseCommand,
 } from '@application';
+import { JwtAuthGuard } from '@application/auth';
 import {
   CountUserListInRoomResponseDto,
   GetUrlStatusResponseDto,
   SetUrlResponseDto,
+  UserTokenDto,
 } from './dto';
 import {
   MaximumUrlException,
@@ -34,6 +35,7 @@ import {
   StatusFalseUrlException,
   UpdateUrlException,
 } from '@common';
+import { UserToken } from './common';
 
 /**
  * 개선 사항
@@ -42,6 +44,7 @@ import {
  */
 @ApiTags('URL API')
 @Controller('url')
+@ApiCookieAuth('potenday_token')
 export class UserUrlController {
   constructor(
     private commandBus: CommandBus,
@@ -84,13 +87,10 @@ export class UserUrlController {
     status: HttpStatus.CONFLICT,
     type: StatusFalseUrlException,
   })
-  @ApiQuery({
-    name: 'urlId',
-    example: 11,
-  })
+  @UseGuards(JwtAuthGuard)
   @Get('waiting-room')
-  async countUserToWaitingRoom(@Query('urlId', ParseIntPipe) urlId: number) {
-    return await this.queryBus.execute(new CountUsersInRoomQuery(urlId));
+  async countUserToWaitingRoom(@UserToken() user: UserTokenDto) {
+    return await this.queryBus.execute(new CountUsersInRoomQuery(user.urlId));
   }
 
   @Patch('status')
@@ -115,12 +115,9 @@ export class UserUrlController {
     description:
       '게임 시작 후 추가 인원을 더 이상 받지 않기 위해 URL의 상태를 변경합니다.',
   })
-  @ApiQuery({
-    name: 'urlId',
-    example: 11,
-  })
-  async updateUrlStatus(@Query('urlId', ParseIntPipe) urlId: number) {
-    return this.commandBus.execute(new UpdateStatusFalseCommand(urlId));
+  @UseGuards(JwtAuthGuard)
+  async updateUrlStatus(@UserToken() user: UserTokenDto) {
+    return this.commandBus.execute(new UpdateStatusFalseCommand(user.urlId));
   }
 
   @Get('status')
@@ -137,11 +134,8 @@ export class UserUrlController {
     description: '입장 가능 여부를 반환합니다.',
     type: GetUrlStatusResponseDto,
   })
-  @ApiQuery({
-    name: 'urlId',
-    example: 11,
-  })
-  async checkUrlToStart(@Query('urlId', ParseIntPipe) urlId: number) {
-    return await this.queryBus.execute(new GetUrlStatusQuery(urlId));
+  @UseGuards(JwtAuthGuard)
+  async checkUrlToStart(@UserToken() user: UserTokenDto) {
+    return await this.queryBus.execute(new GetUrlStatusQuery(user.urlId));
   }
 }

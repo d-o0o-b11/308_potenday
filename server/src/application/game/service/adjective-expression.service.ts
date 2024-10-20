@@ -1,7 +1,4 @@
-import {
-  CreateUserAdjectiveExpressionDto,
-  IAdjectiveExpressionService,
-} from '@interface';
+import { IAdjectiveExpressionService } from '@interface';
 import { Inject, Injectable } from '@nestjs/common';
 import { SubmitAdjectiveExpressionException } from '@common';
 import {
@@ -14,7 +11,10 @@ import {
 } from '@domain';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { SaveUserAdjectiveExpressionDto } from '../dto';
+import {
+  CreateUserExpressionAndGetSubmitCountDto,
+  SaveUserAdjectiveExpressionDto,
+} from '../dto';
 
 @Injectable()
 export class AdjectiveExpressionService implements IAdjectiveExpressionService {
@@ -34,7 +34,7 @@ export class AdjectiveExpressionService implements IAdjectiveExpressionService {
    * But, Handler에 해당 로직을 합칠 경우 가독성 떨어질 수 있다 + 단일 책임 원칙 위반 가능성 존재
    */
   async saveUserExpressionAndGetSubmitCount(
-    dto: CreateUserAdjectiveExpressionDto,
+    dto: CreateUserExpressionAndGetSubmitCountDto,
   ) {
     if (
       await this.adjectiveExpressionReadRepository.isSubmitUser(

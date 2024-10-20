@@ -10,6 +10,7 @@ import { BALANCE_SERVICE_TOKEN } from '@infrastructure';
 import { IBalanceService } from '@interface';
 import {
   CountUsersInRoomQuery,
+  CreateUserBalanceAndGetSubmitCountDto,
   CreateUserBalanceEvent,
   GameNextEvent,
 } from '@application';
@@ -29,12 +30,14 @@ export class CreateUserBalanceCommandHandler
     const { urlId, userId, balanceId, balanceType } = command;
 
     const { submitCount, saveResult } =
-      await this.balanceService.saveUserExpressionAndGetSubmitCount({
-        userId,
-        balanceId,
-        balanceType,
-        urlId,
-      });
+      await this.balanceService.saveUserExpressionAndGetSubmitCount(
+        new CreateUserBalanceAndGetSubmitCountDto(
+          urlId,
+          userId,
+          balanceId,
+          balanceType,
+        ),
+      );
 
     const { userCount } = await this.queryBus.execute(
       new CountUsersInRoomQuery(urlId),

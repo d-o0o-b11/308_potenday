@@ -1,13 +1,12 @@
 import {
   CreateBalanceReadDto,
   DeleteUserBalanceReadDto,
+  FindBalanceSubmitUserCountDto,
+  FindBalanceUserReadDto,
   FindSubmitUserDto,
   FindUserCountResponseDto,
 } from '@application';
-import {
-  CalculatePercentagesResponseDto,
-  FindUserBalanceDto,
-} from '@interface';
+import { CalculatePercentagesResponseDto } from '@interface';
 import { EntityManager, UpdateResult } from 'typeorm';
 
 export interface IBalanceReadRepository {
@@ -37,7 +36,7 @@ export interface IBalanceReadRepository {
    * @returns Promise<FindUserCountResponseDto>
    */
   findUserCount: (
-    dto: FindUserBalanceDto,
+    dto: FindBalanceSubmitUserCountDto,
     manager: EntityManager,
   ) => Promise<FindUserCountResponseDto>;
 
@@ -48,7 +47,7 @@ export interface IBalanceReadRepository {
    * @returns Promise<CalculatePercentagesResponseDto[]>
    */
   find: (
-    dto: FindUserBalanceDto,
+    dto: FindBalanceUserReadDto,
     manager: EntityManager,
   ) => Promise<CalculatePercentagesResponseDto[]>;
 

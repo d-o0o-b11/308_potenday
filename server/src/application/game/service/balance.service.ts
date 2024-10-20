@@ -5,10 +5,15 @@ import {
 } from '@infrastructure';
 import { Inject, Injectable } from '@nestjs/common';
 import { SubmitBalanceException } from '@common';
-import { CreateBalanceDto, IBalanceService } from '@interface';
+import { IBalanceService } from '@interface';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
-import { CreateUserBalanceDto, FindSubmitUserDto } from '../dto';
+import {
+  CreateUserBalanceAndGetSubmitCountDto,
+  CreateUserBalanceDto,
+  FindBalanceSubmitUserCountDto,
+  FindSubmitUserDto,
+} from '../dto';
 
 @Injectable()
 export class BalanceService implements IBalanceService {
@@ -21,7 +26,9 @@ export class BalanceService implements IBalanceService {
     private readonly readManager: EntityManager,
   ) {}
 
-  async saveUserExpressionAndGetSubmitCount(dto: CreateBalanceDto) {
+  async saveUserExpressionAndGetSubmitCount(
+    dto: CreateUserBalanceAndGetSubmitCountDto,
+  ) {
     if (
       await this.balanceReadRepository.isSubmitUser(
         new FindSubmitUserDto(dto.userId, dto.balanceId),
@@ -37,10 +44,7 @@ export class BalanceService implements IBalanceService {
 
     const submitCount = (
       await this.balanceReadRepository.findUserCount(
-        {
-          urlId: dto.urlId,
-          balanceId: dto.balanceId,
-        },
+        new FindBalanceSubmitUserCountDto(dto.urlId, dto.balanceId),
         this.readManager,
       )
     ).count;

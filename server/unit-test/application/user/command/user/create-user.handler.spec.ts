@@ -4,12 +4,13 @@ import {
   CreateUserEvent,
   CreateUserHandler,
   FindOneUserUrlDto,
+  GenerateTokenCommand,
 } from '@application';
 import { MaximumUrlException, StatusFalseUrlException } from '@common';
 import { IUserRepository } from '@domain';
 import { URL_SERVICE_TOKEN, USER_REPOSITORY_TOKEN } from '@infrastructure';
 import { IUrlService } from '@interface';
-import { EventBus } from '@nestjs/cqrs';
+import { CommandBus, EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 
 describe('CreateUserHandler', () => {
@@ -17,6 +18,7 @@ describe('CreateUserHandler', () => {
   let userRepository: IUserRepository;
   let urlService: IUrlService;
   let eventBus: EventBus;
+  let commandBus: CommandBus;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -40,6 +42,12 @@ describe('CreateUserHandler', () => {
             publish: jest.fn(),
           },
         },
+        {
+          provide: CommandBus,
+          useValue: {
+            execute: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -47,6 +55,7 @@ describe('CreateUserHandler', () => {
     userRepository = module.get<IUserRepository>(USER_REPOSITORY_TOKEN);
     urlService = module.get<IUrlService>(URL_SERVICE_TOKEN);
     eventBus = module.get<EventBus>(EventBus);
+    commandBus = module.get<CommandBus>(CommandBus);
   });
 
   it('IsDefined', () => {
@@ -81,6 +90,11 @@ describe('CreateUserHandler', () => {
         .spyOn(userRepository, 'create')
         .mockResolvedValue(result);
       const eventPublish = jest.spyOn(eventBus, 'publish');
+      const commandExecute = jest
+        .spyOn(commandBus, 'execute')
+        .mockResolvedValue({
+          token: 'test',
+        });
 
       await handler.execute(command);
 
@@ -103,6 +117,10 @@ describe('CreateUserHandler', () => {
           result.getUpdatedAt(),
           result.getDeletedAt(),
         ),
+      );
+      expect(commandExecute).toBeCalledTimes(1);
+      expect(commandExecute).toBeCalledWith(
+        new GenerateTokenCommand(result.getUrlId(), result.getId()),
       );
     });
 

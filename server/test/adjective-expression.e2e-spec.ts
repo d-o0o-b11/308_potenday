@@ -23,30 +23,64 @@ import {
   UserReadEntity,
   UserUrlEntity,
 } from '@infrastructure';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { TestTokenService } from './test-cookie.service';
+import { JwtAuthGuard } from '@application';
+import { TestJwtAuthGuard } from './auth-test.guard';
+import * as cookieParser from 'cookie-parser';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 describe('AdjectiveExpressionController (e2e)', () => {
   let app: INestApplication;
   let manager: EntityManager;
   let readManager: EntityManager;
+  let testTokenService: TestTokenService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-      providers: [],
-    }).compile();
+      imports: [
+        AppModule,
+        JwtModule.registerAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: (configService: ConfigService) => ({
+            secret: configService.get('jwt.secretKey'),
+            signOptions: {
+              expiresIn: configService.get('jwt.secretKeyExpire'),
+            },
+          }),
+        }),
+      ],
+      providers: [TestTokenService],
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useFactory({
+        factory: (jwtService: JwtService) => new TestJwtAuthGuard(jwtService),
+        inject: [JwtService],
+      })
+      .compile();
 
     // main.ts에서 app에 주입시킨 사항들 추가.
     app = moduleFixture.createNestApplication();
+    app.use(cookieParser());
     // app 실행
     await app.init();
+    testTokenService = app.get(TestTokenService);
+
     manager = app.get(getEntityManagerToken());
     readManager = app.get(getEntityManagerToken('read'));
   });
 
   describe('GET /adjective-expression/list', () => {
     it('형용사 표현 리스트 출력', async () => {
+      const token = testTokenService.generateToken({
+        urlId: 999999,
+        userId: 999999,
+      });
+
       const response = await request(app.getHttpServer())
         .get('/adjective-expression/list')
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(response.body).toStrictEqual([
@@ -124,13 +158,19 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('밸런스 게임 투표', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId,
+      });
+
       await request(app.getHttpServer())
         .post('/adjective-expression')
         .send({
           urlId,
-          userId: userId,
+          userId,
           expressionIdList: [1, 2, 3],
         })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.CREATED);
 
       const find = await manager.find(UserAdjectiveExpressionEntity, {
@@ -151,6 +191,11 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('형용사 표현 게임 동일한 유저가 2번 입력시 에러', async () => {
+      const token = testTokenService.generateToken({
+        urlId,
+        userId: submitUserId,
+      });
+
       await manager.save(UserAdjectiveExpressionEntity, {
         userId: submitUserId,
         adjectiveExpressionId: 1,
@@ -162,7 +207,8 @@ describe('AdjectiveExpressionController (e2e)', () => {
           urlId,
           userId: submitUserId,
           expressionIdList: [1, 2, 3],
-        });
+        })
+        .set('Cookie', [`test_token=${token.token}`]);
 
       expect(response.body).toStrictEqual({
         code: 'SUBMIT_ADJECTIVE_EXPRESSION',
@@ -247,11 +293,14 @@ describe('AdjectiveExpressionController (e2e)', () => {
     });
 
     it('해당 url에 있는 유저의 형용사 표현 출력', async () => {
+      const token = testTokenService.generateToken({
+        urlId: urlId,
+        userId: userId1,
+      });
+
       const resposne = await request(app.getHttpServer())
         .get('/adjective-expression')
-        .query({
-          urlId: urlId,
-        })
+        .set('Cookie', [`test_token=${token.token}`])
         .expect(HttpStatus.OK);
 
       expect(resposne.body).toStrictEqual([

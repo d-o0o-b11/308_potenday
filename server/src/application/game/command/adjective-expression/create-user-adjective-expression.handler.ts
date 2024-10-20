@@ -10,6 +10,7 @@ import { ADJECTIVE_EXPRESSION_SERVICE_TOKEN } from '@infrastructure';
 import { IAdjectiveExpressionService } from '@interface';
 import { CountUsersInRoomQuery } from '../../../user';
 import { CreateUserExpressionEvent, GameNextEvent } from '../../event';
+import { CreateUserExpressionAndGetSubmitCountDto } from '@application';
 
 @CommandHandler(CreateUserAdjectiveExpressionCommand)
 export class CreateUserAdjectiveExpressionHandler
@@ -27,11 +28,11 @@ export class CreateUserAdjectiveExpressionHandler
 
     const { saveResult, submitCount } =
       await this.adjectiveExpressionService.saveUserExpressionAndGetSubmitCount(
-        {
+        new CreateUserExpressionAndGetSubmitCountDto(
           urlId,
           userId,
           expressionIdList,
-        },
+        ),
       );
 
     const { userCount } = await this.queryBus.execute(
